@@ -1,6 +1,6 @@
-import 'package:note_app/utils/app_constant.dart';
-import 'package:note_app/utils/model/tag.dart';
-import 'package:note_app/utils/repository/tag_repo.dart';
+import 'package:Educare/utils/app_constant.dart';
+import 'package:Educare/utils/model/tag.dart';
+import 'package:Educare/utils/repository/tag_repo.dart';
 
 class TagBUS {
   final _tagRepository = TagRepository();

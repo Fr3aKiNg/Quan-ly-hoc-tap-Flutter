@@ -1,5 +1,5 @@
-import 'package:note_app/utils/dao/note_dao.dart';
-import 'package:note_app/utils/model/note.dart';
+import 'package:Educare/utils/dao/note_dao.dart';
+import 'package:Educare/utils/model/note.dart';
 
 class NoteRepository {
   final noteDao = NoteDAO();

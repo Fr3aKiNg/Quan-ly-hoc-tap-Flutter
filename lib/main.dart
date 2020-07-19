@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scheduleapp/presentation/page/on_board.dart';
+import 'package:Educare/presentation/page/on_board.dart';
 
 
 void main() {

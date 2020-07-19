@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:note_app/utils/model/TimeUtils.dart';
-import 'package:note_app/utils/model/tag.dart';
+import 'package:Educare/utils/model/TimeUtils.dart';
+import 'package:Educare/utils/model/tag.dart';
 
 class ThumbnailNote {
   final String noteId;

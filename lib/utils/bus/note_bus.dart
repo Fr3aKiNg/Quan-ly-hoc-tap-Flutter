@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:note_app/utils/model/note.dart';
-import 'package:note_app/utils/repository/note_repo.dart';
-import 'package:note_app/utils/app_constant.dart';
+import 'package:Educare/utils/model/note.dart';
+import 'package:Educare/utils/repository/note_repo.dart';
+import 'package:Educare/utils/app_constant.dart';
 class NoteBUS {
   final _noteRepository = NoteRepository();
 

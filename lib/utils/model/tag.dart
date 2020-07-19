@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:note_app/utils/model/TimeUtils.dart';
+import 'package:Educare/utils/model/TimeUtils.dart';
 
 class Tag extends TimeUtils with ChangeNotifier {
 

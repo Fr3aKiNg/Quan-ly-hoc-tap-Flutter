@@ -1,5 +1,5 @@
-import 'package:note_app/utils/dao/tag_dao.dart';
-import 'package:note_app/utils/model/tag.dart';
+import 'package:Educare/utils/dao/tag_dao.dart';
+import 'package:Educare/utils/model/tag.dart';
 
 class TagRepository {
   final tagDao = TagDAO();

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:note_app/utils/app_constant.dart';
+import 'package:Educare/utils/app_constant.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:note_app/utils/dao/tag_dao.dart';
-import 'package:note_app/utils/db_commands.dart';
-import 'package:note_app/utils/model/note.dart';
-import 'package:note_app/utils/model/thumbnailNote.dart';
+import 'package:Educare/utils/dao/tag_dao.dart';
+import 'package:Educare/utils/db_commands.dart';
+import 'package:Educare/utils/model/note.dart';
+import 'package:Educare/utils/model/thumbnailNote.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../database/database.dart';

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:note_app/utils/database/database.dart';
-import 'package:note_app/utils/db_commands.dart';
-import 'package:note_app/utils/log_history.dart';
-import 'package:note_app/utils/model/note.dart';
-import 'package:note_app/utils/model/noteItem.dart';
+import 'package:Educare/utils/database/database.dart';
+import 'package:Educare/utils/db_commands.dart';
+import 'package:Educare/utils/log_history.dart';
+import 'package:Educare/utils/model/note.dart';
+import 'package:Educare/utils/model/noteItem.dart';
 import 'package:sqflite/sqflite.dart';
 
 class NoteItemDAO {

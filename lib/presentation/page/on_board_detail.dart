@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:scheduleapp/application/color_app.dart';
+import 'package:Educare/application/color_app.dart';
 
 class OnBoardDetail {
   String imgUrl;

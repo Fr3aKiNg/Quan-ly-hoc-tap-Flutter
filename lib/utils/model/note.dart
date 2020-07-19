@@ -1,8 +1,8 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
-import 'package:note_app/utils/dao/note_dao.dart';
-import 'package:note_app/utils/model/TimeUtils.dart';
+import 'package:Educare/utils/dao/note_dao.dart';
+import 'package:Educare/utils/model/TimeUtils.dart';
 
 import 'noteItem.dart';
 import 'tag.dart';
