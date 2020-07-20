@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/presentation/page/on_board.dart';
+import 'package:scheduleapp/presentation/page/task_event.dart';
 
 
 void main() {
@@ -14,8 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: OnboardingMe(),
-      
+      home: TaskEventPage(), //OnboardingMe(),
     );
   }
 }
