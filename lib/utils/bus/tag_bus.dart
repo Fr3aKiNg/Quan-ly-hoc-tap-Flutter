@@ -1,27 +1,27 @@
 import 'package:scheduleapp/utils/app_constant.dart';
 import 'package:scheduleapp/utils/model/tag.dart';
-import 'package:scheduleapp/utils/repository/tag_repo.dart';
+import 'package:scheduleapp/utils/dao/tag_dao.dart';
 
 class TagBUS {
-  final _tagRepository = TagRepository();
+  final _tagDao = TagDAO();
 
   ///Check tag Exist
   ///Required: Tag
   ///case tag exist return true;
   ///case tag not exist return false;
-  isTitleTagExist(String title) async {
-    if (DEBUG_MODE) {
-      final stopwatch = Stopwatch()..start();
-      var res = await _tagRepository.isTagExist(title);
-      print(
-          '[Time] Check Tag ${title} exists executed in ${stopwatch.elapsed}');
-      stopwatch.stop();
-      return res;
-    } else {
-      var res = await _tagRepository.isTagExist(title);
-      return res;
-    }
-  }
+//  isTitleTagExist(String title) async {
+//    if (DEBUG_MODE) {
+//      final stopwatch = Stopwatch()..start();
+//      var res = await _tagDao.(title);
+//      print(
+//          '[Time] Check Tag ${title} exists executed in ${stopwatch.elapsed}');
+//      stopwatch.stop();
+//      return res;
+//    } else {
+//      var res = await _tagDao.isTagExist(title);
+//      return res;
+//    }
+//  }
 
   ///Get list tag
   ///Required: optional {query}
@@ -30,12 +30,12 @@ class TagBUS {
   getTags({String query}) async {
     if (DEBUG_MODE) {
       final stopwatch = Stopwatch()..start();
-      var res = await _tagRepository.getAllTags(query: query);
+      var res = await _tagDao.getTags(query: query);
       print('[Time] Query All Tag executed in ${stopwatch.elapsed}');
       stopwatch.stop();
       return res;
     } else {
-      var res = await _tagRepository.getAllTags(query: query);
+      var res = await _tagDao.getTags(query: query);
       return res;
     }
   }
@@ -47,12 +47,12 @@ class TagBUS {
   getTagById(String tagId) async {
     if (DEBUG_MODE) {
       final stopwatch = Stopwatch()..start();
-      var res = await _tagRepository.getTag(tagId);
+      var res = await _tagDao.getTagByID(tagId);
       print('[Time] Query Tag by ID ${tagId} executed in ${stopwatch.elapsed}');
       stopwatch.stop();
       return res;
     } else {
-      var res = await _tagRepository.getTag(tagId);
+      var res = await _tagDao.getTagByID(tagId);
       return res;
     }
   }
@@ -62,16 +62,13 @@ class TagBUS {
 //case non-exist tag will add and return tagId
   addTag(Tag tag) async {
     var res = false;
-    if (await isTitleTagExist(tag.title)) {
-      return false;
-    }
     if (DEBUG_MODE) {
       final stopwatch = Stopwatch()..start();
-      await _tagRepository.insertTag(tag);
+      await _tagDao.createTag(tag);
       print('[Time] Add new Tag ${tag.title} executed in ${stopwatch.elapsed}');
       stopwatch.stop();
     } else {
-      await _tagRepository.insertTag(tag);
+      await _tagDao.createTag(tag);
     }
     return true;
   }
@@ -81,12 +78,12 @@ class TagBUS {
   updateTag(Tag tag) async {
     if (DEBUG_MODE) {
       final stopwatch = Stopwatch()..start();
-      var res = await _tagRepository.updateTags(tag);
+      var res = await _tagDao.updateTag(tag);
       print('[Time] Update Tag ${tag.title} executed in ${stopwatch.elapsed}');
       stopwatch.stop();
       return res > 0;
     } else {
-      var res = await _tagRepository.updateTags(tag);
+      var res = await _tagDao.updateTag(tag);
       return res > 0;
     }
   }
@@ -94,12 +91,12 @@ class TagBUS {
   deleteTagById(String tagId) async {
     if (DEBUG_MODE) {
       final stopwatch = Stopwatch()..start();
-      var res = await _tagRepository.deleteTagById(tagId);
+      var res = await _tagDao.deleteTag(tagId);
       print('[Time] Delete Tag ${tagId} executed in ${stopwatch.elapsed}');
       stopwatch.stop();
       return res > 0;
     } else {
-      var res = await _tagRepository.deleteTagById(tagId);
+      var res = await _tagDao.deleteTag(tagId);
       return res > 0;
     }
   }
