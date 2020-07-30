@@ -1,4 +1,4 @@
-import 'package:Educare/utils/app_constant.dart';
+import 'package:scheduleapp/utils/app_constant.dart';
 class LogHistory {
     static void trackLog(String entity,String content){
       var now = DateTime.now();

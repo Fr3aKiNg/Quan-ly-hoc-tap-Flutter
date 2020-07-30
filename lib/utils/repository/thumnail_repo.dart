@@ -1,7 +1,7 @@
 import 'dart:wasm';
 
-import 'package:Educare/utils/dao/thumbnail_dao.dart';
-import 'package:Educare/utils/model/thumbnailNote.dart';
+import 'package:scheduleapp/utils/dao/thumbnail_dao.dart';
+import 'package:scheduleapp/utils/model/thumbnailNote.dart';
 
 class ThumbnailRepository {
   final thumbnailDao = ThumbnailNoteDAO();

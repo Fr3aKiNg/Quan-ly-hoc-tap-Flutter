@@ -1,9 +1,9 @@
 
 import 'dart:async';
 
-import 'package:Educare/utils/model/thumbnailNote.dart';
-import 'package:Educare/utils/repository/thumnail_repo.dart';
-import 'package:Educare/utils/app_constant.dart';
+import 'package:scheduleapp/utils/model/thumbnailNote.dart';
+import 'package:scheduleapp/utils/repository/thumnail_repo.dart';
+import 'package:scheduleapp/utils/app_constant.dart';
 class ThumbnailBUS {
   final _thumbnailRepository = ThumbnailRepository();
 

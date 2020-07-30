@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:Educare/utils/database/database.dart';
-import 'package:Educare/utils/db_commands.dart';
-import 'package:Educare/utils/log_history.dart';
-import 'package:Educare/utils/model/tag.dart';
+import 'package:scheduleapp/utils/database/database.dart';
+import 'package:scheduleapp/utils/db_commands.dart';
+import 'package:scheduleapp/utils/log_history.dart';
+import 'package:scheduleapp/utils/model/tag.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RelativeDAO {

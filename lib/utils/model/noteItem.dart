@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:Educare/utils/model/TimeUtils.dart';
+import 'package:scheduleapp/utils/model/TimeUtils.dart';
 
 enum NoteItemType { TEXT, IMAGE, AUDIO }
 

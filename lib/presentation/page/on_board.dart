@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Educare/application/color_app.dart';
-import 'package:Educare/presentation/atom/page_indicator.dart';
-import 'package:Educare/presentation/atom/screen_data.dart';
+import 'package:scheduleapp/application/color_app.dart';
+import 'package:scheduleapp/presentation/atom/page_indicator.dart';
+import 'package:scheduleapp/presentation/atom/screen_data.dart';
 
 import 'on_board_detail.dart';
 
