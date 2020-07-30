@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/presentation/atom/custom_button.dart';
 import 'package:scheduleapp/presentation/atom/custom_icon_decoration.dart';
-
+import 'package:scheduleapp/presentation/atom/custom_modal_action_button_edit.dart';
 
 class Event{
   final String time;
@@ -10,7 +11,7 @@ class Event{
   const Event(this.time,this.task,this.desc,this.isDone);
 }
 
-final List<Event> _eventList = [
+List<Event> _eventList = [
   new Event("08:00", "Coffee", "Personal", true),
 new Event("08:00", "Coffee", "Personal", true),
 new Event("08:00", "Coffee", "Personal", false),
@@ -29,14 +30,105 @@ class _EventPageState extends State<EventPage> {
       itemCount: _eventList.length,
       padding: const EdgeInsets.all(0),
         itemBuilder: (context,index){
-          return Padding(
-            padding: const EdgeInsets.only(left: 24.0,right: 24.0),
-            child: Row(
-              children: <Widget>[
-                _lineStyle(iconSize, index, context, _eventList.length,_eventList[index].isDone),
-                _displayTime(_eventList[index].time),
-                _displayContent(_eventList[index])
-              ],
+          return InkWell(
+            onTap: (){
+              showDialog(
+                  context: context,
+                  builder: (context){
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12))
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              _eventList[index].task,
+                              style: TextStyle(
+                                  fontSize: 30,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(height: 24,),
+                            Row(
+                              children: <Widget>[
+                                Icon(Icons.access_time),
+                                SizedBox(width: 10,),
+                                Text(_eventList[index].time,),
+                              ],
+                            ),
+                            SizedBox(height: 24,),
+                            Row(
+                              children: <Widget>[
+                                Icon(Icons.event_note),
+                                SizedBox(width: 10,),
+                                Text(_eventList[index].desc,),
+                              ],
+                            ),
+                            SizedBox(height: 24,),
+                            CustomModalActionButton(
+                                onClose: ()=>Navigator.of(context).pop(),
+                                onEdit:(){},
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+              );
+            },
+            onLongPress: (){
+              showDialog(
+                  context: context,
+                  builder: (context){
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12))
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text("Delete",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16
+                                )
+                            ),
+                            SizedBox(height: 24,),
+                            Text(
+                                _eventList[index].task
+                            ),
+                            SizedBox(height: 24,),
+                            Text(_eventList[index].time),
+                            SizedBox(height: 24,),
+                            CustomButton(
+                              buttonText: "Delete",
+                              onPressed: (){
+                                 Navigator.of(context).pop();
+                              },
+                              color: Theme.of(context).accentColor,
+                              textColor: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24.0,right: 24.0),
+              child: Row(
+                children: <Widget>[
+                  _lineStyle(iconSize, index, context, _eventList.length,_eventList[index].isDone),
+                  _displayTime(_eventList[index].time),
+                  _displayContent(_eventList[index])
+                ],
+              ),
             ),
           );
         },
