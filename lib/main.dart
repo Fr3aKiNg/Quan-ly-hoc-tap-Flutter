@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/application/route.dart';
+import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/on_board.dart';
 
 
@@ -14,7 +16,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: OnboardingMe(),
+      routes: {
+        'home': (context) => HomeScreen(),
+        'on_board': (context) => OnboardingMe()
+      },
+      onGenerateRoute: Router.generateRoute,
+      initialRoute: 'on_board',
       
     );
   }

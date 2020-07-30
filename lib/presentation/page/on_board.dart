@@ -3,16 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/presentation/atom/page_indicator.dart';
 import 'package:scheduleapp/presentation/atom/screen_data.dart';
+import 'package:scheduleapp/presentation/page/home_screen.dart';
 
 import 'on_board_detail.dart';
 
-
 class OnboardingMe extends StatefulWidget {
-  /// Number of Pages for the screens
   @required
   int numOfPage;
-
-  List<String> ctaText = [];
   List<OnBoardDetail> dataScreen;
   List<OnBoardDetail> data = [
     OnBoardDetail(
@@ -44,13 +41,11 @@ class OnboardingMe extends StatefulWidget {
 
   OnboardingMe({
     numOfPage = 5,
-    ctaText = const ['Skip', 'Get Started'],
     data,
     isPageIndicatorCircle = true,
     homeRoute = '/',
   }) {
     this.numOfPage = numOfPage;
-    this.ctaText = ctaText;
     this.isPageIndicatorCircle = isPageIndicatorCircle;
     this.homeRoute = homeRoute;
     this.dataScreen = data;
@@ -61,79 +56,61 @@ class OnboardingMe extends StatefulWidget {
 }
 
 class _OnboardingMeState extends State<OnboardingMe> {
-  /// PageController will control the view of screens
   PageController pageController = PageController(initialPage: 0);
 
   int currentPage = 0;
-
+  bool skip = true;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
-        child: Stack(
-          children: <Widget>[
-            Container(
-                width: w * 100,
-                height: h * 45,
-                decoration: BoxDecoration(
-                  color: ColorApp.backgroundColor,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.elliptical(160, 50),
-                      bottomRight: Radius.elliptical(160, 50)),
-                )),
-
-
-                Padding(padding: EdgeInsets.fromLTRB(w*35, h*10, 0, h*20),child:Row(
-                    mainAxisSize: MainAxisSize.min,
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Stack(
+        children: <Widget>[
+          Container(
+              width: w * 100,
+              height: h * 45,
+              decoration: BoxDecoration(
+                color: ColorApp.backgroundColor,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.elliptical(160, 50),
+                    bottomRight: Radius.elliptical(160, 50)),
+              )),
+          Padding(
+              padding: EdgeInsets.fromLTRB(w * 38, h * 10, 0, h * 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: pageIndicator(widget.numOfPage, currentPage,
-                            widget.isPageIndicatorCircle),
-                      ),
-                      SizedBox(
-                          width: w * 15),
-                      GestureDetector(
-                              child: Text("Bỏ qua",
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.white)))
-                    ])),
-            Container(
-              height: h * 100,
-              child: PageView(
-                physics: ClampingScrollPhysics(),
-                controller: pageController,
-                onPageChanged: (int page) {
-                  /// Setting current page for page indicator
-                  setState(() {
-                    currentPage = page;
-                  });
-                },
+                    mainAxisSize: MainAxisSize.min,
+                    children: pageIndicator(widget.numOfPage, currentPage,
+                        widget.isPageIndicatorCircle),
+                  ),
+                  SizedBox(width: w * 15),
+                ],
+              )),
 
-                /// Screen Data
-                children: screenData(widget.numOfPage, widget.data),
-              ),
+          Container(
+            height: h * 100,
+            child: PageView(
+              physics: ClampingScrollPhysics(),
+              controller: pageController,
+              onPageChanged: (int page) {
+                setState(() {
+                  currentPage = page;
+                });
+              },
+              children: screenData(widget.numOfPage, widget.data),
             ),
-//                Row(
-//                  mainAxisAlignment: MainAxisAlignment.center,
-//                  /// Page Indicator
-//                  children: pageIndicator(widget.numOfPage, currentPage,
-//                      widget.isPageIndicatorCircle),
-//                ),
-          ],
-        ),
+          ),
+//
+        ],
       ),
-
-      /// Will show Main Call to action on the last page
-//      bottomSheet: currentPage == widget.numOfPage - 1
-//          ? callToAction(text: widget.ctaText[1], homeRoute: widget.homeRoute, context: context)
-//          : Text(''),
-    );
+    ));
   }
 }
