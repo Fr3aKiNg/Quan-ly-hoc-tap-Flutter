@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
 import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
@@ -11,8 +13,9 @@ class AddEventPage extends StatefulWidget {
 
 class _AddEventPageState extends State<AddEventPage> {
 
-  String _selectedDate = "Pick date";
-  String _selectedTime = "Pick time";
+  DateTime _selectedDate = DateTime.now();
+  TimeOfDay _selectedTimeFrom = TimeOfDay.now();
+  TimeOfDay _selectedTimeTo = TimeOfDay.now();
 
   Future _pickDate() async {
     DateTime datepick = await showDatePicker(
@@ -22,16 +25,16 @@ class _AddEventPageState extends State<AddEventPage> {
         lastDate: new DateTime.now().add(Duration(days: 365)));
       if(datepick!=null){
         setState(() {
-          _selectedDate = datepick.toString();
+          _selectedDate = datepick;
         });
       }
   }
 
-  Future _pickTime() async{
+  Future _pickTime(bool isFrom) async{
     TimeOfDay timepick = await showTimePicker(
         context: context, initialTime: new TimeOfDay.now());
     if(timepick!=null) setState(() {
-      _selectedTime = timepick.toString();
+      isFrom ? _selectedTimeFrom = timepick :_selectedTimeTo = timepick;
     });
   }
 
@@ -52,8 +55,19 @@ class _AddEventPageState extends State<AddEventPage> {
             ),
           ),
           SizedBox(height: 24,),
-          CustomTextField(
-            labelText: "Enter event name",
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 4,
+                child: CustomTextField(
+                  labelText: "Enter event name",
+                ),
+              ),
+              Expanded(
+                  flex: 1,
+                  child: ChangeBGColorDropdown()
+              ),
+            ],
           ),
           SizedBox(height: 12,),
           CustomTextField(
@@ -62,13 +76,32 @@ class _AddEventPageState extends State<AddEventPage> {
           SizedBox(height: 12,),
           CustomDateTimePicker(
             onPressed: _pickDate,
-            value: _selectedDate,
+            value: new DateFormat.yMMMMEEEEd('en_US').format(_selectedDate) ,//new DateFormat("dd-MM-yyyy").format(_selectedDate),
             icon: Icons.date_range,
           ),
-          CustomDateTimePicker(
-            onPressed: _pickTime,
-            value: _selectedTime,
-            icon: Icons.access_time,
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 3,
+                child: CustomDateTimePicker(
+                  onPressed: () {_pickTime(true);},
+                  value: new TimeOfDay(hour: _selectedTimeFrom.hour, minute: _selectedTimeFrom.minute).toString().substring(10,15),
+                  icon: Icons.access_time,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text("-", textAlign: TextAlign.center, style: TextStyle(fontSize: 30),),
+              ),
+              Expanded(
+                flex: 3,
+                child: CustomDateTimePicker(
+                  onPressed: () {_pickTime(false);} ,
+                  value: new TimeOfDay(hour: _selectedTimeTo.hour, minute: _selectedTimeTo.minute).toString().substring(10,15),
+                  icon: Icons.access_time,
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 24,),
           CustomModalActionButton(
