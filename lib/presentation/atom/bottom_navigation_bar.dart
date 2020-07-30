@@ -44,6 +44,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 
   Widget buildNavBarItem(IconData icon, int index,String name) {
+    double h  = MediaQuery.of(context).size.height/100;
+    double w  = MediaQuery.of(context).size.width/100;
     return GestureDetector(
         onTap: () {
           widget.onChange(index);
@@ -52,7 +54,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           });
         },
         child: Container(
-          height: 80,
+          padding: EdgeInsets.fromLTRB(0, h*1.5, 0, h),
+          height: h*10,
           width: MediaQuery.of(context).size.width / _iconList.length,
           decoration: index == _selectedIndex
               ? BoxDecoration(
