@@ -1,9 +1,5 @@
 import 'dart:async';
 
-import 'package:scheduleapp/utils/dao/noteItem_dao.dart';
-import 'package:scheduleapp/utils/dao/relative_dao.dart';
-import 'package:scheduleapp/utils/dao/tag_dao.dart';
-import 'package:scheduleapp/utils/dao/thumbnail_dao.dart';
 import 'package:scheduleapp/utils/database/database.dart';
 import 'package:scheduleapp/utils/db_commands.dart';
 import 'package:scheduleapp/utils/model/note.dart';
@@ -13,10 +9,6 @@ import '../log_history.dart';
 
 class NoteDAO {
   final dbProvider = DatabaseApp.dbProvider;
-  final tagDao = TagDAO();
-  final thumbnailNoteDao = ThumbnailNoteDAO();
-  final noteItemDao = NoteItemDAO();
-  final relativeDao = RelativeDAO();
 
   //Insert new Note
   //Return row id
@@ -30,13 +22,6 @@ class NoteDAO {
         note.toDatabaseJson(),
         //conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      //Insert NoteItem
-      await noteItemDao.createListNoteItemByNote(note, txn: txn);
-      //Insert Tag Relative
-      await relativeDao.insertRelativesFromTagList(note.id, note.tags,
-          txn: txn);
-      //Insert Thumbnail
-      await thumbnailNoteDao.createThumbnailByNote(note, txn: txn);
 
       LogHistory.trackLog("[Transaction][Note]", "INSERT new note:" + note.id.toString());
     });
@@ -56,15 +41,6 @@ class NoteDAO {
         whereArgs: [note.id],
       );
 
-      await relativeDao.deleteRelativesByNoteID(note.id, txn: txn);
-      await relativeDao.insertRelativesFromTagList(note.id, note.tags,
-          txn: txn);
-      await noteItemDao.deleteNoteItemsByNoteID(note.id,txn: txn);
-      await noteItemDao.createListNoteItemByNote(note,txn: txn);
-
-//      await noteItemDao.updateListNoteItemByNote(note, txn: txn);
-      await thumbnailNoteDao.updateThumbnailByNote(note,txn: txn);
-
       LogHistory.trackLog("[Transaction][Note]", "UPDATE note:" + note.id.toString());
     });
 
@@ -79,11 +55,6 @@ class NoteDAO {
     await db.transaction((txn) async {
       count =
           await txn.delete('notes', where: "note_id = ?", whereArgs: [noteId]);
-
-      await relativeDao.deleteRelativesByNoteID(noteId, txn: txn);
-      await noteItemDao.deleteNoteItemsByNoteID(noteId, txn: txn);
-
-      await thumbnailNoteDao.deleteThumbnail(noteId, txn: txn);
       LogHistory.trackLog("[Transaction][Note]", "DELETE note:" + noteId.toString());
     });
     return count;
@@ -98,8 +69,6 @@ class NoteDAO {
       await txn.delete(
         'notes',
       );
-      await noteItemDao.deleteAllNoteItem(txn: txn);
-      await relativeDao.deleteAllRelatives(txn: txn);
       //await tagDao.deleteAllTags();
 
       LogHistory.trackLog("[Transaction][Note]", "DELETE ALL note");
@@ -159,13 +128,8 @@ class NoteDAO {
     List<Map<String, dynamic>> maps =
         await db.query('notes', where: "note_id = ?", whereArgs: [noteId]);
     // Case Found
-    if (maps.isNotEmpty) {
-      var tags = await tagDao.getTagsByNoteID(noteId); //Get tags of Note
-      var noteItems = await noteItemDao
-          .getNoteItemsByNoteID(noteId); //Get noteItems of Note
+    if (maps.isNotEmpty) {//Get noteItems of Note
       var note = Notes.fromDatabaseJson(maps.first); //Create base Note
-      note.setTag(tags);
-      note.setListNoteItems(noteItems);
 
       return note;
     }

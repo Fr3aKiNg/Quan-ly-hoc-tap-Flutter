@@ -6,7 +6,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../db_commands.dart';
-import '../model/tag.dart';
 
 class DatabaseApp {
   // Open the database and store the reference.
