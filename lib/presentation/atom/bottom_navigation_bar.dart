@@ -49,6 +49,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return GestureDetector(
         onTap: () {
           widget.onChange(index);
+          Navigator.of(context).pushNamed('other_screen');
+
           setState(() {
             _selectedIndex = index;
           });
