@@ -37,7 +37,6 @@ class OnBoardInfo extends StatelessWidget {
             SizedBox(height: h * 6),
           Align(alignment: Alignment.bottomRight,child: InkWell(
               onTap: () {
-                print("hihi");
                 Navigator.of(context).pushReplacementNamed('home');
               },
               child: Text("Bỏ qua",
