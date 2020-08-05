@@ -11,28 +11,7 @@ class OnboardingMe extends StatefulWidget {
   @required
   int numOfPage;
   List<OnBoardDetail> dataScreen;
-  List<OnBoardDetail> data = [
-    OnBoardDetail(
-        "assets/on_board_1.png",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
-    OnBoardDetail(
-        "assets/on_board_2.png",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
-    OnBoardDetail(
-        "assets/on_board_3.png",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
-    OnBoardDetail(
-        "assets/on_board_4.png",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
-    OnBoardDetail(
-        "assets/login.png",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut.")
-  ];
+
 
   bool isPageIndicatorCircle = true;
 
@@ -62,6 +41,29 @@ class _OnboardingMeState extends State<OnboardingMe> {
   bool skip = true;
   @override
   Widget build(BuildContext context) {
+    List<OnBoardDetail> data = [
+      OnBoardDetail(img:
+      "assets/on_board_1.png",
+          title:"Lorem ipsum dolor sit amet, consectetur adipiscing",
+          des:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
+      OnBoardDetail(img:
+      "assets/on_board_2.png",
+          title:"Lorem ipsum dolor sit amet, consectetur adipiscing",
+          des:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
+      OnBoardDetail(img:
+      "assets/on_board_3.png",
+          title:"Lorem ipsum dolor sit amet, consectetur adipiscing",
+          des:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
+      OnBoardDetail(img:
+      "assets/on_board_4.png",
+          title:"Lorem ipsum dolor sit amet, consectetur adipiscing",
+          des:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
+      OnBoardDetail(img:
+      "assets/login.png",
+          title: "",
+          des: "",
+          loginGoogle: LoginGoogle()),
+    ];
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return Scaffold(
@@ -105,7 +107,7 @@ class _OnboardingMeState extends State<OnboardingMe> {
                   currentPage = page;
                 });
               },
-              children: screenData(widget.numOfPage, widget.data),
+              children: screenData(widget.numOfPage, data),
             ),
           ),
 //
