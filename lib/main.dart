@@ -6,7 +6,7 @@ import 'package:scheduleapp/utils/firestore/locator.dart';
 
 
 void main() {
-  setupLocator();
+//  setupLocator();
   runApp(MyApp());
 }
 
