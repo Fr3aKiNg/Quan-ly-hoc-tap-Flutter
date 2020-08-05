@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/route.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/on_board.dart';
+import 'package:scheduleapp/utils/firestore/locator.dart';
 
 
 void main() {
+//  setupLocator();
   runApp(MyApp());
 }
 
