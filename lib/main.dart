@@ -5,6 +5,8 @@ import 'package:scheduleapp/presentation/page/on_board.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 import 'package:scheduleapp/utils/firestore/locator.dart';
 
+import 'presentation/page/listcourse.dart';
+
 void main() {
 //  setupLocator();
   runApp(MyApp());
@@ -21,10 +23,11 @@ class MyApp extends StatelessWidget {
       routes: {
         'home': (context) => HomeScreen(),
         'on_board': (context) => OnboardingMe(),
-        'score': (context) => MyTranscriptPage()
+        'score': (context) => MyTranscriptPage(),
+        'list_course':(context) => MyListCoursePage()
       },
       onGenerateRoute: Router.generateRoute,
-      initialRoute: 'score',
+      initialRoute: 'on_board',
     );
   }
 }
