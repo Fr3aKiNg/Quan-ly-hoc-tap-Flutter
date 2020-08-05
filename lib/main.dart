@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/application/route.dart';
+import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/on_board.dart';
-import 'package:scheduleapp/presentation/page/task_event.dart';
 
 
 void main() {
@@ -15,7 +16,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TaskEventPage(), //OnboardingMe(),
+      routes: {
+        'home': (context) => HomeScreen(),
+        'on_board': (context) => OnboardingMe()
+      },
+      onGenerateRoute: Router.generateRoute,
+      initialRoute: 'on_board',
+      
     );
   }
 }

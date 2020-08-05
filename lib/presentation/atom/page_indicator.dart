@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/presentation/page/home_screen.dart';
 
 List<Widget> pageIndicator(
     int numOfPages,
@@ -12,6 +13,7 @@ List<Widget> pageIndicator(
         ? currentPageIndicator(true, isPageIndicatorCircle)
         : currentPageIndicator(false, isPageIndicatorCircle));
   }
+
   return list;
 }
 

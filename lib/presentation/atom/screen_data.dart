@@ -12,6 +12,7 @@ List<Widget> screenData(int numOfPages, data) {
       print("You should provide enough content for all screens");
     }
   }
+
   return list;
 }
 
