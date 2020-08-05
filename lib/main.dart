@@ -27,7 +27,9 @@ class MyApp extends StatelessWidget {
         'list_course':(context) => MyListCoursePage()
       },
       onGenerateRoute: Router.generateRoute,
+
       initialRoute: 'on_board',
+
     );
   }
 }
