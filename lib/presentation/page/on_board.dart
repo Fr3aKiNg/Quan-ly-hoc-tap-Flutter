@@ -67,8 +67,8 @@ class _OnboardingMeState extends State<OnboardingMe> {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return Scaffold(
-        body: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle.light,
+
+        body: SingleChildScrollView(
           child: Stack(
             children: <Widget>[
               Container(
