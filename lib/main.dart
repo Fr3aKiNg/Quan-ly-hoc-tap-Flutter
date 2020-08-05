@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         'score': (context) => MyTranscriptPage()
       },
       onGenerateRoute: Router.generateRoute,
-      initialRoute: 'score',
+      initialRoute: 'home',
     );
   }
 }
