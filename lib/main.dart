@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/route.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/on_board.dart';
+import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 import 'package:scheduleapp/utils/firestore/locator.dart';
-
 
 void main() {
 //  setupLocator();
@@ -20,12 +20,11 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         'home': (context) => HomeScreen(),
-        'on_board': (context) => OnboardingMe()
+        'on_board': (context) => OnboardingMe(),
+        'score': (context) => MyTranscriptPage()
       },
       onGenerateRoute: Router.generateRoute,
-      initialRoute: 'on_board',
-      
+      initialRoute: 'score',
     );
   }
 }
-
