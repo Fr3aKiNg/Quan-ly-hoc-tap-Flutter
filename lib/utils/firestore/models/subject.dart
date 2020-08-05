@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scheduleapp/utils/firestore/models/subject_score.dart';
 
 class Subject{
+  String id;
   String name;
   double goal;
 
@@ -12,6 +13,7 @@ class Subject{
   factory Subject.fromSnapshot(DocumentSnapshot snapshot){
     Subject newSubject = Subject.fromJson(snapshot.data);
     newSubject.reference = snapshot.reference;
+    newSubject.id = snapshot.documentID;
     return newSubject;
   }
   factory Subject.fromJson(Map<dynamic, dynamic> json) => _SubjectFromJson(json);

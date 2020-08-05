@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scheduleapp/utils/firestore/models/subject.dart';
 
 class Term{
+  String id;
   int grade;
   int term;
 
@@ -12,6 +13,7 @@ class Term{
   factory Term.fromSnapshot(DocumentSnapshot snapshot){
     Term newTerm = Term.fromJson(snapshot.data);
     newTerm.reference = snapshot.reference;
+    newTerm.id = snapshot.documentID;
     return newTerm;
   }
   factory Term.fromJson(Map<String, dynamic> json) => _TermFromJson(json);

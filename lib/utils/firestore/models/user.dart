@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:scheduleapp/utils/firestore/models/term.dart';
 
 class User{
+  String id;
   String email;
   String name;
   String imageUrl;
@@ -11,6 +12,7 @@ class User{
   User(this.email, this.name,this.imageUrl,this.terms);
   factory User.fromSnapshot(DocumentSnapshot snapshot) {
     User newUser = User.fromJson(snapshot.data);
+    newUser.id = snapshot.documentID;
     newUser.reference = snapshot.reference;
     return newUser;
   }
