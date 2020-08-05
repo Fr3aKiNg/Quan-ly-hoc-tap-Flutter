@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:path/path.dart';
+
+import 'home_screen.dart';
 class MyListCoursePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,14 @@ class RandomWordsState extends State<RandomWords> {
                 ConstrainedBox (
                     constraints: BoxConstraints.expand(height: 50),
                     child: (
-                        RaisedButton(
+                        RaisedButton(onPressed: (){
+                          Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              HomeScreen()),
+    );
+                        },
                             color: Color(0xFF00C48C),
                             textColor: Colors.white,
                             disabledTextColor: Colors.white,

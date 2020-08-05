@@ -31,10 +31,11 @@ class detailCourseState extends State<detailCourse> {
   String CourseName;
 
   List<String> _nameCol = <String> ["Miệng", "15 phút", "1 tiết", "Giữa kỳ", "Cuối kỳ"];
-  List _score = [[10.0, 9.5],[10.0, 8.5, 9.0],[8.75, 9.5],[9.5],[10.0]];
+  List _scoreSes1 = [[10.0, 9.5],[10.0, 8.5, 9.0],[8.75, 9.5],[9.5],[10.0]];
+  List _scoreSes2 = [[10.0, 9.5],[10.0, 8.5, 9.0],[8.75, 9.5],[9.5],[]];
   List _heso = [1,1,2,2,3];
 
-  double getAvg() {
+  double getAvg(List _score) {
     double res = 0.0;
     int count = 0;
     for (int i = 0; i < _heso.length; i++) {
@@ -53,6 +54,13 @@ class detailCourseState extends State<detailCourse> {
     CourseName = course;
   }
 
+  TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = new TextEditingController(text: 'Initial value');
+  }
   @override
   Widget build(BuildContext context) {
     String _value = "";
@@ -81,7 +89,7 @@ class detailCourseState extends State<detailCourse> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text("Học kỳ 1", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-                    Text(getAvg().toStringAsFixed(1).toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),)
+                    Text(getAvg(_scoreSes1).toStringAsFixed(1).toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),)
                   ],
                 ),
               ),
@@ -93,7 +101,36 @@ class detailCourseState extends State<detailCourse> {
                         return Container(
                             child: Column(
                               children: <Widget>[
-                                _buildRow(_nameCol[index], _score[index]),
+                                _buildRow(_nameCol[index], _scoreSes1[index]),
+                                Divider()
+                              ],),
+                            margin: null,
+                            color: null);
+                      else
+                        return null;
+                    }),
+                  )
+              ),
+              Container(
+                height: 60,
+                margin: EdgeInsets.only(left: 10, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text("Học kỳ 2", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
+                    Text(getAvg(_scoreSes2).toStringAsFixed(1).toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),)
+                  ],
+                ),
+              ),
+              Expanded (
+                  child: SizedBox(
+                    height: 500,
+                    child:ListView.builder(itemBuilder: (context, index) {
+                      if (index < _nameCol.length)
+                        return Container(
+                            child: Column(
+                              children: <Widget>[
+                                _buildRow(_nameCol[index], _scoreSes2[index]),
                                 Divider()
                               ],),
                             margin: null,
@@ -136,12 +173,116 @@ class detailCourseState extends State<detailCourse> {
             Icons.add,
             color: Color(0xFF00C48C)),
         onTap: () {
-
+          _showMyDialog(nameCol, score);
         },
       );
   }
 
-  void addScore() {
-    
+  Future<void> _showMyDialog(String nameCol, List score) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text(nameCol, style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)))),
+          content: Container (
+            height: 250,
+            child: Column (
+              children: <Widget>[
+                Expanded (
+                    child: SizedBox(
+                      height: 500,
+                      child:ListView.builder(itemBuilder: (context, index) {
+                        if (index < score.length)
+                          return Container(
+                              child: Column(
+                                children: <Widget>[
+                                  _buildRowDialog(score[index])
+                                ],),
+                              margin: null,
+                              color: null);
+                        else
+                          return null;
+                      }),
+                    )
+                ),
+              ],
+
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Approve'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
+
+  Widget _buildRowDialog(double score) {
+    return ListTile(
+      title: TextFormField(
+          style: _biggerFont,
+          initialValue: score.toString(),
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            hintText: '',
+            hintStyle: TextStyle(fontSize: 18.0, color: Color(0xFFBDBDBD)),
+            filled: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: Color(0xFF00C48C),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: Color(0xFFE4E4E4),
+                width: 1.0,
+              ),
+            ),
+          )
+      ),
+      trailing: new Icon(Icons.close, color: Colors.red),
+      onTap: () {
+
+      },
+    );
+  }
+}
+class CustomDialog extends StatelessWidget {
+  final String title, description, buttonText;
+  final Image image;
+
+  CustomDialog({
+    @required this.title,
+    @required this.description,
+    @required this.buttonText,
+    this.image,
+  });
+  dialogContent(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        //...bottom card part,
+        //...top circlular image part,
+      ],
+    );
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+      child: dialogContent(context),
+    );
+  }
+
 }
