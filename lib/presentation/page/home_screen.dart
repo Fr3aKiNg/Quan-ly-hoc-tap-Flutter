@@ -31,7 +31,6 @@ class HomeScreenState extends State<HomeScreen>{
       defaultSelectedIndex: 1,
       btnName: ["Tổng quan","Điểm","Ghi chú","Khác"],
     ),
-
         body: SingleChildScrollView(controller:controller ,
           child: Stack(
           children: <Widget>[

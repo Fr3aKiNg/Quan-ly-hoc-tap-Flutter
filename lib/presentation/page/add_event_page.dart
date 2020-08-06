@@ -12,10 +12,14 @@ class AddEventPage extends StatefulWidget {
 }
 
 class _AddEventPageState extends State<AddEventPage> {
-
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTimeFrom = TimeOfDay.now();
   TimeOfDay _selectedTimeTo = TimeOfDay.now();
+
+  @override
+  void initState(){
+    super.initState();
+  }
 
   Future _pickDate() async {
     DateTime datepick = await showDatePicker(
@@ -41,7 +45,7 @@ class _AddEventPageState extends State<AddEventPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(0.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

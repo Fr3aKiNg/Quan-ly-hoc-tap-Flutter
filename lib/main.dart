@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/route.dart';
+import 'package:scheduleapp/presentation/page/calender_page.dart';
+import 'package:scheduleapp/presentation/page/event_page.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/on_board.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
+import 'package:scheduleapp/presentation/page/task_event.dart';
 import 'package:scheduleapp/utils/firestore/locator.dart';
 
 import 'presentation/page/enter_information.dart';
@@ -18,19 +21,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        primarySwatch: Colors.green,
       ),
       routes: {
         'home': (context) => HomeScreen(),
         'on_board': (context) => OnboardingMe(),
         'score': (context) => MyTranscriptPage(),
         'list_course':(context) => MyListCoursePage(),
-        'personal_information':(context) => MyInformationPage()
+        'personal_information':(context) => MyInformationPage(),
+        'task_event':(context)=> TaskEventPage(),
+        'calendar':(context)=> CalenderPage(),
       },
       onGenerateRoute: Router.generateRoute,
 
-      initialRoute: 'on_board',
+      initialRoute: 'calendar',
 
     );
   }
