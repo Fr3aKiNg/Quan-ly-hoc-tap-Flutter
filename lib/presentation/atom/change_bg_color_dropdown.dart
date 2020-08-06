@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ChangeBGColorDropdown extends StatefulWidget {
+  Color selectedColor;
+  ChangeBGColorDropdown(this.selectedColor);
   @override
   ChangeBGColorDropdownState createState() {
-    return new ChangeBGColorDropdownState();
+    return new ChangeBGColorDropdownState(this.selectedColor);
   }
 }
 class ChangeBGColorDropdownState extends State<ChangeBGColorDropdown> {
@@ -15,7 +17,8 @@ class ChangeBGColorDropdownState extends State<ChangeBGColorDropdown> {
     ColorModel(color: Colors.amber, colorName: "Amber"),
     ColorModel(color: Colors.brown, colorName: "Brown"),
   ];
-  Color _selectedColor = Colors.red;
+  ChangeBGColorDropdownState(this._selectedColor);
+  Color _selectedColor;
   @override
   Widget build(BuildContext context) {
     return  DropdownButton<Color>(

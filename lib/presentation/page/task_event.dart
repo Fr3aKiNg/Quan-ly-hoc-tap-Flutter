@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/presentation/page/event_page.dart';
-
+import 'package:intl/intl.dart';
 
 class TaskEventPage extends StatefulWidget {
   TaskEventPage({Key key, this.title}) : super(key: key);
@@ -30,8 +30,8 @@ class _TaskEventPageState extends State<TaskEventPage> {
           mainContent(context),
           Positioned(
             right: 0,
-            top: 0,
-            child: Text("6",
+            child: Text(
+              DateFormat.d().format(DateTime.now()),
               style: TextStyle(
                 fontSize: 150,
                 color: Color(0x10000000),
@@ -50,7 +50,7 @@ class _TaskEventPageState extends State<TaskEventPage> {
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Text(
-              "Monday",
+              DateFormat.EEEE().format(DateTime.now()),
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

@@ -4,6 +4,7 @@ import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
 import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
+import 'package:scheduleapp/presentation/model/event_model.dart';
 
 
 class AddEventPage extends StatefulWidget {
@@ -15,6 +16,10 @@ class _AddEventPageState extends State<AddEventPage> {
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTimeFrom = TimeOfDay.now();
   TimeOfDay _selectedTimeTo = TimeOfDay.now();
+
+  Color _selectedColor = Colors.red;
+  final _textEventControlerName = TextEditingController();
+  final _textEventControlerDesc = TextEditingController();
 
   @override
   void initState(){
@@ -44,8 +49,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
+    return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -64,17 +68,19 @@ class _AddEventPageState extends State<AddEventPage> {
               Expanded(
                 flex: 4,
                 child: CustomTextField(
+                  controller: _textEventControlerName,
                   labelText: "Enter event name",
                 ),
               ),
               Expanded(
                   flex: 1,
-                  child: ChangeBGColorDropdown()
+                  child: ChangeBGColorDropdown(_selectedColor),
               ),
             ],
           ),
           SizedBox(height: 12,),
           CustomTextField(
+            controller: _textEventControlerDesc,
             labelText: "Enter description",
           ),
           SizedBox(height: 12,),
@@ -110,7 +116,14 @@ class _AddEventPageState extends State<AddEventPage> {
           SizedBox(height: 24,),
           CustomModalActionButton(
             onClose: () => Navigator.of(context).pop(),
-            onSave: (){},
+            onSave: (){
+              if(_textEventControlerName.text.isEmpty) {
+                Navigator.of(context).pop();
+              }
+              else {
+                Navigator.of(context).pop(Event(_textEventControlerName.text,_textEventControlerDesc.text, DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),_selectedColor));
+              }
+            },
           ),
         ],
       ),
