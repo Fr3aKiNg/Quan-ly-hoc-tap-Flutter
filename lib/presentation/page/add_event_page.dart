@@ -55,7 +55,7 @@ class _AddEventPageState extends State<AddEventPage> {
         children: <Widget>[
           Center(
             child: Text(
-              "Add new event",
+              "Thêm sự kiện",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -69,7 +69,7 @@ class _AddEventPageState extends State<AddEventPage> {
                 flex: 4,
                 child: CustomTextField(
                   controller: _textEventControlerName,
-                  labelText: "Enter event name",
+                  labelText: "Tiêu đề sự kiện",
                 ),
               ),
               Expanded(
@@ -81,12 +81,144 @@ class _AddEventPageState extends State<AddEventPage> {
           SizedBox(height: 12,),
           CustomTextField(
             controller: _textEventControlerDesc,
-            labelText: "Enter description",
+            labelText: "Chi tiết",
           ),
           SizedBox(height: 12,),
           CustomDateTimePicker(
             onPressed: _pickDate,
-            value: new DateFormat.yMMMMEEEEd('en_US').format(_selectedDate) ,//new DateFormat("dd-MM-yyyy").format(_selectedDate),
+            value: new DateFormat.yMMMMEEEEd().format(_selectedDate) ,//new DateFormat("dd-MM-yyyy").format(_selectedDate),
+            icon: Icons.date_range,
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 3,
+                child: CustomDateTimePicker(
+                  onPressed: () {_pickTime(true);},
+                  value: new TimeOfDay(hour: _selectedTimeFrom.hour, minute: _selectedTimeFrom.minute).toString().substring(10,15),
+                  icon: Icons.access_time,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text("-", textAlign: TextAlign.center, style: TextStyle(fontSize: 30),),
+              ),
+              Expanded(
+                flex: 3,
+                child: CustomDateTimePicker(
+                  onPressed: () {_pickTime(false);} ,
+                  value: new TimeOfDay(hour: _selectedTimeTo.hour, minute: _selectedTimeTo.minute).toString().substring(10,15),
+                  icon: Icons.access_time,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 24,),
+          CustomModalActionButton(
+            onClose: () => Navigator.of(context).pop(),
+            onSave: (){
+              if(_textEventControlerName.text.isEmpty) {
+                Navigator.of(context).pop();
+              }
+              else {
+                Navigator.of(context).pop(Event(_textEventControlerName.text,_textEventControlerDesc.text, DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),_selectedColor));
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EditEventPage extends StatefulWidget {
+  DateTime _selectedDate;
+  TimeOfDay _selectedTimeFrom;
+  TimeOfDay _selectedTimeTo;
+
+  Color _selectedColor;
+  TextEditingController _textEventControlerName,_textEventControlerDesc;
+  EditEventPage(this._selectedDate,this._selectedTimeFrom,this._selectedTimeTo,this._textEventControlerName,this._textEventControlerDesc,this._selectedColor);
+  @override
+  _EditEventPageState createState() => _EditEventPageState(this._selectedDate,this._selectedTimeFrom,this._selectedTimeTo,this._textEventControlerName,this._textEventControlerDesc,this._selectedColor);
+
+}
+
+class _EditEventPageState extends State<EditEventPage> {
+  DateTime _selectedDate;
+  TimeOfDay _selectedTimeFrom;
+  TimeOfDay _selectedTimeTo;
+  Color _selectedColor;
+  TextEditingController _textEventControlerName,_textEventControlerDesc;
+
+  _EditEventPageState(this._selectedDate,this._selectedTimeFrom,this._selectedTimeTo,this._textEventControlerName,this._textEventControlerDesc,this._selectedColor);
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
+  Future _pickDate() async {
+    DateTime datepick = await showDatePicker(
+        context: context,
+        initialDate: new DateTime.now(),
+        firstDate: new DateTime.now().add(Duration(days: -365)),
+        lastDate: new DateTime.now().add(Duration(days: 365)));
+    if(datepick!=null){
+      setState(() {
+        _selectedDate = datepick;
+      });
+    }
+  }
+
+  Future _pickTime(bool isFrom) async{
+    TimeOfDay timepick = await showTimePicker(
+        context: context, initialTime: new TimeOfDay.now());
+    if(timepick!=null) setState(() {
+      isFrom ? _selectedTimeFrom = timepick :_selectedTimeTo = timepick;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Center(
+            child: Text(
+              "Sửa sự kiện",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          SizedBox(height: 24,),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 4,
+                child: CustomTextField(
+                  controller: _textEventControlerName,
+                  labelText: "Tiêu đề sự kiện",
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: ChangeBGColorDropdown(_selectedColor),
+              ),
+            ],
+          ),
+          SizedBox(height: 12,),
+          CustomTextField(
+            controller: _textEventControlerDesc,
+            labelText: "Chi tiết",
+          ),
+          SizedBox(height: 12,),
+          CustomDateTimePicker(
+            onPressed: _pickDate,
+            value: new DateFormat.yMMMMEEEEd().format(_selectedDate) ,//new DateFormat("dd-MM-yyyy").format(_selectedDate),
             icon: Icons.date_range,
           ),
           Row(

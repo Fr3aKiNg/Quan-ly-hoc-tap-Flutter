@@ -7,4 +7,7 @@ class Event{
   DateTime to;
   Color color;
   Event(this.name,this.desc,this.from,this.to,this.color);
+  DateTime getDate(){
+    return from;
+  }
 }

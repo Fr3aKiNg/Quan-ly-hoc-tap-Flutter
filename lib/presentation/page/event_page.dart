@@ -1,203 +1,172 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scheduleapp/presentation/atom/custom_button.dart';
-import 'package:scheduleapp/presentation/atom/custom_icon_decoration.dart';
-import 'package:scheduleapp/presentation/atom/custom_modal_action_button_edit.dart';
-
-class Event{
-  final String time;
-  final String task;
-  final String desc;
-  final bool isDone;
-  const Event(this.time,this.task,this.desc,this.isDone);
-}
-
-List<Event> _eventList = [
-  new Event("08:00", "Coffee", "Personal", true),
-new Event("08:00", "Coffee", "Personal", true),
-new Event("08:00", "Coffee", "Personal", false),
-];
+import 'package:intl/intl.dart';
+import 'package:scheduleapp/presentation/page/add_event_page.dart';
 
 class EventPage extends StatefulWidget {
+  EventPage({Key key, this.title}) : super(key: key);
+  final String title;
+
   @override
   _EventPageState createState() => _EventPageState();
 }
 
 class _EventPageState extends State<EventPage> {
+  Map data = {};
   @override
   Widget build(BuildContext context) {
-    double iconSize =20;
-    return ListView.builder(
-      itemCount: _eventList.length,
-      padding: const EdgeInsets.all(0),
-        itemBuilder: (context,index){
-          return InkWell(
-            onTap: (){
-              showDialog(
-                  context: context,
-                  builder: (context){
-                    return Dialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12))
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              _eventList[index].task,
-                              style: TextStyle(
-                                  fontSize: 30,
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            SizedBox(height: 24,),
-                            Row(
-                              children: <Widget>[
-                                Icon(Icons.access_time),
-                                SizedBox(width: 10,),
-                                Text(_eventList[index].time,),
-                              ],
-                            ),
-                            SizedBox(height: 24,),
-                            Row(
-                              children: <Widget>[
-                                Icon(Icons.event_note),
-                                SizedBox(width: 10,),
-                                Text(_eventList[index].desc,),
-                              ],
-                            ),
-                            SizedBox(height: 24,),
-                            CustomModalActionButton(
-                                onClose: ()=>Navigator.of(context).pop(),
-                                onEdit:(){},
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-              );
-            },
-            onLongPress: (){
-              showDialog(
-                  context: context,
-                  builder: (context){
-                    return Dialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12))
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text("Delete",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16
-                                )
-                            ),
-                            SizedBox(height: 24,),
-                            Text(
-                                _eventList[index].task
-                            ),
-                            SizedBox(height: 24,),
-                            Text(_eventList[index].time),
-                            SizedBox(height: 24,),
-                            CustomButton(
-                              buttonText: "Delete",
-                              onPressed: (){
-                                 Navigator.of(context).pop();
-                              },
-                              color: Theme.of(context).accentColor,
-                              textColor: Colors.white,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 24.0,right: 24.0),
-              child: Row(
-                children: <Widget>[
-                  _lineStyle(iconSize, index, context, _eventList.length,_eventList[index].isDone),
-                  _displayTime(_eventList[index].time),
-                  _displayContent(_eventList[index])
-                ],
-              ),
-            ),
-          );
-        },
+    data = ModalRoute.of(context).settings.arguments;
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: Icon(Icons.clear,color: Colors.white,),
+          onPressed: ()=>Navigator.of(context).pop(),
+        ),
+      ),
+      body: Stack(
+        children: <Widget>[
+          mainContent(context),
+          Positioned(
+            right: 0,
+            child: Text(
+              DateFormat.d().format(data['date']),
+              style: TextStyle(
+                fontSize: 100,
+                color: Color(0x10000000),
+              ),),
+          )
+        ],
+      ),
     );
   }
 
-  Widget _displayContent(Event event) {
-    return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12,bottom: 12),
-                  child: Container(
-                    padding: const EdgeInsets.all(14.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0x20000000),
-                          blurRadius: 5,
-                          offset: Offset(0,3),
-                        ),
-                      ]
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(event.task),
-                        SizedBox(height: 12,),
-                        Text(event.desc),
-                      ],
-                    ),
+  Widget mainContent(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  DateFormat.EEEE().format(data['date']),
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              );
+              ),
+            ),
+            EventCard(),
+            EventCard(),
+          ]
+      ),
+    );
   }
+}
 
-  Widget _displayTime(String time) {
-    return Container(
-                width: 80,
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(time),
-              );
-  }
+class EventCard extends StatelessWidget {
+  const EventCard({
+    Key key,
+  }) : super(key: key);
 
-  Widget _lineStyle(double iconSize, int index, BuildContext context,int listLength, bool isDone) {
+  @override
+  Widget build(BuildContext context) {
     return Container(
-                decoration: CustomIconDecoration(
-                  iconSize: iconSize,
-                  lineWidth: 1,
-                  firstData: index==0,
-                  lastData: index==listLength-1
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: Offset(0,3),
-                        color: Color(0x20000000),
-                        blurRadius: 5
-                      )
-                    ],
-                  ),
-                  child: Icon(
-                    isDone ? Icons.fiber_manual_record : Icons.radio_button_unchecked,
-                    size:20,
-                    color: Theme.of(context).accentColor,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width,
+      ),
+      margin: EdgeInsets.only(top:5),
+      padding: EdgeInsets.symmetric(vertical: 5),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(flex: 1,child: Icon(Icons.work,color: Colors.redAccent,)),
+              Expanded(
+                flex: 5,
+                child: Text("Thi Toán",
+                  style: TextStyle(
+                    fontSize: 35
                   ),
                 ),
-              );
+              ),
+              Expanded(
+                flex: 1,
+                child: PopupMenuButton <String> (
+                  icon: Icon(Icons.more_vert,color: Colors.grey,),
+                  onSelected: (String _selected){
+                    if(_selected=="Edit"){
+
+                    }
+                  } ,
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: "Edit",
+                      child: Text('Sửa sự kiện'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: "Delete",
+                      child: Text('Xóa sự kiện',style: TextStyle(color: Colors.redAccent),),
+                    ),
+                  ],
+                )
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Row(
+            children: [
+              Expanded(flex: 1,child: Icon(Icons.calendar_today,color: Colors.grey,)),
+              Expanded(
+                flex: 6,
+                child: Text("Thứ 5, 19 tháng 7, 2020",
+                  style: TextStyle(
+                      fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 1,child: Icon(Icons.access_time,color: Colors.grey,)),
+              Expanded(
+                flex: 6,
+                child: Text("9:00 AM - 10:00AM",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 1,child: Icon(Icons.list,color: Colors.grey,)),
+              Expanded(
+                flex: 5,
+                child: Text("Ôn phần 2 3 4 chương 6. Phần 3 4 5 6 7 của các chương còn lại.",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: SizedBox(),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

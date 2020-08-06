@@ -11,14 +11,14 @@ class CalenderPage extends StatefulWidget {
 
 class _CalenderPageState extends State<CalenderPage> {
   CalendarController _calendarController;
-
+  Map<DateTime,List<dynamic>> _events;
   List<Event> listEvents = [];
-
 
   @override
   void initState() {
     super.initState();
     _calendarController = CalendarController();
+    _events = {};
   }
 
   @override
@@ -42,8 +42,8 @@ class _CalenderPageState extends State<CalenderPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add,color: Colors.white,),
-            onPressed: ()  {
-              showAddDialog(context);
+            onPressed: ()  async {
+              await showAddDialog(context);
             },
           ),
         ],
@@ -53,15 +53,41 @@ class _CalenderPageState extends State<CalenderPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TableCalendar(
+              events: _events,
               calendarController: _calendarController,
               startingDayOfWeek: StartingDayOfWeek.sunday,
               initialCalendarFormat: CalendarFormat.month,
               onDaySelected: (date,events){
-                  Navigator.of(context).pushNamed("task_event");
+                  Navigator.pushNamed(context,"task_event",arguments:{
+                    "date" : DateTime(date.year,date.month,date.day),
+                    "event" : listEvents,
+                  });
                 },
               headerStyle: HeaderStyle(
                 centerHeaderTitle: true,
                 formatButtonVisible: false,
+              ),
+              builders: CalendarBuilders(
+                selectedDayBuilder: (context, date, events) => Container(
+                    margin: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    )),
+                todayDayBuilder: (context, date, events) => Container(
+                    margin: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.cyan,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    )),
               ),
             ),
           ],
@@ -71,14 +97,16 @@ class _CalenderPageState extends State<CalenderPage> {
   }
 
   Future showAddDialog(BuildContext context) async {
-    final event = await showDialog(
+    Event event = await showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  content: AddEventPage(), //addDialog(context),
+                  content: AddEventPage(),
                 )
             );
     setState(() {
-      listEvents.add(event);
+      if(event!=null) {
+        listEvents.add(event);
+      }
     });
   }
 }
