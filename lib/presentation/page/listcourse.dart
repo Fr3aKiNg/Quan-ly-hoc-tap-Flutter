@@ -16,7 +16,7 @@ class RandomWords extends StatefulWidget {
   RandomWordsState createState() => new RandomWordsState();
 }
 
-class RandomWordsState extends State<RandomWords> {
+  class RandomWordsState extends State<RandomWords> {
   final List<String> _courses = <String>[
     "Toán",
     "Vật lý",
