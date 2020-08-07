@@ -128,8 +128,7 @@ class RandomWordsState extends State<RandomWords> {
             color: Color(0xFFBDBDBD)),
         onTap: () {
           Navigator.push(
-            context,
-              MaterialPageRoute(builder: (context) => MyDetailCoursePage(course: course,) )
+            context, MaterialPageRoute(builder: (context) => MyDetailCoursePage(course: course,) )
           );
         },
       );

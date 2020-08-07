@@ -50,7 +50,7 @@ class InformationState extends State<EnterInformation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(resizeToAvoidBottomPadding:false,
+    return Scaffold(resizeToAvoidBottomPadding:true,
         appBar: RoundedAppBar(),
         body: Center(
           child: Column(
