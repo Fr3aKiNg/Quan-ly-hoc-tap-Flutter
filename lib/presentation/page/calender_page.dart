@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/model/event_model.dart';
 import 'package:scheduleapp/presentation/page/add_event_page.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -13,6 +14,14 @@ class _CalenderPageState extends State<CalenderPage> {
   CalendarController _calendarController;
   Map<DateTime,List<dynamic>> _events;
   List<Event> listEvents = [];
+
+  DateTime _selectedDate = DateTime.now();
+  TimeOfDay _selectedTimeFrom = TimeOfDay.now();
+  TimeOfDay _selectedTimeTo = TimeOfDay.now();
+
+  Color _selectedColor = Colors.red;
+  final _textEventControlerName = TextEditingController();
+  final _textEventControlerDesc = TextEditingController();
 
   @override
   void initState() {
@@ -58,7 +67,7 @@ class _CalenderPageState extends State<CalenderPage> {
               startingDayOfWeek: StartingDayOfWeek.sunday,
               initialCalendarFormat: CalendarFormat.month,
               onDaySelected: (date,events){
-                  Navigator.pushNamed(context,"task_event",arguments:{
+                  Navigator.pushNamed(context,"event",arguments:{
                     "date" : DateTime(date.year,date.month,date.day),
                     "event" : listEvents,
                   });
@@ -99,8 +108,21 @@ class _CalenderPageState extends State<CalenderPage> {
   Future showAddDialog(BuildContext context) async {
     Event event = await showDialog(
                 context: context,
-                builder: (context) => AlertDialog(
-                  content: AddEventPage(),
+                builder: (_) => AlertDialog(
+                  content: AddEventPage(_textEventControlerName,_textEventControlerDesc,_selectedDate,_selectedTimeFrom,_selectedTimeTo,_selectedColor),
+                  actions: <Widget>[
+                    CustomModalActionButton(
+                      onClose: () => Navigator.of(context).pop(),
+                      onSave: (){
+                        if(_textEventControlerName.text.isEmpty) {
+                          Navigator.of(context).pop();
+                        }
+                        else {
+                          Navigator.of(context).pop(Event(_textEventControlerName.text,_textEventControlerDesc.text, DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),_selectedColor));
+                        }
+                      },
+                    ),
+                  ],
                 )
             );
     setState(() {

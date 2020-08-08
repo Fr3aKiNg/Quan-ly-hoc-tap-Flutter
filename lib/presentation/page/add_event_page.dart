@@ -8,8 +8,18 @@ import 'package:scheduleapp/presentation/model/event_model.dart';
 
 
 class AddEventPage extends StatefulWidget {
+  DateTime _selectedDate = DateTime.now();
+  TimeOfDay _selectedTimeFrom = TimeOfDay.now();
+  TimeOfDay _selectedTimeTo = TimeOfDay.now();
+
+  Color _selectedColor = Colors.red;
+  TextEditingController _textEventControlerName ;
+  TextEditingController _textEventControlerDesc;
+
+  AddEventPage(this._textEventControlerName,this._textEventControlerDesc,this._selectedDate,this._selectedTimeFrom,this._selectedTimeTo,this._selectedColor);
+
   @override
-  _AddEventPageState createState() => _AddEventPageState();
+  _AddEventPageState createState() => _AddEventPageState(this._textEventControlerName,this._textEventControlerDesc,this._selectedDate,this._selectedTimeFrom,this._selectedTimeTo,this._selectedColor);
 }
 
 class _AddEventPageState extends State<AddEventPage> {
@@ -18,8 +28,10 @@ class _AddEventPageState extends State<AddEventPage> {
   TimeOfDay _selectedTimeTo = TimeOfDay.now();
 
   Color _selectedColor = Colors.red;
-  final _textEventControlerName = TextEditingController();
-  final _textEventControlerDesc = TextEditingController();
+  TextEditingController _textEventControlerName ;
+  TextEditingController _textEventControlerDesc;
+
+  _AddEventPageState(this._textEventControlerName,this._textEventControlerDesc,this._selectedDate,this._selectedTimeFrom,this._selectedTimeTo,this._selectedColor);
 
   @override
   void initState(){
@@ -113,18 +125,7 @@ class _AddEventPageState extends State<AddEventPage> {
               ),
             ],
           ),
-          SizedBox(height: 24,),
-          CustomModalActionButton(
-            onClose: () => Navigator.of(context).pop(),
-            onSave: (){
-              if(_textEventControlerName.text.isEmpty) {
-                Navigator.of(context).pop();
-              }
-              else {
-                Navigator.of(context).pop(Event(_textEventControlerName.text,_textEventControlerDesc.text, DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),_selectedColor));
-              }
-            },
-          ),
+          //SizedBox(height: 24,),
         ],
       ),
     );

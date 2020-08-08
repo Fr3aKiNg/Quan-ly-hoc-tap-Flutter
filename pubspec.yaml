@@ -39,6 +39,7 @@ dependencies:
   #floor: ^0.12.0
   camera: any
   sqflite: ^1.3.0
+  weekly_timetable: ^0.2.2
 
 
 
