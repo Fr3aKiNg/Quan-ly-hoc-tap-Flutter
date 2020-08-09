@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 
 class ChangeBGColorDropdown extends StatefulWidget {
-  Color selectedColor;
-  ChangeBGColorDropdown(this.selectedColor);
+  final Function(Color) onValueSelected;
+  ChangeBGColorDropdown(this.onValueSelected);
   @override
-  ChangeBGColorDropdownState createState() {
-    return new ChangeBGColorDropdownState(this.selectedColor);
-  }
+  ChangeBGColorDropdownState createState() => ChangeBGColorDropdownState();
 }
 class ChangeBGColorDropdownState extends State<ChangeBGColorDropdown> {
   List<ColorModel> _colors = [
     ColorModel(color: Colors.blue, colorName: "Blue"),
-    ColorModel(color: Colors.purple, colorName: "Purple"),
+    ColorModel(color: Colors.redAccent, colorName: "Red Accent"),
     ColorModel(color: Colors.pink, colorName: "Pink"),
-    ColorModel(color: Colors.teal, colorName: "Teal"),
+    ColorModel(color: Colors.greenAccent, colorName: "Green Accent"),
     ColorModel(color: Colors.amber, colorName: "Amber"),
     ColorModel(color: Colors.brown, colorName: "Brown"),
   ];
-  ChangeBGColorDropdownState(this._selectedColor);
   Color _selectedColor;
   @override
   Widget build(BuildContext context) {
@@ -32,6 +29,7 @@ class ChangeBGColorDropdownState extends State<ChangeBGColorDropdown> {
         onChanged: (Color value) {
           setState(() {
             _selectedColor = value;
+            widget.onValueSelected(value);
           });
         },
       );

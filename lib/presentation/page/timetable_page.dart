@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
+import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
+import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
 
 class TimetablePage extends StatefulWidget {
   @override
@@ -14,7 +17,7 @@ class _TimetablePageState extends State<TimetablePage> {
         title: Text("Thời khóa biểu"),
         automaticallyImplyLeading: true,
         leading: IconButton(
-          onPressed: () {  },
+          onPressed: () { /*Navigator.of(context).pop();*/ },
           icon: Icon(Icons.arrow_back_ios),
       ),
         centerTitle: true,
@@ -22,162 +25,182 @@ class _TimetablePageState extends State<TimetablePage> {
       body: SingleChildScrollView(
         child: Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          /*border: TableBorder(
-            verticalInside: BorderSide(color: Colors.grey.shade200),
-            horizontalInside: BorderSide(color: Colors.grey.shade200),
-          ),*/
           children: [
-            TableRow(
-              children: [
-                TimeTableCell(text: "",textColor: Colors.transparent,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "T2",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "T3",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "T4",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "T5",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "T6",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "T7",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "CN",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-              ],
-            ),
-            TableRow(
-              children: [
-                TimeTableCell(text: "Tiet 1",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Toan",textColor: Colors.white,backgroundColor: Colors.redAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-              ],
-            ),
-            TableRow(
-              children: [
-                TimeTableCell(text: "Tiet 2",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Toan",textColor: Colors.white,backgroundColor: Colors.redAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-              ],
-            ),
-            TableRow(
-              children: [
-                TimeTableCell(text: "Tiet 3",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Hoa",textColor: Colors.white,backgroundColor: Colors.orangeAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Sinh",textColor: Colors.white,backgroundColor: Colors.greenAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-              ],
-            ),
-            TableRow(
-              children: [
-                TimeTableCell(text: "Tiet 4",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Hoa",textColor: Colors.white,backgroundColor: Colors.orangeAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Sinh",textColor: Colors.white,backgroundColor: Colors.greenAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-              ],
-            ),
-            TableRow(
-              children: [
-                TimeTableCell(text: "Tiet 5",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Anh",textColor: Colors.white,backgroundColor: Colors.blueAccent,),
-                TimeTableCell(text: "Anh",textColor: Colors.white,backgroundColor: Colors.blueAccent,),
-              ],
-            ),
-            TableRow(
-              children: [
-                TimeTableCell(text: "Tiet 6",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.white,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-              ],
-            ),
-            TableRow(
-              children: [
-                TimeTableCell(text: "Tiet 7",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Sinh",textColor: Colors.white,backgroundColor: Colors.greenAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Toan",textColor: Colors.white,backgroundColor: Colors.redAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-              ],
-            ),
-            TableRow(
-              children: [
-                TimeTableCell(text: "Tiet 8",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Sinh",textColor: Colors.white,backgroundColor: Colors.greenAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-                TimeTableCell(text: "Toan",textColor: Colors.white,backgroundColor: Colors.redAccent,),
-                TimeTableCell(text: "",textColor: Colors.grey.shade700,backgroundColor: Colors.transparent,),
-              ],
-            ),
+            buildTableRowTitle(),
+            TableRow(children: [SizedBox(height: 10,),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),]),
+            buildTimeTableRow("Tiet 1"),
+            buildTimeTableRow("Tiet 2"),
+            buildTimeTableRow("Tiet 3"),
+            buildTimeTableRow("Tiet 4"),
+            TableRow(children: [SizedBox(height: 20,),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),]),
+            buildTimeTableRow("Tiet 5"),
+            buildTimeTableRow("Tiet 6"),
+            buildTimeTableRow("Tiet 7"),
+            buildTimeTableRow("Tiet 8"),
           ]
         ),
       )
     );
   }
+
+  TableRow buildTableRowTitle() {
+    return TableRow(
+            children: [
+              SizedBox(),
+              TitleCell(title: "T2",),
+              TitleCell(title: "T3",),
+              TitleCell(title: "T4",),
+              TitleCell(title: "T5",),
+              TitleCell(title: "T6",),
+              TitleCell(title: "T7",),
+              TitleCell(title: "CN",),
+            ]
+          );
+  }
+
+  TableRow buildTimeTableRow(String title) {
+    return TableRow(
+            children: [
+              TitleCell(title: title,),
+              TimeTableCell(),
+              TimeTableCell(),
+              TimeTableCell(),
+              TimeTableCell(),
+              TimeTableCell(),
+              TimeTableCell(),
+              TimeTableCell(),
+            ],
+          );
+  }
 }
 
-class TimeTableCell extends StatelessWidget {
-  const TimeTableCell({
-    Key key, @required this.text, @required this.textColor, @required this.backgroundColor,
+class TitleCell extends StatelessWidget {
+  TitleCell({
+    Key key, @required this.title
   }) : super(key: key);
 
-  final String text;
-  final Color backgroundColor, textColor;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return TableCell(
-      child: InkWell(
-        onTap: (){
-          showDialog(
-              context: context,
-              child: AlertDialog(
-                content: Text(text),
-              )
-          );
-        },
-        child: Container(
-          padding: EdgeInsets.all(5),
-          width: 60.0,
-          height: 30.0,
-          decoration: BoxDecoration(
+      child: Container(
+        padding: EdgeInsets.all(5),
+        width: 60.0,
+        height: 30.0,
+        decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),
-            color: backgroundColor,
             border: Border.all(color: Colors.grey.shade200)
-          ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: textColor),
-          ),
         ),
-      )
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.grey.shade700),
+        ),
+      ),
+    );
+  }
+}
+
+class TimeTableCell extends StatefulWidget {
+
+  @override
+  _TimeTableCellState createState() => _TimeTableCellState();
+}
+
+class _TimeTableCellState extends State<TimeTableCell> {
+  TextEditingController _textControllerName = TextEditingController();
+  TextEditingController _textControllerClass = TextEditingController();
+  TextEditingController _textControllerTeacher = TextEditingController();
+
+  void onValueSelected(Color color){
+    backgroundColor = color;
+  }
+
+  String text = "";
+  Color backgroundColor ;
+  @override
+  Widget build(BuildContext context) {
+    return TableCell(
+        child: InkWell(
+          onTap: ()  {
+           showDialog(
+               context: context,
+               builder: (context) => AlertDialog(
+                 content: SingleChildScrollView(
+                   child: Column(
+                     mainAxisSize: MainAxisSize.min,
+                     children: <Widget>[
+                       Center(
+                         child: Text(
+                           "Thêm thời khoá biểu",
+                           style: TextStyle(
+                             fontWeight: FontWeight.bold,
+                             fontSize: 16,
+                           ),
+                         ),
+                       ),
+                       SizedBox(height: 24,),
+                       Row(
+                         children: <Widget>[
+                           Expanded(
+                             flex: 4,
+                             child: CustomTextField(
+                               controller: _textControllerName,
+                               labelText: "Tên môn học",
+                             ),
+                           ),
+                           Expanded(
+                             flex: 1,
+                             child: ChangeBGColorDropdown(onValueSelected),
+                           ),
+                         ],
+                       ),
+                       SizedBox(height: 12,),
+                       CustomTextField(
+                         labelText: "Lớp học",
+                         icon: Icon(Icons.edit_location),
+                         controller: _textControllerClass,
+                       ),
+                       SizedBox(height: 12,),
+                       CustomTextField(
+                         labelText: "Tên giáo viên",
+                         icon: Icon(Icons.person),
+                         controller: _textControllerTeacher,
+                       ),
+                     ],
+                   ),
+                 ),
+                 actions: <Widget>[
+                   CustomModalActionButton(
+                     onClose: () => Navigator.of(context).pop(),
+                     onSave: () {
+                       setState(() {
+                         this.text = _textControllerName.text;
+                       });
+                       Navigator.of(context).pop();
+                     },
+                   ),
+                 ],
+               ),
+           );
+          },
+          child: Container(
+            padding: EdgeInsets.all(5),
+            width: 60.0,
+            height: 30.0,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: backgroundColor,
+                border: Border.all(color: Colors.grey.shade200)
+            ),
+            child: Text(
+              '$text',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        )
     );
   }
 }
