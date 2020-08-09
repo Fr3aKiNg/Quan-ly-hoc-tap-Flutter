@@ -19,11 +19,11 @@ class ChangeBGColorDropdownState extends State<ChangeBGColorDropdown> {
   @override
   Widget build(BuildContext context) {
     return  DropdownButton<Color>(
-        icon: Icon(Icons.add_circle,color: _selectedColor,),
+        icon: Icon(Icons.lens,color: _selectedColor,),
         iconSize: 30,
         items: _colors.map((color) =>
             DropdownMenuItem<Color>(
-              child: Center(child: Icon(Icons.add_circle,color: color.color,)),
+              child: Center(child: Icon(Icons.lens,color: color.color,)),
               value: color.color,
             )).toList(),
         onChanged: (Color value) {

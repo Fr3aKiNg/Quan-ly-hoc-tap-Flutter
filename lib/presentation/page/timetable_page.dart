@@ -118,11 +118,102 @@ class _TimeTableCellState extends State<TimeTableCell> {
   }
 
   String text = "";
+  String room = "";
+  String teach = "";
   Color backgroundColor ;
   @override
   Widget build(BuildContext context) {
     return TableCell(
         child: InkWell(
+          onLongPress: (){
+            showDialog(
+                context: context,
+              builder: (context)=> AlertDialog(
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Text("Xoa mon hoc ?"),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: (){
+                      setState(() {
+                        text = "";
+                        room = "";
+                        teach = "";
+                        backgroundColor = Colors.transparent;
+                        _textControllerTeacher.clear();
+                        _textControllerClass.clear();
+                        _textControllerName.clear();
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Ok"),
+                  ),
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text("Cancel"),
+                  ),
+                ],
+              )
+            );
+
+          },
+          onDoubleTap: (){
+            showDialog(
+              context: context,
+              builder: (context)=> AlertDialog(
+                content: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.lens,color: backgroundColor),
+                          SizedBox(width: 5,),
+                          Text(
+                            text,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 24,),
+                      Row(
+                        children: [
+                          Icon(Icons.edit_location),
+                          SizedBox(width: 5,),
+                          Text(room),
+                        ],
+                      ),
+                      SizedBox(height: 12,),
+                      Row(
+                        children: [
+                          Icon(Icons.person),
+                          SizedBox(width: 5,),
+                          Text(teach),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text("Close"),
+                  )
+                ],
+              )
+            );
+          },
           onTap: ()  {
            showDialog(
                context: context,
@@ -177,6 +268,8 @@ class _TimeTableCellState extends State<TimeTableCell> {
                      onSave: () {
                        setState(() {
                          this.text = _textControllerName.text;
+                         this.room = _textControllerClass.text;
+                         this.teach = _textControllerTeacher.text;
                        });
                        Navigator.of(context).pop();
                      },
