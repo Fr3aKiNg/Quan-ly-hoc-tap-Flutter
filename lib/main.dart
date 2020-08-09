@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       },
       onGenerateRoute: Router.generateRoute,
 
-      initialRoute: 'on_board',
+      initialRoute: 'score',
 
     );
   }

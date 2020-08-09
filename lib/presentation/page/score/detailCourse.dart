@@ -3,8 +3,8 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:path/path.dart' as Path;
-
-
+import 'package:scheduleapp/presentation/page/score/transcipt.dart';
+import 'package:scheduleapp/presentation/page/score/editCourse.dart';
 class MyDetailCoursePage extends StatelessWidget {
   final String course;
   MyDetailCoursePage({Key key, @required this.course}) : super(key: key);
@@ -65,14 +65,20 @@ class detailCourseState extends State<detailCourse> {
               //Gọi hàm lưu lại thay đổi lên db từ các biến _nameCol, _scoreSes1, _scoreSes2, _heso
 
               //
-              Navigator.of(context).pushReplacementNamed('score');
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>
+                      MyTranscriptPage()));
             })
           ),
           title: Center(
             child: Text(CourseName)
           ),
           actions: <Widget>[
-            new IconButton(icon: const Icon(Icons.edit, color: Colors.white), onPressed: null),
+            new IconButton(icon: const Icon(Icons.edit, color: Colors.white), onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EditCoursePage(course: this.CourseName,)));
+            }),
           ],
           backgroundColor: Color(0xFF00C48C),
         ),
