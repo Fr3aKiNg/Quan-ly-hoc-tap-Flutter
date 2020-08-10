@@ -16,29 +16,32 @@ class NoteItem extends StatelessWidget {
     tag: 'NoteItem${note.id}',
     child: DefaultTextStyle(
       style: TextStyle(fontSize: 18,color: Colors.black),
-      child: Container(
-        decoration: BoxDecoration(
-          color: note.color,
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          border: note.color.value == 0xFFFFFFFF ? Border.all(color: Colors.black) : Border.all(color: Colors.white),
+      child:
+//      Wrap(
+//        children:<Widget>[
+          Container(
+          decoration: BoxDecoration(
+            color: note.color,
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            border: note.color.value == 0xFFFFFFFF ? Border.all(color: Colors.black) : Border.all(color: Colors.white),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              if (note.title?.isNotEmpty == true) Text(note.title,
+                style: TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.w600),
+                maxLines: 1,
+              ),
+              if (note.title?.isNotEmpty == true)  SizedBox(height: 14),
+              Flexible(
+                flex: 1,
+                child: Text(note.content ?? '',style: TextStyle(color: Colors.black),), // wrapping using a Flexible to avoid overflow
+              ),
+            ],
+          ),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            if (note.title?.isNotEmpty == true) Text(note.title,
-              style: TextStyle(fontSize: 16,color: Colors.black),
-              maxLines: 1,
-            ),
-            if (note.title?.isNotEmpty == true) const SizedBox(height: 14),
-            Flexible(
-              flex: 1,
-              child: Text(note.content ?? '',style: TextStyle(color: Colors.black),), // wrapping using a Flexible to avoid overflow
-            ),
-          ],
-        ),
-      ),
     ),
   );
 }

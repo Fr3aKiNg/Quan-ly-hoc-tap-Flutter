@@ -86,9 +86,9 @@ class NotesGrid extends StatelessWidget {
     sliver: SliverGrid(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 200.0,
-        mainAxisSpacing: 10.0,
+        mainAxisSpacing: 15.0,
         crossAxisSpacing: 10.0,
-        childAspectRatio: 1 / 1.2,
+        childAspectRatio: 1 / 1,
       ),
       delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => _noteItem(context, notes[index]),
