@@ -15,7 +15,9 @@ class ChangeBGColorDropdownState extends State<ChangeBGColorDropdown> {
     ColorModel(color: Colors.amber, colorName: "Amber"),
     ColorModel(color: Colors.brown, colorName: "Brown"),
   ];
-  Color _selectedColor;
+  Color _selectedColor = Colors.redAccent;
+  @override
+  // TODO: implement widget
   @override
   Widget build(BuildContext context) {
     return  DropdownButton<Color>(

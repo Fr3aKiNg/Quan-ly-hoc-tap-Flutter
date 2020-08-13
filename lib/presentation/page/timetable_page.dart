@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
+import 'package:scheduleapp/presentation/atom/custom_button.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
+import 'package:intl/intl.dart';
+import 'package:scheduleapp/presentation/page/add_task_page.dart';
 
 class TimetablePage extends StatefulWidget {
   @override
@@ -22,24 +25,54 @@ class _TimetablePageState extends State<TimetablePage> {
       ),
         centerTitle: true,
     ),
-      body: SingleChildScrollView(
-        child: Table(
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: [
-            buildTableRowTitle(),
-            TableRow(children: [SizedBox(height: 10,),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),]),
-            buildTimeTableRow("Tiet 1"),
-            buildTimeTableRow("Tiet 2"),
-            buildTimeTableRow("Tiet 3"),
-            buildTimeTableRow("Tiet 4"),
-            TableRow(children: [SizedBox(height: 20,),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),]),
-            buildTimeTableRow("Tiet 5"),
-            buildTimeTableRow("Tiet 6"),
-            buildTimeTableRow("Tiet 7"),
-            buildTimeTableRow("Tiet 8"),
-          ]
-        ),
-      )
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            child: SingleChildScrollView(
+              child: Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  buildTableRowTitle(),
+                  TableRow(children: [SizedBox(height: 10,),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),]),
+                  buildTimeTableRow("Tiet 1"),
+                  buildTimeTableRow("Tiet 2"),
+                  buildTimeTableRow("Tiet 3"),
+                  buildTimeTableRow("Tiet 4"),
+                  TableRow(children: [SizedBox(height: 20,),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),SizedBox(),]),
+                  buildTimeTableRow("Tiet 5"),
+                  buildTimeTableRow("Tiet 6"),
+                  buildTimeTableRow("Tiet 7"),
+                  buildTimeTableRow("Tiet 8"),
+                ]
+              ),
+            ),
+          ),
+          _taskUncomplete("Dummy"),
+          _taskUncomplete("Dummy"),
+          _taskUncomplete("Dummy"),
+          _taskComplete("Dummy"),
+          _taskComplete("Dummy"),
+          _taskComplete("Dummy"),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context){
+                return Dialog(
+                  child:  AddTaskPage(),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                );
+              }
+          );
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+      ),
     );
   }
 
@@ -71,6 +104,212 @@ class _TimetablePageState extends State<TimetablePage> {
               TimeTableCell(),
             ],
           );
+  }
+
+  Widget _taskUncomplete(String data) {
+    return InkWell(
+      onTap: (){
+        showDialog(
+            context: context,
+            builder: (context){
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12))
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("Confirm Task",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16
+                          )
+                      ),
+                      SizedBox(height: 24,),
+                      Text(
+                          data
+                      ),
+                      SizedBox(height: 24,),
+                      Text(new DateFormat("dd-MM-yyyy").format(DateTime.now()),),
+                      SizedBox(height: 24,),
+                      CustomButton(
+                        buttonText: "Complete",
+                        onPressed: (){
+                           Navigator.of(context).pop();
+                        },
+                        color: Theme.of(context).accentColor,
+                        textColor: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+        );
+      },
+      onLongPress: (){
+        showDialog(
+            context: context,
+            builder: (context){
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12))
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("Delete Task",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16
+                          )
+                      ),
+                      SizedBox(height: 24,),
+                      Text(
+                          data
+                      ),
+                      SizedBox(height: 24,),
+                      Text(new DateFormat("dd-MM-yyyy").format(DateTime.now()),),
+                      SizedBox(height: 24,),
+                      CustomButton(
+                        buttonText: "Delete",
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                        color: Theme.of(context).accentColor,
+                        textColor: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              Icons.radio_button_unchecked,
+              color: Theme.of(context).accentColor,
+              size: 20,
+            ),
+            SizedBox(width: 28,),
+            Text(data),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _taskComplete(String data) {
+    return InkWell(
+      onLongPress: (){
+        showDialog(
+            context: context,
+            builder: (context){
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12))
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("Delete Task",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16
+                          )
+                      ),
+                      SizedBox(height: 24,),
+                      Text(
+                          data
+                      ),
+                      SizedBox(height: 24,),
+                      Text(new DateFormat("dd-MM-yyyy").format(DateTime.now()),),
+                      SizedBox(height: 24,),
+                      CustomButton(
+                        buttonText: "Delete",
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                        color: Theme.of(context).accentColor,
+                        textColor: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+        );
+      },
+      onTap: (){
+        showDialog(
+            context: context,
+            builder: (context){
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12))
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("Confirm Task",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16
+                          )
+                      ),
+                      SizedBox(height: 24,),
+                      Text(
+                          data
+                      ),
+                      SizedBox(height: 24,),
+                      Text(new DateFormat("dd-MM-yyyy").format(DateTime.now()),),
+                      SizedBox(height: 24,),
+                      CustomButton(
+                        buttonText: "Uncompleted",
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                        color: Theme.of(context).accentColor,
+                        textColor: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+        );
+      },
+      child: Container(
+        foregroundDecoration: BoxDecoration(
+          color: Color(0x60FDFDFD),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+          child: Row(
+            children: <Widget>[
+              Icon(
+                Icons.radio_button_checked,
+                color: Theme.of(context).accentColor,
+                size: 20,
+              ),
+              SizedBox(width: 28,),
+              Text(data),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -120,7 +359,7 @@ class _TimeTableCellState extends State<TimeTableCell> {
   String text = "";
   String room = "";
   String teach = "";
-  Color backgroundColor ;
+  Color backgroundColor;
   @override
   Widget build(BuildContext context) {
     return TableCell(
