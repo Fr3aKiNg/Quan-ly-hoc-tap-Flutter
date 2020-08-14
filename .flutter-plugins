@@ -7,6 +7,7 @@ firebase_auth_web=C:\\Program Files\\Android\\flutter\\.pub-cache\\hosted\\pub.d
 firebase_core=C:\\Program Files\\Android\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core-0.4.5\\
 firebase_core_web=C:\\Program Files\\Android\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core_web-0.1.1+2\\
 firebase_database=C:\\Program Files\\Android\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_database-3.1.6\\
+flutter_local_notifications=C:\\Program Files\\Android\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\flutter_local_notifications-1.4.4+2\\
 google_sign_in=C:\\Program Files\\Android\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\google_sign_in-4.5.1\\
 google_sign_in_web=C:\\Program Files\\Android\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\google_sign_in_web-0.9.1+1\\
 path_provider=C:\\Program Files\\Android\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider-1.6.11\\

@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scheduleapp/presentation/atom/event_card.dart';
-import 'package:scheduleapp/presentation/page/add_event_page.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:scheduleapp/presentation/atom/push_local_notification.dart';
 
 class EventPage extends StatefulWidget {
   EventPage({Key key, this.title}) : super(key: key);
@@ -13,7 +14,15 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
+  PushLocalNotificationCustom _notify;
   Map data = {};
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _notify = PushLocalNotificationCustom(context);
+    _notify.initializeNotifications();
+  }
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
@@ -62,6 +71,12 @@ class _EventPageState extends State<EventPage> {
             ),
             EventCard(),
             EventCard(),
+          RaisedButton(
+          onPressed: (){
+            _notify.show();
+          },
+          child: new Text('Show Notification'),
+          ),
           ]
       ),
     );
