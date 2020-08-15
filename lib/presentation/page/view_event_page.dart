@@ -1,37 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:scheduleapp/presentation/atom/event_card.dart';
 import 'package:scheduleapp/presentation/atom/push_local_notification.dart';
+import 'package:scheduleapp/presentation/model/event_model.dart';
+import 'package:intl/intl.dart';
 
-class EventPage extends StatefulWidget {
-  EventPage({Key key, this.title}) : super(key: key);
-  final String title;
+class EventDetailsPage extends StatelessWidget {
+  final EventModel event;
+  //PushLocalNotificationCustom _notify;
+  const EventDetailsPage({Key key, this.event}) : super(key: key);
 
   @override
-  _EventPageState createState() => _EventPageState();
-}
-
-class _EventPageState extends State<EventPage> {
-  PushLocalNotificationCustom _notify;
-  Map data = {};
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _notify = PushLocalNotificationCustom(context);
-    _notify.initializeNotifications();
-  }
-  @override
-  Widget build(BuildContext context) {
-    data = ModalRoute.of(context).settings.arguments;
+  Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-          icon: Icon(Icons.clear,color: Colors.white,),
-          onPressed: ()=>Navigator.of(context).pop(),
-        ),
+        title: Text('Chi tiết'),
       ),
       body: Stack(
         children: <Widget>[
@@ -39,7 +21,7 @@ class _EventPageState extends State<EventPage> {
           Positioned(
             right: 0,
             child: Text(
-              DateFormat.d().format(DateTime.now()),
+              DateFormat.d().format(event.eventDateFrom),
               style: TextStyle(
                 fontSize: 100,
                 color: Color(0x10000000),
@@ -60,7 +42,7 @@ class _EventPageState extends State<EventPage> {
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: Text(
-                  DateFormat.EEEE().format(DateTime.now()),
+                  DateFormat.EEEE().format(event.eventDateFrom),
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -68,12 +50,7 @@ class _EventPageState extends State<EventPage> {
                 ),
               ),
             ),
-          RaisedButton(
-          onPressed: (){
-            _notify.show();
-          },
-          child: new Text('Show Notification'),
-          ),
+            EventCard(event: event,),
           ]
       ),
     );

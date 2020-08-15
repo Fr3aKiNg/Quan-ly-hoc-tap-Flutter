@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/presentation/model/event_model.dart';
+import 'package:intl/intl.dart';
 
 class EventCard extends StatelessWidget {
-  const EventCard({
-    Key key,
-  }) : super(key: key);
+  final EventModel event;
+  const EventCard({Key key,this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,10 @@ class EventCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(flex: 1,child: Icon(Icons.work,color: Colors.redAccent,)),
+              Expanded(flex: 1,child: Icon(Icons.lens,color: Colors.redAccent,)),
               Expanded(
                 flex: 5,
-                child: Text("Thi Toán",
+                child: Text(event.title,
                   style: TextStyle(
                       fontSize: 35
                   ),
@@ -57,7 +58,7 @@ class EventCard extends StatelessWidget {
               Expanded(flex: 1,child: Icon(Icons.calendar_today,color: Colors.grey,)),
               Expanded(
                 flex: 6,
-                child: Text("Thứ 5, 19 tháng 7, 2020",
+                child: Text(DateFormat.yMMMMEEEEd().format(event.eventDateFrom),
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -87,7 +88,7 @@ class EventCard extends StatelessWidget {
               Expanded(flex: 1,child: Icon(Icons.list,color: Colors.grey,)),
               Expanded(
                 flex: 5,
-                child: Text("Ôn phần 2 3 4 chương 6. Phần 3 4 5 6 7 của các chương còn lại.",
+                child: Text(event.description,
                   style: TextStyle(
                     fontSize: 20,
                   ),

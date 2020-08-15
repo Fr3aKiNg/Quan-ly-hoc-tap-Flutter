@@ -4,22 +4,14 @@ import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
 import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
+import 'package:scheduleapp/presentation/model/database.dart';
 import 'package:scheduleapp/presentation/model/event_model.dart';
 
-
 class AddEventPage extends StatefulWidget {
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTimeFrom = TimeOfDay.now();
-  TimeOfDay _selectedTimeTo = TimeOfDay.now();
-
-  Color _selectedColor = Colors.red;
-  TextEditingController _textEventControlerName ;
-  TextEditingController _textEventControlerDesc;
-
-  AddEventPage(this._textEventControlerName,this._textEventControlerDesc,this._selectedDate,this._selectedTimeFrom,this._selectedTimeTo,this._selectedColor);
-
+  final EventModel note;
+  const AddEventPage({Key key, this.note}) : super(key: key);
   @override
-  _AddEventPageState createState() => _AddEventPageState(this._textEventControlerName,this._textEventControlerDesc,this._selectedDate,this._selectedTimeFrom,this._selectedTimeTo,this._selectedColor);
+  _AddEventPageState createState() => _AddEventPageState();
 }
 
 class _AddEventPageState extends State<AddEventPage> {
@@ -27,15 +19,17 @@ class _AddEventPageState extends State<AddEventPage> {
   TimeOfDay _selectedTimeFrom = TimeOfDay.now();
   TimeOfDay _selectedTimeTo = TimeOfDay.now();
 
-  Color _selectedColor = Colors.red;
   TextEditingController _textEventControlerName ;
-  TextEditingController _textEventControlerDesc;
+  TextEditingController _textEventControlerDesc ;
 
-  _AddEventPageState(this._textEventControlerName,this._textEventControlerDesc,this._selectedDate,this._selectedTimeFrom,this._selectedTimeTo,this._selectedColor);
+  bool processing;
 
   @override
   void initState(){
     super.initState();
+    _textEventControlerName = TextEditingController(text: widget.note != null ? widget.note.title : "");
+    _textEventControlerDesc = TextEditingController(text:  widget.note != null ? widget.note.description : "");
+    processing = false;
   }
 
   Future _pickDate() async {
@@ -59,9 +53,7 @@ class _AddEventPageState extends State<AddEventPage> {
     });
   }
 
-  void onValueSelected(Color color){
-    Color backgroundColor = color;
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +63,7 @@ class _AddEventPageState extends State<AddEventPage> {
         children: <Widget>[
           Center(
             child: Text(
-              "Thêm sự kiện",
+              widget.note != null ? "Edit Note" : "Thêm sự kiện",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -79,20 +71,9 @@ class _AddEventPageState extends State<AddEventPage> {
             ),
           ),
           SizedBox(height: 24,),
-          Row(
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: CustomTextField(
-                  controller: _textEventControlerName,
-                  labelText: "Tiêu đề sự kiện",
-                ),
-              ),
-              Expanded(
-                  flex: 1,
-                  child: ChangeBGColorDropdown(onValueSelected),
-              ),
-            ],
+          CustomTextField(
+            controller: _textEventControlerName,
+            labelText: "Tiêu đề sự kiện",
           ),
           SizedBox(height: 12,),
           CustomTextField(
@@ -129,9 +110,46 @@ class _AddEventPageState extends State<AddEventPage> {
               ),
             ],
           ),
-          //SizedBox(height: 24,),
+          SizedBox(height: 24,),
+          processing ? Center(child: CircularProgressIndicator()) :
+          CustomModalActionButton(
+            onClose: () => Navigator.of(context).pop(),
+            onSave: () async {
+              setState(() {
+                processing = true;
+              });
+              if (widget.note!= null){
+                await eventDBS.updateData(widget.note.id, {
+                  'title': _textEventControlerName.text,
+                  'description': _textEventControlerDesc.text,
+                  'event_date_from': widget.note.eventDateFrom,
+                  'event_date_to': widget.note.eventDateTo,
+                  //'color': _selectedColor
+                });
+              }
+              else{
+                await eventDBS.createItem(EventModel(
+                    title: _textEventControlerName.text,
+                    description:  _textEventControlerDesc.text,
+                    eventDateFrom: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),
+                    eventDateTo: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),
+                    //color: _selectedColor
+                ));
+              }
+              Navigator.pop(context);
+              setState(() {
+                processing = false;
+              });
+            },
+          )
         ],
       ),
     );
+  }
+  @override
+  void dispose() {
+    _textEventControlerName.dispose();
+    _textEventControlerDesc.dispose();
+    super.dispose();
   }
 }

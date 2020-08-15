@@ -1,13 +1,44 @@
-import 'package:flutter/material.dart';
+import 'package:firebase_helpers/firebase_helpers.dart';
 
-class Event{
-  String name;
-  String desc;
-  DateTime from;
-  DateTime to;
-  Color color;
-  Event(this.name,this.desc,this.from,this.to,this.color);
-  DateTime getDate(){
-    return from;
+class EventModel extends DatabaseItem{
+  final String id;
+  final String title;
+  final String description;
+  final DateTime eventDateFrom;
+  final DateTime eventDateTo;
+  //final Color color;
+
+  EventModel({this.id,this.title, this.description, this.eventDateFrom,this.eventDateTo, }):super(id);
+
+  factory EventModel.fromMap(Map data) {
+    return EventModel(
+      title: data['title'],
+      description: data['description'],
+      eventDateFrom: data['event_date_from'],
+      eventDateTo: data['event_date_to'],
+    //  color: data['color'],
+    );
+  }
+
+  factory EventModel.fromDS(String id, Map<String,dynamic> data) {
+    return EventModel(
+      id: id,
+      title: data['title'],
+      description: data['description'],
+      eventDateFrom: data['event_date_from'].toDate(),
+      eventDateTo: data['event_date_to'].toDate(),
+     // color: data['color'],
+    );
+  }
+
+  Map<String,dynamic> toMap() {
+    return {
+      "title":title,
+      "description": description,
+      "event_date_from":eventDateFrom,
+      "event_date_to":eventDateTo,
+     // "color":color,
+      "id":id,
+    };
   }
 }
