@@ -73,7 +73,12 @@ class RandomWordsState extends State<RandomWords> {
     String _value = "";
     return Scaffold(
         appBar: AppBar(
-          leading: GestureDetector(),
+          leading: GestureDetector(
+            child: IconButton(
+              icon: Icon(Icons.tune, color: Colors.white),
+              onPressed: null,
+            )
+          ),
           title: Center(child: Text("Bảng điểm")),
           actions: <Widget>[
             new IconButton(

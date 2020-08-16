@@ -24,9 +24,10 @@ class addCourseState extends State<addCourse> {
   List nameScoreCol = ["Miệng", "15 phút", "1 tiết", "Giữa Kỳ", "Cuối Kỳ"];
   
   TextEditingController newCourseController = TextEditingController();
-  TextEditingController newName = TextEditingController();
-  TextEditingController newHeso = TextEditingController();
-  
+
+  List HeSoController = new List();
+  List NameScoreController = new List();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,26 +83,9 @@ class addCourseState extends State<addCourse> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text("Cột điểm", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-                    Icon(Icons.add, color: Color(0xFF00C48C)),
+                    IconButton(icon: Icon(Icons.add, color: Color(0xFF00C48C)), onPressed: () => _showMyDialog(),),
                   ],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Icon(Icons.close, color: Colors.red),
-                  ),
-                  Flexible(
-                    flex: 4,
-                    child: _customTextField("Tên cột điểm", newName, Color(0xFFBDBDBD)),
-                  ),
-                  Flexible(
-                    flex: 2,
-                    child: _customTextField("Hệ số", newHeso, Color(0xFFBDBDBD)),
-                  )
-                ],
               ),
               Container(
                 width: double.maxFinite,
@@ -109,7 +93,13 @@ class addCourseState extends State<addCourse> {
                   shrinkWrap: true,
                   itemCount: nameScoreCol.length + 1,
                   itemBuilder: (BuildContext context, int index) {
+                    if (HeSoController.length != 0 && index == 0) {
+                      HeSoController.removeRange(0, heso.length - 1);
+                      NameScoreController.removeRange(0, nameScoreCol.length - 1);
+                    }
                     if (index < nameScoreCol.length) {
+                      HeSoController.add(new TextEditingController(text: heso[index].toString()));
+                      NameScoreController.add(new TextEditingController(text: nameScoreCol[index]));
                       return Dismissible(
                         background: Container(
                           color: Colors.red,
@@ -126,11 +116,11 @@ class addCourseState extends State<addCourse> {
                               ),
                               Flexible(
                                 flex: 4,
-                                child: _customTextField(nameScoreCol[index], null, Colors.black),
+                                child: _customTextField('', NameScoreController[index], Colors.black),
                               ),
                               Flexible(
                                 flex: 2,
-                                child: _customTextField(heso[index].toString(), null, Colors.black),
+                                child: _customTextField('', HeSoController[index], Colors.black),
                               )
                             ],
                           ),
@@ -140,6 +130,8 @@ class addCourseState extends State<addCourse> {
                           setState(() {
                             nameScoreCol.removeAt(index);
                             heso.removeAt(index);
+                            HeSoController.removeAt(index);
+                            NameScoreController.removeAt(index);
                           });
                         },
                       );
@@ -179,48 +171,67 @@ class addCourseState extends State<addCourse> {
         )
     );
   }
-  Widget _buildRow(String nameCol, List score, int ses) {
-    return ListTile(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              nameCol,
-              style: _biggerFont,
-            ),
+
+  Future<void> _showMyDialog() async {
+    TextEditingController newScoreName = TextEditingController();
+    TextEditingController newCoef = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text("Thêm cột điểm", style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)))),
+          content: Container(
+              height: 230,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text("Tên cột điểm", style: _biggerFont,),
+                  Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 20),
+                      child: _customTextField("Tên cột điểm mới", newScoreName, Color(0xFFBDBDBD))
+                  ),
+                  Text("Hệ số", style: _biggerFont,),
+                  Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: _customTextField("Hệ số", newCoef, Color(0xFFBDBDBD))
+                  ),
+                ],
+              )
           ),
-          Expanded(
-              child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: List.generate(score.length, (index) {
-                  return Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: Text(
-                        score[index].toString(),
-                        style: _biggerFont,
-                      ));
-                })),
-          ))
-        ],
-      ),
-      trailing: new Icon(Icons.add, color: Color(0xFF00C48C)),
-      onTap: () {},
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Hủy", style: TextStyle(fontSize: 18.0, color: Color(0xFFBDBDBD))),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Thêm', style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C) ),),
+              onPressed: () {
+                setState(() {
+                  nameScoreCol.add(newScoreName.text);
+                  heso.add(newCoef.text);
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
-
   void Accept() {
     String newCourseName = newCourseController.text;
-    if (newName.text != "")
-      nameScoreCol.add(newName.text);
-    if (newHeso.text != "")
-      heso.add(int.parse(newHeso.text));
-
     //xử lí Database
 
     //
+    for (int i =0 ; i < nameScoreCol.length; i++)
+    {
+      nameScoreCol[i] = NameScoreController[i].text;
+      heso[i] = HeSoController[i].text;
+      debugPrint(nameScoreCol[i] + " "+ heso[i].toString());
+    }
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
