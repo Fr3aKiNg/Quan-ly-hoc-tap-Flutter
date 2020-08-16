@@ -56,7 +56,6 @@ class _CalenderPageState extends State<CalenderPage> {
           IconButton(
             icon: Icon(Icons.add,color: Colors.white,),
             onPressed: ()  async {
-              //await showAddDialog(context);
               await showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
@@ -103,7 +102,7 @@ class _CalenderPageState extends State<CalenderPage> {
                             borderRadius: BorderRadius.circular(10.0)),
                         child: InkWell(
                           onDoubleTap: (){
-                            Navigator.of(context).pushNamed('event');
+                            Navigator.of(context).pushNamed('event',arguments: _events);
                           },
                           child: Text(
                             date.day.toString(),
@@ -123,7 +122,13 @@ class _CalenderPageState extends State<CalenderPage> {
                   ),
                 ),
                 ..._selectedEvents.map((event) => ListTile(
-                  title: Text(event.title),
+                  title: Row(
+                    children: [
+                      Icon(Icons.lens,color: Theme.of(context).primaryColor,),
+                      SizedBox(width: 5,),
+                      Text(event.title),
+                    ],
+                  ),
                   onTap: () {
                     Navigator.push(
                         context,

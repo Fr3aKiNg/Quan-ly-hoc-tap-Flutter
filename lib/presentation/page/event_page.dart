@@ -13,14 +13,11 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
-  PushLocalNotificationCustom _notify;
   Map data = {};
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _notify = PushLocalNotificationCustom(context);
-    _notify.initializeNotifications();
   }
   @override
   Widget build(BuildContext context) {
@@ -68,12 +65,13 @@ class _EventPageState extends State<EventPage> {
                 ),
               ),
             ),
-          RaisedButton(
-          onPressed: (){
-            _notify.show();
-          },
-          child: new Text('Show Notification'),
-          ),
+            data == null ? Center(child: CircularProgressIndicator()) :
+            ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context,index){
+                  return EventCard(event: data[index]);
+                }
+            ),
           ]
       ),
     );

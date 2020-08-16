@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/route.dart';
+import 'package:scheduleapp/presentation/page/add_event_page.dart';
 import 'package:scheduleapp/presentation/page/calender_page.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/on_board.dart';

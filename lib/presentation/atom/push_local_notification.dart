@@ -2,11 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:scheduleapp/presentation/atom/event_card.dart';
+import 'package:scheduleapp/presentation/model/event_model.dart';
 
 class PushLocalNotificationCustom {
+  EventModel event;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   BuildContext context;
-  PushLocalNotificationCustom(this.context);
+  PushLocalNotificationCustom({this.context,this.event});
 
   initializeNotifications() async {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -20,20 +22,14 @@ class PushLocalNotificationCustom {
         context: context,
         builder: (_) => AlertDialog(
           title: Text("Notification"),
-          content: EventCard(),
+          content: EventCard(event: event,),
           actions: <Widget>[
-            FlatButton(
-              onPressed: (){
-                Navigator.of(context).pop();
-              },
-              child: Text("Ok"),
-            ),
           ],
         )
     );
   }
 
-  void show(){
+  void setNotify(){
     _showNotification();
   }
 
@@ -44,6 +40,6 @@ class PushLocalNotificationCustom {
     var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
     var platformChannelSpecifics = new NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     //await flutterLocalNotificationsPlugin.show(0, 'New Post', 'How to Show Notification in Flutter', platformChannelSpecifics, payload: 'Default_Sound',);
-    await flutterLocalNotificationsPlugin.schedule(1,'Testing' , 'hahahhahahaa', DateTime.now().add(Duration(seconds: 2)), platformChannelSpecifics,payload: "FUCK",androidAllowWhileIdle: true);
+    await flutterLocalNotificationsPlugin.schedule(0,event.title ,event.description, event.eventDateFrom, platformChannelSpecifics,payload: event.title,androidAllowWhileIdle: true);
   }
 }

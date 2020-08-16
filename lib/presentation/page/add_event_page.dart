@@ -4,6 +4,7 @@ import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
 import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
+import 'package:scheduleapp/presentation/atom/push_local_notification.dart';
 import 'package:scheduleapp/presentation/model/database.dart';
 import 'package:scheduleapp/presentation/model/event_model.dart';
 
@@ -15,20 +16,26 @@ class AddEventPage extends StatefulWidget {
 }
 
 class _AddEventPageState extends State<AddEventPage> {
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTimeFrom = TimeOfDay.now();
-  TimeOfDay _selectedTimeTo = TimeOfDay.now();
+  DateTime _selectedDate;
+  TimeOfDay _selectedTimeFrom;
+  TimeOfDay _selectedTimeTo;
 
   TextEditingController _textEventControlerName ;
   TextEditingController _textEventControlerDesc ;
 
   bool processing;
 
+  PushLocalNotificationCustom _notify;
+
   @override
   void initState(){
     super.initState();
     _textEventControlerName = TextEditingController(text: widget.note != null ? widget.note.title : "");
     _textEventControlerDesc = TextEditingController(text:  widget.note != null ? widget.note.description : "");
+    _selectedDate = widget.note != null ? widget.note.eventDateFrom : DateTime.now();
+    _selectedTimeFrom = widget.note != null ? TimeOfDay.fromDateTime(widget.note.eventDateFrom):TimeOfDay.now();
+    _selectedTimeTo = widget.note != null ? TimeOfDay.fromDateTime(widget.note.eventDateTo):TimeOfDay.now();
+    _notify = widget.note == null ? null : PushLocalNotificationCustom(context: context,event: widget.note);
     processing = false;
   }
 
@@ -53,8 +60,6 @@ class _AddEventPageState extends State<AddEventPage> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -63,7 +68,7 @@ class _AddEventPageState extends State<AddEventPage> {
         children: <Widget>[
           Center(
             child: Text(
-              widget.note != null ? "Edit Note" : "Thêm sự kiện",
+              widget.note != null ? "Sửa sự kiện" : "Thêm sự kiện",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -111,7 +116,7 @@ class _AddEventPageState extends State<AddEventPage> {
             ],
           ),
           SizedBox(height: 24,),
-          processing ? Center(child: CircularProgressIndicator()) :
+          processing ? Center(child: LinearProgressIndicator()) :
           CustomModalActionButton(
             onClose: () => Navigator.of(context).pop(),
             onSave: () async {
@@ -122,10 +127,13 @@ class _AddEventPageState extends State<AddEventPage> {
                 await eventDBS.updateData(widget.note.id, {
                   'title': _textEventControlerName.text,
                   'description': _textEventControlerDesc.text,
-                  'event_date_from': widget.note.eventDateFrom,
-                  'event_date_to': widget.note.eventDateTo,
+                  'event_date_from': DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),
+                  'event_date_to': DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),
                   //'color': _selectedColor
                 });
+                Navigator.of(context).pushReplacementNamed('calendar');
+                //_notify.flutterLocalNotificationsPlugin.cancelAll();
+                //_notify.setNotify();
               }
               else{
                 await eventDBS.createItem(EventModel(
@@ -135,8 +143,17 @@ class _AddEventPageState extends State<AddEventPage> {
                     eventDateTo: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),
                     //color: _selectedColor
                 ));
+                _notify = PushLocalNotificationCustom(context: context,event:EventModel(
+                  title: _textEventControlerName.text,
+                  description:  _textEventControlerDesc.text,
+                  eventDateFrom: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),
+                  eventDateTo: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),
+                  //color: _selectedColor
+                ));
+                _notify.initializeNotifications();
+                _notify.setNotify();
+                Navigator.pop(context);
               }
-              Navigator.pop(context);
               setState(() {
                 processing = false;
               });

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/presentation/atom/event_card.dart';
-import 'package:scheduleapp/presentation/atom/push_local_notification.dart';
 import 'package:scheduleapp/presentation/model/event_model.dart';
 import 'package:intl/intl.dart';
 
 class EventDetailsPage extends StatelessWidget {
   final EventModel event;
-  //PushLocalNotificationCustom _notify;
   const EventDetailsPage({Key key, this.event}) : super(key: key);
 
   @override

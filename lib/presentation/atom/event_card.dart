@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/presentation/model/database.dart';
 import 'package:scheduleapp/presentation/model/event_model.dart';
 import 'package:intl/intl.dart';
+import 'package:scheduleapp/presentation/page/add_event_page.dart';
 
-class EventCard extends StatelessWidget {
+
+class EventCard extends StatefulWidget {
   final EventModel event;
-  const EventCard({Key key,this.event}) : super(key: key);
+  EventCard({Key key,this.event}) : super(key: key);
 
+  @override
+  _EventCardState createState() => _EventCardState();
+}
+
+class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,7 +31,7 @@ class EventCard extends StatelessWidget {
               Expanded(flex: 1,child: Icon(Icons.lens,color: Colors.redAccent,)),
               Expanded(
                 flex: 5,
-                child: Text(event.title,
+                child: Text(widget.event.title,
                   style: TextStyle(
                       fontSize: 35
                   ),
@@ -33,9 +41,18 @@ class EventCard extends StatelessWidget {
                   flex: 1,
                   child: PopupMenuButton <String> (
                     icon: Icon(Icons.more_vert,color: Colors.grey,),
-                    onSelected: (String _selected){
+                    onSelected: (String _selected) async {
                       if(_selected=="Edit"){
-
+                        await showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              content: AddEventPage(note:widget.event,),
+                          ),
+                        );
+                      }
+                      else if(_selected=="Delete"){
+                        await eventDBS.removeItem(widget.event.id);
+                        Navigator.of(context).pushReplacementNamed('calendar');
                       }
                     } ,
                     itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -58,7 +75,7 @@ class EventCard extends StatelessWidget {
               Expanded(flex: 1,child: Icon(Icons.calendar_today,color: Colors.grey,)),
               Expanded(
                 flex: 6,
-                child: Text(DateFormat.yMMMMEEEEd().format(event.eventDateFrom),
+                child: Text(DateFormat.yMMMMEEEEd().format(widget.event.eventDateFrom),
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -73,10 +90,24 @@ class EventCard extends StatelessWidget {
               Expanded(flex: 1,child: Icon(Icons.access_time,color: Colors.grey,)),
               Expanded(
                 flex: 6,
-                child: Text("9:00 AM - 10:00AM",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+                child: Row(
+                  children: [
+                    Text(TimeOfDay.fromDateTime(widget.event.eventDateFrom).toString().substring(10,15),
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                    Text(" - ",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                    Text(TimeOfDay.fromDateTime(widget.event.eventDateTo).toString().substring(10,15),
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -88,7 +119,7 @@ class EventCard extends StatelessWidget {
               Expanded(flex: 1,child: Icon(Icons.list,color: Colors.grey,)),
               Expanded(
                 flex: 5,
-                child: Text(event.description,
+                child: Text(widget.event.description,
                   style: TextStyle(
                     fontSize: 20,
                   ),
