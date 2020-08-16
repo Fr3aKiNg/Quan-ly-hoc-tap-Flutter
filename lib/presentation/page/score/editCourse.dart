@@ -222,37 +222,7 @@ class editCourseState extends State<editCourse> {
         )
     );
   }
-  Widget _buildRow(String nameCol, List score, int ses) {
-    return ListTile(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              nameCol,
-              style: _biggerFont,
-            ),
-          ),
-          Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: List.generate(score.length, (index) {
-                      return Container(
-                          margin: EdgeInsets.only(left: 20),
-                          child: Text(
-                            score[index].toString(),
-                            style: _biggerFont,
-                          ));
-                    })),
-              ))
-        ],
-      ),
-      trailing: new Icon(Icons.add, color: Color(0xFF00C48C)),
-      onTap: () {},
-    );
-  }
+
 
   Future<void> _showMyDialog() async {
     TextEditingController newScoreName = TextEditingController();
