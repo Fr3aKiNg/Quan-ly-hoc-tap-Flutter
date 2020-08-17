@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
 import 'package:scheduleapp/presentation/atom/custom_button.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
@@ -14,46 +17,27 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
-  //TimetableController _calendarController;
-  Map<String, Map<String, TimeTableModel>> _events;
+  List<List<TimeTableModel>> _events;
   List<dynamic> _selecteds;
 
   @override
   void initState() {
     super.initState();
-    //_calendarConntroller = CalendarController();
-    _events = {};
     _selecteds = [];
   }
 
-  Map<String, Map<String, TimeTableModel>> _groupEvents(
-      List<TimeTableModel> events) {
-    TimeTableModel empty = TimeTableModel.empty("123");
-    List<String> list = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"];
-    List<String> days = ["T2", "T3", "T4", "T5", "T6", "T7", "T8"];
-
-    Map<String, TimeTableModel> map =
-        new Map.fromIterable(days, key: (item) => item.toString(), value: (item) => empty);
-    Map<String, Map<String, TimeTableModel>> data =
-        new Map.fromIterable(list, key: (item) => item.toString(), value: (_) => map);
-
+  List<List<TimeTableModel>> _groupEvents(
+      List<TimeTableModel> events, List<List<TimeTableModel>> data) {
     events.forEach((event) {
       data[event.order][event.day] = event;
     });
-
-//    list.forEach((element) {
-//      print(data[element]["T2"].subject_name);
-//    });
-//    data.forEach((key, value) {
-//      value.forEach((key1, value1){
-//        print(key+key1+value1.subject_name.toString());
-//      });
-//    });
     return data;
   }
 
   @override
   Widget build(BuildContext context) {
+    //final uid = Provider.of<CurrentUser>(context).data.uid;
+    //var timetableDBS = gettimetableDBS("1234");
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -67,14 +51,15 @@ class _TimetablePageState extends State<TimetablePage> {
         ),
         centerTitle: true,
       ),
-      body: StreamBuilder<List<TimeTableModel>>(
+      body: StreamBuilder(
           stream: timetableDBS.streamList(),
           builder: (context, snapshot) {
+            TimeTableModel empty = TimeTableModel.empty(null);
+            var data =
+                List.generate(8, (index) => List.generate(7, (index) => empty));
             if (snapshot.hasData) {
               List<TimeTableModel> allTable = snapshot.data;
-              if (allTable.isNotEmpty) {
-                _events = _groupEvents(allTable);
-              }
+              _events = _groupEvents(allTable, data);
             }
             return Column(
               children: [
@@ -98,10 +83,10 @@ class _TimetablePageState extends State<TimetablePage> {
                             SizedBox(),
                             SizedBox(),
                           ]),
-                          buildTimeTableRow("1", _events["T1"]),
-                          buildTimeTableRow("2", _events["T2"]),
-                          buildTimeTableRow("3", _events["T3"]),
-                          buildTimeTableRow("4", _events["T4"]),
+                          buildTimeTableRow("1", _events[0], 1),
+                          buildTimeTableRow("2", _events[1], 1),
+                          buildTimeTableRow("3", _events[2], 2),
+                          buildTimeTableRow("4", _events[3], 3),
                           TableRow(children: [
                             SizedBox(
                               height: 20,
@@ -114,10 +99,10 @@ class _TimetablePageState extends State<TimetablePage> {
                             SizedBox(),
                             SizedBox(),
                           ]),
-                          buildTimeTableRow("5", _events["T5"]),
-                          buildTimeTableRow("6", _events["T6"]),
-                          buildTimeTableRow("7", _events["T7"]),
-                          buildTimeTableRow("8", _events["T8"]),
+                          buildTimeTableRow("5", _events[4], 4),
+                          buildTimeTableRow("6", _events[5], 5),
+                          buildTimeTableRow("7", _events[6], 6),
+                          buildTimeTableRow("8", _events[7], 7),
                         ]),
                   ),
                 ),
@@ -176,53 +161,75 @@ class _TimetablePageState extends State<TimetablePage> {
     ]);
   }
 
-  TableRow buildTimeTableRow(String title, Map<String, TimeTableModel> data) {
+  TableRow buildTimeTableRow(
+      String title, List<TimeTableModel> data, int order) {
     return TableRow(
       children: [
         TitleCell(
           title: title,
         ),
         TimeTableCell(
-          sub_name: data["T2"].subject_name,
-          location: data["T2"].location,
-          teacher_name: data["T2"].teacher_name,
-          color: data["T2"].color,
+          sub_name: data[0].subject_name,
+          location: data[0].location,
+          teacher_name: data[0].teacher_name,
+          id: data[0].id,
+          color: data[0].color,
+          day: 0,
+          order: order,
         ),
         TimeTableCell(
-          sub_name: data["T3"].subject_name,
-          location: data["T3"].location,
-          teacher_name: data["T3"].teacher_name,
-          color: data["T3"].color,
+          sub_name: data[1].subject_name,
+          location: data[1].location,
+          id: data[1].id,
+          teacher_name: data[1].teacher_name,
+          color: data[1].color,
+          day: 1,
+          order: order,
         ),
         TimeTableCell(
-          sub_name: data["T4"].subject_name,
-          location: data["T4"].location,
-          teacher_name: data["T4"].teacher_name,
-          color: data["T4"].color,
+          sub_name: data[2].subject_name,
+          location: data[2].location,
+          id: data[2].id,
+          teacher_name: data[2].teacher_name,
+          color: data[2].color,
+          day: 2,
+          order: order,
         ),
         TimeTableCell(
-          sub_name: data["T5"].subject_name,
-          location: data["T5"].location,
-          teacher_name: data["T5"].teacher_name,
-          color: data["T5"].color,
+          sub_name: data[3].subject_name,
+          location: data[3].location,
+          id: data[3].id,
+          teacher_name: data[3].teacher_name,
+          color: data[3].color,
+          day: 3,
+          order: order,
         ),
         TimeTableCell(
-          sub_name: data["T6"].subject_name,
-          location: data["T6"].location,
-          teacher_name: data["T6"].teacher_name,
-          color: data["T6"].color,
+          sub_name: data[4].subject_name,
+          location: data[4].location,
+          id: data[4].id,
+          teacher_name: data[4].teacher_name,
+          color: data[4].color,
+          day: 4,
+          order: order,
         ),
         TimeTableCell(
-          sub_name: data["T7"].subject_name,
-          location: data["T7"].location,
-          teacher_name: data["T7"].teacher_name,
-          color: data["T7"].color,
+          sub_name: data[5].subject_name,
+          location: data[5].location,
+          teacher_name: data[5].teacher_name,
+          color: data[5].color,
+          id: data[5].id,
+          day: 5,
+          order: order,
         ),
         TimeTableCell(
-          sub_name: data["T8"].subject_name,
-          location: data["T8"].location,
-          teacher_name: data["T8"].teacher_name,
-          color: data["T8"].color,
+          sub_name: data[6].subject_name,
+          location: data[6].location,
+          id: data[6].id,
+          teacher_name: data[6].teacher_name,
+          color: data[6].color,
+          day: 6,
+          order: order,
         ),
       ],
     );
@@ -475,12 +482,18 @@ class TimeTableCell extends StatefulWidget {
       @required this.sub_name,
       @required this.location,
       @required this.teacher_name,
-      @required this.color})
+      @required this.color,
+      @required this.day,
+      @required this.id,
+      @required this.order})
       : super(key: key);
-  final String sub_name;
-  final String location;
-  final String teacher_name;
-  final Color color;
+  String sub_name;
+  String location;
+  String teacher_name;
+  Color color;
+  String id;
+  int order;
+  int day;
 
   @override
   _TimeTableCellState createState() => _TimeTableCellState();
@@ -494,62 +507,76 @@ class _TimeTableCellState extends State<TimeTableCell> {
   void onValueSelected(Color color) {
     backgroundColor = color;
   }
-
-  @override
-  void initState() {
+@override
+void initState(){
     super.initState();
     this.text = widget.sub_name;
     this.room = widget.location;
     this.teach = widget.teacher_name;
+    this.day = widget.day;
+    this.order = widget.order;
+    this.id = widget.id;
     this.backgroundColor = widget.color;
-  }
+    _textControllerClass.text = room;
+    _textControllerName.text = text;
+    _textControllerTeacher.text = teach;
+}
+  String text = "";
+  String id;
 
-  String text;
+  String room = "";
 
-  String room;
-
-  String teach;
+  String teach = "";
   Color backgroundColor;
+  int day;
+  int order;
 
   @override
   Widget build(BuildContext context) {
+
     return TableCell(
         child: InkWell(
       onLongPress: () {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  content: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Center(
-                          child: Text("Xoa mon hoc ?"),
-                        ),
-                      ],
+        if (text != "") {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    content: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Text("Xoa mon hoc ?"),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          text = "";
-                          room = "";
-                          teach = "";
-                          backgroundColor = Colors.transparent;
-                          _textControllerTeacher.clear();
-                          _textControllerClass.clear();
-                          _textControllerName.clear();
-                        });
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("Ok"),
-                    ),
-                    FlatButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text("Cancel"),
-                    ),
-                  ],
-                ));
+                    actions: <Widget>[
+                      FlatButton(
+                        onPressed: () async {
+                          if (text != "") {
+                            setState(() {
+                              text = "";
+                              room = "";
+                              teach = "";
+                              backgroundColor = Colors.transparent;
+                              _textControllerTeacher.clear();
+                              _textControllerClass.clear();
+                              _textControllerName.clear();
+                            });
+                            if (this.id != null)
+                              await timetableDBS.removeItem(this.id);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: Text("Ok"),
+                      ),
+                      FlatButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text("Cancel"),
+                      ),
+                    ],
+                  ));
+        }
       },
       onDoubleTap: () {
         showDialog(
@@ -668,11 +695,36 @@ class _TimeTableCellState extends State<TimeTableCell> {
             actions: <Widget>[
               CustomModalActionButton(
                 onClose: () => Navigator.of(context).pop(),
-                onSave: () {
+                onSave: () async {
+                  if(backgroundColor == null || backgroundColor == Color(0))
+                    backgroundColor = Color(4280391411);
+                  if (text != "") {
+                    await timetableDBS.updateData(
+                        this.id,
+                        TimeTableModel(
+                            subject_name: _textControllerName.text,
+                            location: _textControllerClass.text,
+                            teacher_name: _textControllerTeacher.text,
+                            day: this.day,
+                            order: this.order,
+                            color: this.backgroundColor)
+                            .toMap());
+                  } else {
+                    DocumentReference res = await timetableDBS.createItem(TimeTableModel(
+                        subject_name: _textControllerName.text,
+                        location: _textControllerClass.text,
+                        teacher_name: _textControllerTeacher.text,
+                        day: this.day,
+                        order: this.order,
+                      color: this.backgroundColor
+                    ));
+                    this.id = res.documentID;
+                  }
                   setState(() {
                     this.text = _textControllerName.text;
                     this.room = _textControllerClass.text;
                     this.teach = _textControllerTeacher.text;
+
                   });
                   Navigator.of(context).pop();
                 },
