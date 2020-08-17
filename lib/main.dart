@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       },
       onGenerateRoute: Router.generateRoute,
 
-      initialRoute: 'calendar',
+      initialRoute: 'timetable',
 
     );
   }
