@@ -94,49 +94,78 @@ class _CalenderPageState extends State<CalenderPage> {
                     formatButtonVisible: false,
                   ),
                   builders: CalendarBuilders(
+                    dayBuilder: (context,date,events)=> Container(
+                        margin: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        child: Text(
+                          date.day.toString(),
+                          style: TextStyle(fontSize: 15),
+                        )),
                     selectedDayBuilder: (context, date, events) => Container(
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.greenAccent,
                             borderRadius: BorderRadius.circular(10.0)),
                         child: InkWell(
                           onDoubleTap: (){
-                            Navigator.of(context).pushNamed('event',arguments: _events);
+                              Navigator.of(context).pushNamed('event',arguments: _selectedEvents);
                           },
                           child: Text(
                             date.day.toString(),
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white,fontSize: 20),
                           ),
                         )),
                     todayDayBuilder: (context, date, events) => Container(
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: Colors.cyan,
+                            color: Colors.orangeAccent,
                             borderRadius: BorderRadius.circular(10.0)),
                         child: Text(
                           date.day.toString(),
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white,fontSize: 15),
                         )),
+                    markersBuilder: (context, date, events, holidays) {
+                      final children = <Widget>[];
+                      if (events.isNotEmpty) {
+                        children.add(
+                          Positioned(
+                            right: 1,
+                            bottom: 1,
+                            child: _buildEventsMarker(date, events),
+                          ),
+                        );
+                      }
+                      return children;
+                    },
                   ),
                 ),
-                ..._selectedEvents.map((event) => ListTile(
-                  title: Row(
-                    children: [
-                      Icon(Icons.lens,color: Theme.of(context).primaryColor,),
-                      SizedBox(width: 5,),
-                      Text(event.title),
-                    ],
+                ..._selectedEvents.map((event) => Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 0.4),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => EventDetailsPage(
-                              event: event,
-                            )));
-                  },
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  child: ListTile(
+                    title: Row(
+                      children: [
+                        Icon(Icons.lens,color: Colors.greenAccent,size: 30,),
+                        SizedBox(width: 5,),
+                        Text(event.title,
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => EventDetailsPage(
+                                event: event,
+                              )));
+                    },
+                  ),
                 )),
               ],
             ),
@@ -145,5 +174,27 @@ class _CalenderPageState extends State<CalenderPage> {
       ),
     );
   }
-
+  Widget _buildEventsMarker(DateTime date, List events) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(10),
+        color: _calendarController.isSelected(date)
+            ? Colors.brown[500]
+            : _calendarController.isToday(date) ? Colors.brown[300] : Colors.blue[400],
+      ),
+      width: 20.0,
+      height: 20.0,
+      child: Center(
+        child: Text(
+          '${events.length}',
+          style: TextStyle().copyWith(
+            color: Colors.white,
+            fontSize: 14.0,
+          ),
+        ),
+      ),
+    );
+  }
 }

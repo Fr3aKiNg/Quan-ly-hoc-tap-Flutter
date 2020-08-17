@@ -6,7 +6,7 @@ class EventModel extends DatabaseItem{
   final String description;
   final DateTime eventDateFrom;
   final DateTime eventDateTo;
-  //final Color color;
+ // final int color;
 
   EventModel({this.id,this.title, this.description, this.eventDateFrom,this.eventDateTo, }):super(id);
 
@@ -16,7 +16,7 @@ class EventModel extends DatabaseItem{
       description: data['description'],
       eventDateFrom: data['event_date_from'],
       eventDateTo: data['event_date_to'],
-    //  color: data['color'],
+     // color: data['color'],
     );
   }
 
@@ -27,7 +27,7 @@ class EventModel extends DatabaseItem{
       description: data['description'],
       eventDateFrom: data['event_date_from'].toDate(),
       eventDateTo: data['event_date_to'].toDate(),
-     // color: data['color'],
+      //color: data['color'],
     );
   }
 

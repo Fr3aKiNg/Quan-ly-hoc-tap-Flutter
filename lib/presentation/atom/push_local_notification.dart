@@ -16,12 +16,13 @@ class PushLocalNotificationCustom {
     var ios = IOSInitializationSettings();
     var initSetting = InitializationSettings(android,ios);
     await flutterLocalNotificationsPlugin.initialize(initSetting,onSelectNotification: onSelectNotification);
+    //_showNotification();
   }
   Future onSelectNotification(String payload) async {
     await showDialog(
         context: context,
-        builder: (_) => AlertDialog(
-          title: Text("Notification"),
+        builder: (context) => AlertDialog(
+          title: Text("Sự kiện"),
           content: EventCard(event: event,),
           actions: <Widget>[
           ],
@@ -29,8 +30,8 @@ class PushLocalNotificationCustom {
     );
   }
 
-  void setNotify(){
-    _showNotification();
+  void setNotify() async{
+     await _showNotification();
   }
 
   Future _showNotification() async {

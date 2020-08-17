@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
 import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
+import 'package:scheduleapp/presentation/atom/event_card.dart';
 import 'package:scheduleapp/presentation/atom/push_local_notification.dart';
 import 'package:scheduleapp/presentation/model/database.dart';
 import 'package:scheduleapp/presentation/model/event_model.dart';
@@ -19,7 +21,6 @@ class _AddEventPageState extends State<AddEventPage> {
   DateTime _selectedDate;
   TimeOfDay _selectedTimeFrom;
   TimeOfDay _selectedTimeTo;
-
   TextEditingController _textEventControlerName ;
   TextEditingController _textEventControlerDesc ;
 
@@ -35,9 +36,9 @@ class _AddEventPageState extends State<AddEventPage> {
     _selectedDate = widget.note != null ? widget.note.eventDateFrom : DateTime.now();
     _selectedTimeFrom = widget.note != null ? TimeOfDay.fromDateTime(widget.note.eventDateFrom):TimeOfDay.now();
     _selectedTimeTo = widget.note != null ? TimeOfDay.fromDateTime(widget.note.eventDateTo):TimeOfDay.now();
-    _notify = widget.note == null ? null : PushLocalNotificationCustom(context: context,event: widget.note);
     processing = false;
   }
+
 
   Future _pickDate() async {
     DateTime datepick = await showDatePicker(
@@ -109,15 +110,14 @@ class _AddEventPageState extends State<AddEventPage> {
                 flex: 3,
                 child: CustomDateTimePicker(
                   onPressed: () {_pickTime(false);} ,
-                  value: new TimeOfDay(hour: _selectedTimeTo.hour, minute: _selectedTimeTo.minute).toString().substring(10,15),
+                  value: TimeOfDay(hour: _selectedTimeTo.hour, minute: _selectedTimeTo.minute).toString().substring(10,15),
                   icon: Icons.access_time,
                 ),
               ),
             ],
           ),
           SizedBox(height: 24,),
-          processing ? Center(child: LinearProgressIndicator()) :
-          CustomModalActionButton(
+          if (processing) Center(child: LinearProgressIndicator()) else CustomModalActionButton(
             onClose: () => Navigator.of(context).pop(),
             onSave: () async {
               setState(() {
@@ -131,7 +131,6 @@ class _AddEventPageState extends State<AddEventPage> {
                   'event_date_to': DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),
                   //'color': _selectedColor
                 });
-                Navigator.of(context).pushReplacementNamed('calendar');
                 //_notify.flutterLocalNotificationsPlugin.cancelAll();
                 //_notify.setNotify();
               }
@@ -148,12 +147,12 @@ class _AddEventPageState extends State<AddEventPage> {
                   description:  _textEventControlerDesc.text,
                   eventDateFrom: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),
                   eventDateTo: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),
-                  //color: _selectedColor
+                 // color: _selectedColor
                 ));
                 _notify.initializeNotifications();
                 _notify.setNotify();
-                Navigator.pop(context);
               }
+              Navigator.of(context).pushReplacementNamed('calendar');
               setState(() {
                 processing = false;
               });

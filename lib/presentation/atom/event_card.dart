@@ -28,7 +28,7 @@ class _EventCardState extends State<EventCard> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(flex: 1,child: Icon(Icons.lens,color: Colors.redAccent,)),
+              Expanded(flex: 1,child: Icon(Icons.lens,color: Colors.greenAccent,)),
               Expanded(
                 flex: 5,
                 child: Text(widget.event.title,
