@@ -43,7 +43,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     if (settings.name?.isNotEmpty != true) return null;
     final uri = Uri.parse(settings.name);
     final path = uri.path ?? '';
-    // final q = uri.queryParameters ?? <String, String>{};
     switch (path) {
       case '/note': {
         final note = (settings.arguments as Map ?? {})['note'];
@@ -107,16 +106,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           brightness: Brightness.light,
           primaryColor: Colors.white,
           appBarTheme: AppBarTheme.of(context).copyWith(
-            elevation: 0,
+            elevation: 1,
             brightness: Brightness.light,
           ),
           scaffoldBackgroundColor: Colors.white,
-//          bottomAppBarColor: kBottomAppBarColorLight,
+          bottomAppBarColor: Colors.white,
           primaryTextTheme: Theme.of(context).primaryTextTheme.copyWith(
-            // title
-            headline6: const TextStyle(
-//              color: kIconTintLight,
-            ),
+
           ),
         ),
         home:  NoteScreen(),
@@ -137,12 +133,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           height: h*10,
           width: MediaQuery.of(context).size.width / _iconList.length,
           decoration: index == _selectedIndex
-              ? BoxDecoration(
+              ? BoxDecoration(color: Colors.white,
             border: Border(
               bottom: BorderSide(width: 4, color: Colors.white),
             ),
           )
-              : BoxDecoration(),
+              : BoxDecoration(color: Colors.white),
           child: Column(
               children: <Widget>[
                 Icon(

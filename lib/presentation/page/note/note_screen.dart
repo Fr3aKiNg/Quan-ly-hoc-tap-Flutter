@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -8,20 +7,15 @@ import 'package:scheduleapp/data/model/note.dart';
 import 'package:scheduleapp/data/model/note_service.dart';
 import 'package:scheduleapp/data/model/user.dart';
 import 'package:scheduleapp/presentation/atom/bottom_navigation_bar.dart';
-import 'package:scheduleapp/presentation/page/home_screen.dart';
-import 'package:scheduleapp/presentation/page/note/note_editor.dart';
 import 'package:tuple/tuple.dart';
 
-import '../icons.dart';
-import 'package:flutter/material.dart';
 
 import 'package:collection_ext/iterables.dart';
-import 'package:flutter/material.dart';
+
 
 import 'note_item.dart';
 
 
-/// ListView for notes
 class NotesList extends StatelessWidget {
   final List<Note> notes;
   final void Function(Note) onTap;
@@ -84,11 +78,12 @@ class NotesGrid extends StatelessWidget {
   Widget build(BuildContext context) => SliverPadding(
     padding: const EdgeInsets.symmetric(horizontal: 10),
     sliver: SliverGrid(
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate:
+      SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 200.0,
-        mainAxisSpacing: 15.0,
-        crossAxisSpacing: 10.0,
-        childAspectRatio: 1 / 1,
+        mainAxisSpacing: 20.0,
+        crossAxisSpacing: 15.0,
+        childAspectRatio: 1
       ),
       delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) => _noteItem(context, notes[index]),
@@ -106,7 +101,6 @@ class NotesGrid extends StatelessWidget {
 class NoteFilter extends ChangeNotifier {
   NoteState _noteState;
 
-  /// The state of note to search.
   NoteState get noteState => _noteState;
   set noteState(NoteState value) {
     if (value != null && value != _noteState) {
@@ -114,8 +108,7 @@ class NoteFilter extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  /// Creates a [NoteFilter] object.
+  
   NoteFilter([this._noteState = NoteState.unspecified]);
 }
 
@@ -128,8 +121,6 @@ class NoteScreen extends StatefulWidget
 }
 class NoteScreenState extends State<NoteScreen> with CommandHandler {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  /// `true` to show notes in a GridView, a ListView otherwise.
   bool _gridView = true;
   int _selectedItem;
 
@@ -279,10 +270,6 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
     );
   }
 
-  /// A grid/list view to display notes
-  ///
-  /// Notes are divided to `Pinned` and `Others` when there's no filter,
-  /// and a blank view will be rendered, if no note found.
   List<Widget> _buildNotesView(BuildContext context, NoteFilter filter, List<Note> notes) {
     if (notes?.isNotEmpty != true) {
       return [_buildBlankView(filter.noteState)];
