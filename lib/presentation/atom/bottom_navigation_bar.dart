@@ -1,5 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scheduleapp/application/color_app.dart';
+import 'package:scheduleapp/application/constant.dart';
+import 'package:scheduleapp/data/model/user.dart';
+import 'package:scheduleapp/presentation/page/home_screen.dart';
+import 'package:scheduleapp/presentation/page/note/note_editor.dart';
+import 'package:scheduleapp/presentation/page/note/note_screen.dart';
+import 'package:scheduleapp/presentation/page/other_screen.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final int defaultSelectedIndex;
@@ -22,7 +30,38 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   List<IconData> _iconList = [];
   List<String> _btnName = [];
 
-  @override
+  Route _generateRoute(RouteSettings settings) {
+    try {
+      return _doGenerateRoute(settings);
+    } catch (e, s) {
+      debugPrint("failed to generate route for $settings: $e $s");
+      return null;
+    }
+  }
+
+  Route _doGenerateRoute(RouteSettings settings) {
+    if (settings.name?.isNotEmpty != true) return null;
+    final uri = Uri.parse(settings.name);
+    final path = uri.path ?? '';
+    switch (path) {
+      case '/note': {
+        final note = (settings.arguments as Map ?? {})['note'];
+        return _buildRoute(settings, (_) => NoteEditor(note: note));
+      }
+      default:
+        return null;
+    }
+  }
+
+  /// Create a [Route].
+  Route _buildRoute(RouteSettings settings, WidgetBuilder builder) =>
+      MaterialPageRoute<void>(
+        settings: settings,
+        builder: builder,
+      );
+
+
+@override
   void initState() {
     super.initState();
     _selectedIndex = widget.defaultSelectedIndex;
@@ -49,8 +88,42 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return GestureDetector(
         onTap: () {
           widget.onChange(index);
-          Navigator.of(context).pushNamed('other_screen');
+          if (index == 0) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+          }
+          else if (index == 3) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => OtherScreen()));
+          }
+          else if (index == 2)
+          {
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>
+                StreamProvider.value(
+    value: FirebaseAuth.instance.onAuthStateChanged.map((user) => CurrentUser.create(user)),
+    initialData: CurrentUser.initial,
+    child: Consumer<CurrentUser>(
+      builder: (context, user, _) => MaterialApp(
+        theme: Theme.of(context).copyWith(
+          brightness: Brightness.light,
+          primaryColor: Colors.white,
+          appBarTheme: AppBarTheme.of(context).copyWith(
+            elevation: 1,
+            brightness: Brightness.light,
+          ),
+          scaffoldBackgroundColor: Colors.white,
+          bottomAppBarColor: Colors.white,
+          primaryTextTheme: Theme.of(context).primaryTextTheme.copyWith(
 
+          ),
+        ),
+        home:  NoteScreen(),
+        routes: {
+          '/settings': (_) => NoteScreen(),
+        },
+        onGenerateRoute: _generateRoute,
+      ),
+    ),
+  )));
+          }
           setState(() {
             _selectedIndex = index;
           });
@@ -60,12 +133,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           height: h*10,
           width: MediaQuery.of(context).size.width / _iconList.length,
           decoration: index == _selectedIndex
-              ? BoxDecoration(
+              ? BoxDecoration(color: Colors.white,
             border: Border(
               bottom: BorderSide(width: 4, color: Colors.white),
             ),
           )
-              : BoxDecoration(),
+              : BoxDecoration(color: Colors.white),
           child: Column(
               children: <Widget>[
                 Icon(

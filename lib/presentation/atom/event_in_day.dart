@@ -10,9 +10,9 @@ class EventInDayUI extends StatelessWidget{
   {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Container(
+    return Container(padding: EdgeInsets.fromLTRB(w, h, w, h),
       width: w*100,
-      height: h*12,
+      height: h*15,
       child: Row(children: <Widget>[
         Expanded(flex:2,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: <Widget>[
@@ -38,8 +38,8 @@ Widget eventCard(BuildContext context, String name, String timeLine)
   double w = MediaQuery.of(context).size.width / 100;
   double h = MediaQuery.of(context).size.height / 100;
   return Container(
-    margin: EdgeInsets.fromLTRB(w*2, 0, 0, h*2),
-    padding: EdgeInsets.fromLTRB(w, h, w, h/2),
+    margin: EdgeInsets.fromLTRB(w, 0, 0, h),
+    padding: EdgeInsets.fromLTRB(w, h, w, h),
     width: w*25,
     height: w*12,
     decoration: BoxDecoration(shape: BoxShape.rectangle,color: Colors.amberAccent,

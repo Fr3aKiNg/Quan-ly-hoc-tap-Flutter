@@ -30,7 +30,7 @@ class HomeScreenState extends State<HomeScreen>{
           _selectedItem = val;
         });
       },
-      defaultSelectedIndex: 1,
+      defaultSelectedIndex: 0,
       btnName: ["Tổng quan","Điểm","Ghi chú","Khác"],
     ),
 
@@ -169,7 +169,7 @@ class EventList extends StatelessWidget{
         ),
         Container(
           width: w*100,
-          height: h*listEvent.length*14,
+          height: h*listEvent.length*16,
           child: ListView.builder(physics: NeverScrollableScrollPhysics(),
               itemCount: listEvent.length,itemBuilder: (context,index){
               final item = listEvent[index];
