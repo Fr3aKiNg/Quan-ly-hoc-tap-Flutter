@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/presentation/atom/page_indicator.dart';
 import 'package:scheduleapp/presentation/atom/screen_data.dart';
@@ -39,25 +41,49 @@ class _OnboardingMeState extends State<OnboardingMe> {
 
   int currentPage = 0;
   bool skip = true;
+
+  startTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool firstTime = prefs.getBool('first_time');
+
+    var _duration = new Duration(seconds: 3);
+
+    if (firstTime != null && !firstTime) {// Not first time
+      return new Timer(_duration, navigationPageHome);
+    } else {// First time
+      prefs.setBool('first_time', false);
+      return new Timer(_duration, navigationPageWel);
+    }
+  }
+
+  void navigationPageHome() {
+    Navigator.of(context).pushReplacementNamed('home');
+  }
+
+  void navigationPageWel() {
+
+    Navigator.of(context).pushReplacementNamed('on_board');
+  }
+
   @override
   Widget build(BuildContext context) {
     List<OnBoardDetail> data = [
       OnBoardDetail(img:
       "assets/on_board_1.png",
-          title:"Lorem ipsum dolor sit amet, consectetur adipiscing",
-          des:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
+          title:"Giúp bạn quản lý học tập hiệu quả",
+          des:"Ứng dụng cho phép đặt mục tiêu học tập, lưu và thống kê điểm số theo học kì, môn học do chính bạn cài đặt. Hỗ trợ theo dõi lịch học và ghi chú."),
       OnBoardDetail(img:
       "assets/on_board_2.png",
-          title:"Lorem ipsum dolor sit amet, consectetur adipiscing",
-          des:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
+          title:"Hoàn toàn miễn phí, cam kết không quảng cáo",
+          des:"Bạn không phải trả bất kì loại phí nào và sẽ không bị làm phiền do quảng cáo gây xao nhãng và tốn thời gian."),
       OnBoardDetail(img:
       "assets/on_board_3.png",
-          title:"Lorem ipsum dolor sit amet, consectetur adipiscing",
-          des:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
+          title:"Đồng bộ hóa dữ liệu qua nhiều thiết bị",
+          des:"Hỗ trợ đồng bộ hóa dữ liệu giúp bạn tiện theo dõi trên cái thiết bị sử dụng khác nhau. Hỗ trợ cả hệ điều hành Android và IOS."),
       OnBoardDetail(img:
       "assets/on_board_4.png",
-          title:"Lorem ipsum dolor sit amet, consectetur adipiscing",
-          des:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut morbi at odio ut."),
+          title:"Tùy chỉnh theo nhu cầu cá nhân",
+          des:"Cài đặt mọi thứ theo mục tiêu học tập của chính bạn."),
       OnBoardDetail(img:
       "assets/login.png",
           title: "",
@@ -67,7 +93,6 @@ class _OnboardingMeState extends State<OnboardingMe> {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return Scaffold(
-
         body: SingleChildScrollView(
           child: Stack(
             children: <Widget>[

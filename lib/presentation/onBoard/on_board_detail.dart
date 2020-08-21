@@ -35,17 +35,17 @@ class OnBoardInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-
             Image.asset(
               item.imgUrl,
               fit: BoxFit.cover,
               width: w * 100,
               height: h * 45,
             ),
-            item.title != ""  ? Text(item.title,
-                style: TextStyle(fontSize: 32, color: Colors.black,fontWeight: FontWeight.w600)) : LoginGoogle(),
-            SizedBox(height: h * 5),
-            Text(item.des, style: TextStyle(fontSize: 16, color: Colors.black)),
+            SizedBox(height: 20),
+            item.title != ""  ? Container(margin: EdgeInsets.fromLTRB(w*2, h*3, w*2, 0),child: Text(item.title,
+                style: TextStyle(fontSize: 36, color: ColorApp.backgroundColor,fontWeight: FontWeight.w600))) : LoginGoogle(),
+//            SizedBox(height: h * 5),
+            Container(margin: EdgeInsets.fromLTRB(w*2, h*2, w*2, 0),child:Text(item.des, style: TextStyle(fontSize: 18, color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w400))),
             SizedBox(height: h * 6),
             Align(alignment: Alignment.bottomRight,child: InkWell(
                 onTap: () {

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:scheduleapp/presentation/page/on_board_detail.dart';
+import 'package:scheduleapp/presentation/onBoard/on_board_detail.dart';
 
 
 List<Widget> screenData(int numOfPages, data) {
