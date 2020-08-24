@@ -13,9 +13,13 @@ class OtherState extends State<OtherScreen>{
   Widget build(BuildContext context)
   {
 
-    return Scaffold(appBar: AppBar(title: Text("Khác",style: TextStyle(
-      fontSize: 22, color: Colors.white,fontWeight: FontWeight.w400
-    ),),
+    return Scaffold(appBar: AppBar(title: Text("Khác",
+    softWrap: false,
+    style: TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+        fontSize: 22,)
+    ),
     backgroundColor: ColorApp.backgroundColor,),
       bottomNavigationBar:BottomAppBar(child:CustomBottomNavigationBar(
     iconList: [

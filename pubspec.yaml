@@ -56,6 +56,8 @@ dev_dependencies:
   shared_preferences: ^0.5.10
 
 
+
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -93,9 +95,9 @@ fonts:
 module:
   androidX: true
 flutter_icons:
-  android: "launcher_icon"
+  android: true
   ios: true
-  image_path: "assets/logo.jp"
+  image_path: "assets/app_logo.png"
 flutter_laucher_name:
   name: "Educare"
   # To add custom fonts to your application, add a fonts section here,

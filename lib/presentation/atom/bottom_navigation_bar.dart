@@ -101,7 +101,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => OtherScreen()));
             setState(() {
               _selectedIndex =index;
-              print("select 3");
             });
           }
           else if (index == 2)

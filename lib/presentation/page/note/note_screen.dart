@@ -146,7 +146,24 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
         builder: (context, filter, notes, child) {
           final hasNotes = notes?.isNotEmpty == true;
           final canCreate = filter.noteState.canCreate;
-          return Scaffold(bottomNavigationBar:BottomAppBar(
+          return Scaffold(appBar: AppBar(title: Row(children: [
+            const SizedBox(width: 10),
+            const Expanded(
+              child: Text('Ghi chú',
+                softWrap: false,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            const SizedBox(width: 18),
+            _buildAvatar(context),
+            const SizedBox(width: 10),
+          ]),backgroundColor: ColorApp.backgroundColor,),
+            bottomNavigationBar:BottomAppBar(
             child:
               CustomBottomNavigationBar(
                 iconList: [
@@ -167,10 +184,10 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
             key: _scaffoldKey,
             body: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints.tightFor(width: 720),
-                child: CustomScrollView(
+                constraints:  BoxConstraints.
+        tightFor(width: 720), child: CustomScrollView(
                   slivers: <Widget>[
-                    _appBar(context, filter, child),
+//                    _appBar(context, filter, child),
                     if (hasNotes) const SliverToBoxAdapter(
                       child: SizedBox(height: 24),
                     ),

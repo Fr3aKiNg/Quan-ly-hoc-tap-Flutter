@@ -30,7 +30,7 @@ class OnBoardInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Container(margin: EdgeInsets.fromLTRB(0, h*15, w*3, h),
+    return Container(margin: EdgeInsets.fromLTRB(0, h*15, w*3, h*6),
         padding: EdgeInsets.fromLTRB(w*4, 0, w*2, 0),
         width: w*100,height: h*100,
         child: Column(
@@ -48,7 +48,7 @@ class OnBoardInfo extends StatelessWidget {
               child: Container(margin: EdgeInsets.fromLTRB(w*2, h*3, w*2, 0),child: Text(item.title,
                   style: TextStyle(fontSize: 36, color: ColorApp.backgroundColor,fontWeight: FontWeight.w600))),
             ) : LoginGoogle(),
-            Expanded(child:Container(margin: EdgeInsets.fromLTRB(w*2, h*2, w*2, 0),child:Text(item.des, style: TextStyle(fontSize: 18, color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w400)))),
+            Expanded(child:Container(margin: EdgeInsets.fromLTRB(w*2, h, w*2, 0),child:Text(item.des, style: TextStyle(fontSize: 18, color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w400)))),
             SizedBox(height: h * 4),
             Align(alignment: Alignment.bottomRight,child: InkWell(
                 onTap: () {
@@ -154,10 +154,12 @@ class LoginGoogleState extends State<LoginGoogle> {
                 child: CircleAvatar(backgroundColor: Colors.white,
                     child: Image.asset(
                         "assets/gg_logo.png", width: h * 3, height: h * 3))),
-            SizedBox(width: w * 5),
-            Text("Đăng nhập bằng Google", style: TextStyle(
-                fontSize: 18, color: Colors.white
-            ))
+            SizedBox(width: w * 3),
+            Expanded(
+              child: Text("Đăng nhập bằng Google", style: TextStyle(
+                  fontSize: 18, color: Colors.white
+              )),
+            )
           ],
         ),),
     );
