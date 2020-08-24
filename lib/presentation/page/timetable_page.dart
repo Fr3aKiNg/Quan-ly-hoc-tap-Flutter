@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
+
 import 'package:scheduleapp/presentation/atom/custom_button.dart';
-import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
-import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
+
 import 'package:intl/intl.dart';
+import 'package:scheduleapp/presentation/atom/timetable_cell.dart';
+import 'package:scheduleapp/presentation/model/database.dart';
+import 'package:scheduleapp/presentation/model/timetablenote_model.dart';
 import 'package:scheduleapp/presentation/page/add_task_page.dart';
 
 class TimetablePage extends StatefulWidget {
@@ -48,30 +50,58 @@ class _TimetablePageState extends State<TimetablePage> {
               ),
             ),
           ),
-          _taskUncomplete("Dummy"),
-          _taskUncomplete("Dummy"),
-          _taskUncomplete("Dummy"),
-          _taskComplete("Dummy"),
-          _taskComplete("Dummy"),
-          _taskComplete("Dummy"),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context){
-                return Dialog(
-                  child:  AddTaskPage(),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
+          Divider(thickness: 2,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Ghi Chú",
+                  style: TextStyle(
+                    fontSize: 20
                   ),
-                );
-              }
-          );
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
+                ),
+                IconButton(
+                  icon: Icon(Icons.mode_edit),
+                  onPressed: (){
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context){
+                          return Dialog(
+                            child: AddTaskPage(),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                            ),
+                          );
+                        }
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<List<TimeTableNoteModel>>(
+                stream: noteDBS.streamList(),
+                builder: (context, snapshot) {
+                  if(snapshot.hasData){
+                    List<TimeTableNoteModel> allNotes = snapshot.data;
+                      return ListView.builder(
+                          itemCount: allNotes.length,
+                          itemBuilder: (context,index){
+                            return allNotes[index].isDone
+                                ? _taskComplete(allNotes[index])
+                                : _taskUncomplete(allNotes[index]);
+                          }
+                      );
+                  }
+                  else{
+                    return Center(child: CircularProgressIndicator()) ;
+                  }
+                }
+            ),
+          )
+        ],
       ),
     );
   }
@@ -90,7 +120,6 @@ class _TimetablePageState extends State<TimetablePage> {
             ]
           );
   }
-
   TableRow buildTimeTableRow(String title) {
     return TableRow(
             children: [
@@ -106,7 +135,7 @@ class _TimetablePageState extends State<TimetablePage> {
           );
   }
 
-  Widget _taskUncomplete(String data) {
+  Widget _taskUncomplete(TimeTableNoteModel data) {
     return InkWell(
       onTap: (){
         showDialog(
@@ -119,9 +148,10 @@ class _TimetablePageState extends State<TimetablePage> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text("Confirm Task",
+                      Text(DateFormat.yMMMMEEEEd().format(data.noteDate),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16
@@ -129,18 +159,26 @@ class _TimetablePageState extends State<TimetablePage> {
                       ),
                       SizedBox(height: 24,),
                       Text(
-                          data
+                          data.description
                       ),
                       SizedBox(height: 24,),
-                      Text(new DateFormat("dd-MM-yyyy").format(DateTime.now()),),
-                      SizedBox(height: 24,),
-                      CustomButton(
-                        buttonText: "Complete",
-                        onPressed: (){
-                           Navigator.of(context).pop();
-                        },
-                        color: Theme.of(context).accentColor,
-                        textColor: Colors.white,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomButton(
+                            buttonText: "Xong",
+                            onPressed: () async {
+                              await noteDBS.updateData(data.id,{
+                                'description': data.description,
+                                'note_date': data.noteDate,
+                                'is_done': true,
+                              });
+                              Navigator.of(context).pop();
+                            },
+                            color: Theme.of(context).accentColor,
+                            textColor: Colors.white,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -162,26 +200,43 @@ class _TimetablePageState extends State<TimetablePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text("Delete Task",
+                      Text("Xoá ghi chú",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16
                           )
                       ),
                       SizedBox(height: 24,),
-                      Text(
-                          data
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  data.description
+                              ),
+                              SizedBox(height: 24,),
+                              Text(DateFormat.yMMMMEEEEd().format(data.noteDate),),
+                            ],
+                          ),
+                        ],
                       ),
                       SizedBox(height: 24,),
-                      Text(new DateFormat("dd-MM-yyyy").format(DateTime.now()),),
-                      SizedBox(height: 24,),
-                      CustomButton(
-                        buttonText: "Delete",
-                        onPressed: (){
-                          Navigator.of(context).pop();
-                        },
-                        color: Theme.of(context).accentColor,
-                        textColor: Colors.white,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomButton(
+                            buttonText: "Xoá",
+                            onPressed: (){
+                              noteDBS.removeItem(data.id);
+                              //Navigator.of(context).pushReplacementNamed('timetable');
+                              Navigator.of(context).pop();
+                            },
+                            color: Theme.of(context).accentColor,
+                            textColor: Colors.white,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -200,13 +255,17 @@ class _TimetablePageState extends State<TimetablePage> {
               size: 20,
             ),
             SizedBox(width: 28,),
-            Text(data),
+            Text(data.description,
+                style: TextStyle(
+                  fontSize: 17,
+                ),
+            ),
           ],
         ),
       ),
     );
   }
-  Widget _taskComplete(String data) {
+  Widget _taskComplete(TimeTableNoteModel data) {
     return InkWell(
       onLongPress: (){
         showDialog(
@@ -221,26 +280,43 @@ class _TimetablePageState extends State<TimetablePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text("Delete Task",
+                      Text("Xoá ghi chú",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16
                           )
                       ),
                       SizedBox(height: 24,),
-                      Text(
-                          data
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  data.description
+                              ),
+                              SizedBox(height: 24,),
+                              Text(DateFormat.yMMMMEEEEd().format(data.noteDate),),
+                            ],
+                          ),
+                        ],
                       ),
                       SizedBox(height: 24,),
-                      Text(new DateFormat("dd-MM-yyyy").format(DateTime.now()),),
-                      SizedBox(height: 24,),
-                      CustomButton(
-                        buttonText: "Delete",
-                        onPressed: (){
-                          Navigator.of(context).pop();
-                        },
-                        color: Theme.of(context).accentColor,
-                        textColor: Colors.white,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomButton(
+                            buttonText: "Xoá",
+                            onPressed: (){
+                              noteDBS.removeItem(data.id);
+                              //Navigator.of(context).pushReplacementNamed('timetable');
+                              Navigator.of(context).pop();
+                            },
+                            color: Theme.of(context).accentColor,
+                            textColor: Colors.white,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -260,9 +336,10 @@ class _TimetablePageState extends State<TimetablePage> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text("Confirm Task",
+                      Text(DateFormat.yMMMMEEEEd().format(data.noteDate),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16
@@ -270,18 +347,26 @@ class _TimetablePageState extends State<TimetablePage> {
                       ),
                       SizedBox(height: 24,),
                       Text(
-                          data
+                          data.description
                       ),
                       SizedBox(height: 24,),
-                      Text(new DateFormat("dd-MM-yyyy").format(DateTime.now()),),
-                      SizedBox(height: 24,),
-                      CustomButton(
-                        buttonText: "Uncompleted",
-                        onPressed: (){
-                          Navigator.of(context).pop();
-                        },
-                        color: Theme.of(context).accentColor,
-                        textColor: Colors.white,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomButton(
+                            buttonText: "Chưa xong",
+                            onPressed: () async {
+                              await noteDBS.updateData(data.id,{
+                                'description': data.description,
+                                'note_date': data.noteDate,
+                                'is_done': false,
+                              });
+                              Navigator.of(context).pop();
+                            },
+                            color: Theme.of(context).accentColor,
+                            textColor: Colors.white,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -304,235 +389,16 @@ class _TimetablePageState extends State<TimetablePage> {
                 size: 20,
               ),
               SizedBox(width: 28,),
-              Text(data),
+              Text(data.description,
+                style: TextStyle(
+                  fontSize: 17,
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class TitleCell extends StatelessWidget {
-  TitleCell({
-    Key key, @required this.title
-  }) : super(key: key);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return TableCell(
-      child: Container(
-        padding: EdgeInsets.all(5),
-        width: 60.0,
-        height: 30.0,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            border: Border.all(color: Colors.grey.shade200)
-        ),
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.grey.shade700),
-        ),
-      ),
-    );
-  }
-}
-
-class TimeTableCell extends StatefulWidget {
-
-  @override
-  _TimeTableCellState createState() => _TimeTableCellState();
-}
-
-class _TimeTableCellState extends State<TimeTableCell> {
-  TextEditingController _textControllerName = TextEditingController();
-  TextEditingController _textControllerClass = TextEditingController();
-  TextEditingController _textControllerTeacher = TextEditingController();
-
-  void onValueSelected(Color color){
-    backgroundColor = color;
-  }
-
-  String text = "";
-  String room = "";
-  String teach = "";
-  Color backgroundColor;
-  @override
-  Widget build(BuildContext context) {
-    return TableCell(
-        child: InkWell(
-          onLongPress: (){
-            showDialog(
-                context: context,
-              builder: (context)=> AlertDialog(
-                content: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Text("Xoa mon hoc ?"),
-                      ),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  FlatButton(
-                    onPressed: (){
-                      setState(() {
-                        text = "";
-                        room = "";
-                        teach = "";
-                        backgroundColor = Colors.transparent;
-                        _textControllerTeacher.clear();
-                        _textControllerClass.clear();
-                        _textControllerName.clear();
-                      });
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("Ok"),
-                  ),
-                  FlatButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text("Cancel"),
-                  ),
-                ],
-              )
-            );
-
-          },
-          onDoubleTap: (){
-            showDialog(
-              context: context,
-              builder: (context)=> AlertDialog(
-                content: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.lens,color: backgroundColor),
-                          SizedBox(width: 5,),
-                          Text(
-                            text,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 24,),
-                      Row(
-                        children: [
-                          Icon(Icons.edit_location),
-                          SizedBox(width: 5,),
-                          Text(room),
-                        ],
-                      ),
-                      SizedBox(height: 12,),
-                      Row(
-                        children: [
-                          Icon(Icons.person),
-                          SizedBox(width: 5,),
-                          Text(teach),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  FlatButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text("Close"),
-                  )
-                ],
-              )
-            );
-          },
-          onTap: ()  {
-           showDialog(
-               context: context,
-               builder: (context) => AlertDialog(
-                 content: SingleChildScrollView(
-                   child: Column(
-                     mainAxisSize: MainAxisSize.min,
-                     children: <Widget>[
-                       Center(
-                         child: Text(
-                           "Thêm thời khoá biểu",
-                           style: TextStyle(
-                             fontWeight: FontWeight.bold,
-                             fontSize: 16,
-                           ),
-                         ),
-                       ),
-                       SizedBox(height: 24,),
-                       Row(
-                         children: <Widget>[
-                           Expanded(
-                             flex: 4,
-                             child: CustomTextField(
-                               controller: _textControllerName,
-                               labelText: "Tên môn học",
-                             ),
-                           ),
-                           Expanded(
-                             flex: 1,
-                             child: ChangeBGColorDropdown(onValueSelected),
-                           ),
-                         ],
-                       ),
-                       SizedBox(height: 12,),
-                       CustomTextField(
-                         labelText: "Lớp học",
-                         icon: Icon(Icons.edit_location),
-                         controller: _textControllerClass,
-                       ),
-                       SizedBox(height: 12,),
-                       CustomTextField(
-                         labelText: "Tên giáo viên",
-                         icon: Icon(Icons.person),
-                         controller: _textControllerTeacher,
-                       ),
-                     ],
-                   ),
-                 ),
-                 actions: <Widget>[
-                   CustomModalActionButton(
-                     onClose: () => Navigator.of(context).pop(),
-                     onSave: () {
-                       setState(() {
-                         this.text = _textControllerName.text;
-                         this.room = _textControllerClass.text;
-                         this.teach = _textControllerTeacher.text;
-                       });
-                       Navigator.of(context).pop();
-                     },
-                   ),
-                 ],
-               ),
-           );
-          },
-          child: Container(
-            padding: EdgeInsets.all(5),
-            width: 60.0,
-            height: 30.0,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: backgroundColor,
-                border: Border.all(color: Colors.grey.shade200)
-            ),
-            child: Text(
-              '$text',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        )
-    );
-  }
 }

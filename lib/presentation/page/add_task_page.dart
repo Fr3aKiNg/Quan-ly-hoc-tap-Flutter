@@ -3,16 +3,21 @@ import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
 import 'package:intl/intl.dart';
+import 'package:scheduleapp/presentation/model/database.dart';
+import 'package:scheduleapp/presentation/model/timetablenote_model.dart';
 
 class AddTaskPage extends StatefulWidget {
+  final TimeTableNoteModel note;
+  const AddTaskPage({Key key, this.note}) : super(key: key);
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
 
-  DateTime _selectedDate = DateTime.now();
-  final _textTaskControler = TextEditingController();
+  DateTime _selectedDate ;
+  TextEditingController _textTaskControler;
+  bool processing;
 
   Future _pickDate() async {
     DateTime datepick = await showDatePicker(
@@ -27,6 +32,21 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _textTaskControler = TextEditingController(text:  widget.note != null ? widget.note.description : "");
+    _selectedDate = widget.note != null ? widget.note.noteDate : DateTime.now();
+    processing = false;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _textTaskControler.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +58,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         children: <Widget>[
           Center(
             child: Text(
-              "Add new task",
+              "Thêm ghi chú",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -47,7 +67,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           ),
           SizedBox(height: 24,),
           CustomTextField(
-            labelText: "Enter task name",
+            labelText: "Mô tả",
             controller: _textTaskControler,
           ),
           CustomDateTimePicker(
@@ -56,10 +76,32 @@ class _AddTaskPageState extends State<AddTaskPage> {
             icon: Icons.date_range,
           ),
           SizedBox(height: 24,),
-          CustomModalActionButton(
+          if (processing) Center(child: LinearProgressIndicator()) else CustomModalActionButton(
             onClose: () => Navigator.of(context).pop(),
-            onSave: ()=> Navigator.of(context).pop(),
-          ),
+            onSave: () async {
+              setState(() {
+                processing = true;
+              });
+              if (widget.note!= null){
+                await noteDBS.updateData(widget.note.id, {
+                  'description': _textTaskControler.text,
+                  'note_date': _selectedDate,
+                  'is_done': false,
+                });
+              }
+              else{
+                await noteDBS.createItem(TimeTableNoteModel(
+                  description:  _textTaskControler.text,
+                  noteDate: _selectedDate,
+                  isDone: false,
+                ));
+              }
+              Navigator.of(context).pop();
+              setState(() {
+                processing = false;
+              });
+            },
+          )
         ],
       ),
     );
