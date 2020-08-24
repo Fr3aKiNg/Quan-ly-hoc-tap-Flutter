@@ -18,20 +18,22 @@ class HomeScreenState extends State<HomeScreen>{
   {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Scaffold(bottomNavigationBar:CustomBottomNavigationBar(
-      iconList: [
-        Icons.home,
-        Icons.assessment,
-        Icons.note,
-        Icons.dashboard,
-      ],
-      onChange: (val) {
-        setState(() {
-          _selectedItem = val;
-        });
-      },
-      defaultSelectedIndex: 0,
-      btnName: ["Tổng quan","Điểm","Ghi chú","Khác"],
+    return Scaffold(bottomNavigationBar: BottomAppBar(
+      child: CustomBottomNavigationBar(
+        iconList: [
+          Icons.home,
+          Icons.assessment,
+          Icons.note,
+          Icons.dashboard,
+        ],
+        onChange: (val) {
+          setState(() {
+            _selectedItem = val;
+          });
+        },
+        defaultSelectedIndex: 0,
+        btnName: ["Tổng quan","Điểm","Ghi chú","Khác"],
+      ),
     ),
 
         body: SingleChildScrollView(controller:controller ,

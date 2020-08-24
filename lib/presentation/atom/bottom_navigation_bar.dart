@@ -91,8 +91,18 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           if (index == 0) {
             Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
           }
+          if (index == 1) {
+            setState(() {
+              _selectedIndex =index;
+            });
+//            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+          }
           else if (index == 3) {
             Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => OtherScreen()));
+            setState(() {
+              _selectedIndex =index;
+              print("select 3");
+            });
           }
           else if (index == 2)
           {
@@ -132,7 +142,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           padding: EdgeInsets.fromLTRB(0, h*1.5, 0, h),
           height: h*10,
           width: MediaQuery.of(context).size.width / _iconList.length,
-          decoration: index == _selectedIndex
+          decoration: _selectedIndex == index
               ? BoxDecoration(color: Colors.white,
             border: Border(
               bottom: BorderSide(width: 4, color: Colors.white),
@@ -143,9 +153,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               children: <Widget>[
                 Icon(
                     icon,
-                    color: index == _selectedIndex ? ColorApp.backgroundColor : Colors.grey,
+                    color:  _selectedIndex == index  ? ColorApp.backgroundColor : Colors.grey,
                     size: 28),
-                Text(name, style: TextStyle(color:index == _selectedIndex ? ColorApp.backgroundColor : Colors.grey ),)
+                Text(name, style: TextStyle(color: _selectedIndex == index  ? ColorApp.backgroundColor : Colors.grey ),)
               ]),
         ));
   }

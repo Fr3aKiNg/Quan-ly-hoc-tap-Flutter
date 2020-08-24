@@ -146,20 +146,23 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
         builder: (context, filter, notes, child) {
           final hasNotes = notes?.isNotEmpty == true;
           final canCreate = filter.noteState.canCreate;
-          return Scaffold(bottomNavigationBar:CustomBottomNavigationBar(
-            iconList: [
-              Icons.home,
-              Icons.assessment,
-              Icons.note,
-              Icons.dashboard,
-            ],
-            onChange: (val) {
-              setState(() {
-                _selectedItem = val;
-              });
-            },
-            defaultSelectedIndex: 2,
-            btnName: ["Tổng quan","Điểm","Ghi chú","Khác"],
+          return Scaffold(bottomNavigationBar:BottomAppBar(
+            child:
+              CustomBottomNavigationBar(
+                iconList: [
+                  Icons.home,
+                  Icons.assessment,
+                  Icons.note,
+                  Icons.dashboard,
+                ],
+                onChange: (val) {
+                  setState(() {
+                    _selectedItem = val;
+                  });
+                },
+                defaultSelectedIndex: 2,
+                btnName: ["Tổng quan","Điểm","Ghi chú","Khác"],
+              ),
           ),
             key: _scaffoldKey,
             body: Center(
@@ -181,8 +184,7 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
             ),
 //            drawer: AppDrawer(),
             floatingActionButton: canCreate ? _fab(context) : null,
-//            bottomNavigationBar: canCreate ? _bottomActions() : null,
-            floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+            floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
             extendBody: true,
           );
         },
@@ -220,22 +222,21 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
     constraints: const BoxConstraints(
       maxWidth: 720,
     ),
-    padding: const EdgeInsets.symmetric(horizontal: 0),
+    padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 0),
     child: Card(color: ColorApp.backgroundColor,
       elevation: 2,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical:  7),
+        padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
         child: Row(
           children: <Widget>[
-            const SizedBox(width: 20),
-            Icon(Icons.search,size: 24, color: Colors.white),
-            const SizedBox(width: 16),
+            const SizedBox(width: 10),
             const Expanded(
-              child: Text('Tìm kiếm ghi chú',
+              child: Text('Ghi chú',
                 softWrap: false,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
                 ),
               ),
             ),
@@ -249,17 +250,19 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
     ),
   );
 
-  Widget _fab(BuildContext context) => SizedBox(height: MediaQuery.of(context).size.height/100*30,
-    child: FloatingActionButton(
-      backgroundColor: ColorApp.backgroundColor,
-      elevation: 0,
-      child: const Icon(Icons.add,size: 24),
-      onPressed: () async {
-        final command = await Navigator.pushNamed(context, '/note');
-        processNoteCommand(_scaffoldKey.currentState, command);
-      },
-    ),
-  );
+  Widget _fab(BuildContext context) =>
+      Transform.translate(offset: Offset(3,-35) ,
+        child: FloatingActionButton(
+            key: UniqueKey(),
+            backgroundColor: ColorApp.backgroundColor,
+            elevation: 0,
+            child: Icon(Icons.add,size: 24),
+            onPressed: () async {
+              final command = await Navigator.pushNamed(context, '/note');
+              processNoteCommand(_scaffoldKey.currentState, command);
+            },
+          ),
+      );
 
   Widget _buildAvatar(BuildContext context) {
     final url = Provider.of<CurrentUser>(context)?.data?.photoUrl;

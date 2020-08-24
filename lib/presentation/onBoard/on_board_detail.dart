@@ -12,14 +12,16 @@ class OnBoardDetail {
   Widget loginFB;
   Widget loginGG;
   Widget continueBtn;
+  bool skipOnboard;
   OnBoardDetail({@required String img, @required String title, @required String des,
-    @required Widget loginFacebook, @required Widget loginGoogle, @required Widget continueBtn}):
+    @required Widget loginFacebook, @required Widget loginGoogle, @required Widget continueBtn, @required bool skip}):
         imgUrl = img,
         title = title,
         des = des,
         loginFB = loginFacebook,
         loginGG = loginGoogle,
-        continueBtn = continueBtn;
+        continueBtn = continueBtn,
+        skipOnboard = skip;
 }
 
 class OnBoardInfo extends StatelessWidget {
@@ -28,7 +30,7 @@ class OnBoardInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Container(margin: EdgeInsets.fromLTRB(0, h*15, w*3, 0),
+    return Container(margin: EdgeInsets.fromLTRB(0, h*15, w*3, h),
         padding: EdgeInsets.fromLTRB(w*4, 0, w*2, 0),
         width: w*100,height: h*100,
         child: Column(
@@ -39,20 +41,22 @@ class OnBoardInfo extends StatelessWidget {
               item.imgUrl,
               fit: BoxFit.cover,
               width: w * 100,
-              height: h * 45,
+              height: h * 42,
             ),
-            SizedBox(height: 20),
-            item.title != ""  ? Container(margin: EdgeInsets.fromLTRB(w*2, h*3, w*2, 0),child: Text(item.title,
-                style: TextStyle(fontSize: 36, color: ColorApp.backgroundColor,fontWeight: FontWeight.w600))) : LoginGoogle(),
-//            SizedBox(height: h * 5),
-            Container(margin: EdgeInsets.fromLTRB(w*2, h*2, w*2, 0),child:Text(item.des, style: TextStyle(fontSize: 18, color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w400))),
-            SizedBox(height: h * 6),
+            SizedBox(height: h*3),
+            item.title != ""  ? Expanded(
+              child: Container(margin: EdgeInsets.fromLTRB(w*2, h*3, w*2, 0),child: Text(item.title,
+                  style: TextStyle(fontSize: 36, color: ColorApp.backgroundColor,fontWeight: FontWeight.w600))),
+            ) : LoginGoogle(),
+            Expanded(child:Container(margin: EdgeInsets.fromLTRB(w*2, h*2, w*2, 0),child:Text(item.des, style: TextStyle(fontSize: 18, color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w400)))),
+            SizedBox(height: h * 4),
             Align(alignment: Alignment.bottomRight,child: InkWell(
                 onTap: () {
                   Navigator.of(context).pushReplacementNamed('home');
                 },
-                child: Text("Bỏ qua",
-                    style: TextStyle(fontSize: 16, color: Colors.grey))))
+                child: item.skipOnboard ? Text("Bỏ qua",
+                    style: TextStyle(fontSize: 16, color: Colors.grey)): Container()))
+
           ],
         ));
   }
