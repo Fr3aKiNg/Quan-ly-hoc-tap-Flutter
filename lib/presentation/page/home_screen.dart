@@ -18,20 +18,22 @@ class HomeScreenState extends State<HomeScreen>{
   {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Scaffold(bottomNavigationBar:CustomBottomNavigationBar(
-      iconList: [
-        Icons.home,
-        Icons.assessment,
-        Icons.note,
-        Icons.dashboard,
-      ],
-      onChange: (val) {
-        setState(() {
-          _selectedItem = val;
-        });
-      },
-      defaultSelectedIndex: 1,
-      btnName: ["Tổng quan","Điểm","Ghi chú","Khác"],
+    return Scaffold(bottomNavigationBar: BottomAppBar(
+      child: CustomBottomNavigationBar(
+        iconList: [
+          Icons.home,
+          Icons.assessment,
+          Icons.note,
+          Icons.dashboard,
+        ],
+        onChange: (val) {
+          setState(() {
+            _selectedItem = val;
+          });
+        },
+        defaultSelectedIndex: 0,
+        btnName: ["Tổng quan","Điểm","Ghi chú","Khác"],
+      ),
     ),
 
         body: SingleChildScrollView(controller:controller ,
@@ -169,7 +171,7 @@ class EventList extends StatelessWidget{
         ),
         Container(
           width: w*100,
-          height: h*listEvent.length*14,
+          height: h*listEvent.length*16,
           child: ListView.builder(physics: NeverScrollableScrollPhysics(),
               itemCount: listEvent.length,itemBuilder: (context,index){
               final item = listEvent[index];

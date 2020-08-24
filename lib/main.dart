@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/application/constant.dart';
 import 'package:scheduleapp/application/route.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
-import 'package:scheduleapp/presentation/page/on_board.dart';
+import 'package:scheduleapp/presentation/onBoard/on_board.dart';
 import 'package:scheduleapp/presentation/page/score/addCourse.dart';
 import 'package:scheduleapp/presentation/page/score/detailCourse.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
@@ -33,8 +34,7 @@ class MyApp extends StatelessWidget {
         'add_course': (context) => AddCoursePage(),
       },
       onGenerateRoute: Router.generateRoute,
-
-      initialRoute: 'home',
+      initialRoute: RoutePaths.SplashScreen,
 
     );
   }
