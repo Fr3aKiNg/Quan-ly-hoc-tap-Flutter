@@ -4,6 +4,7 @@ import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/note/note_editor.dart';
 import 'package:scheduleapp/presentation/page/note/note_screen.dart';
 import 'package:scheduleapp/presentation/page/other_screen.dart';
+import 'package:scheduleapp/presentation/page/splash_screen.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -14,8 +15,8 @@ class Router {
         return MaterialPageRoute(builder: (BuildContext context) => OtherScreen());
       case RoutePaths.Note:
         return MaterialPageRoute(builder: (BuildContext context) => NoteScreen());
-//      case RoutePaths.NoteEditor:
-//        return MaterialPageRoute(builder: (BuildContext context)=> NoteEditor(note: note,) );
+      case RoutePaths.SplashScreen:
+        return MaterialPageRoute(builder: (BuildContext context)=> SplashPage());
         default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
