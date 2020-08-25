@@ -46,8 +46,11 @@ class detailCourseState extends State<detailCourse> {
     int count = 0;
     for (int i = 0; i < _heso.length; i++) {
       for (int j = 0; j < _score[i].length; j++) {
-        res += _heso[i] * double.parse(_score[i][j]);
-        for (int k = 0; k < _heso[i]; k++)
+        if (_score[i][j] is String)
+          res += double.parse(_heso[i]) * double.parse(_score[i][j]);
+        else
+          res += _heso[i] * _score[i][j];
+        for (int k = 0; k < int.parse(_heso[i]); k++)
           count++;
       }
     }
