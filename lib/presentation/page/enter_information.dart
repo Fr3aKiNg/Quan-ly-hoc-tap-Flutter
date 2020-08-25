@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:scheduleapp/presentation/page/colorBloc.dart';
 import 'package:scheduleapp/presentation/page/listcourse.dart';
+import 'package:scheduleapp/presentation/page/user.dart';
 import 'package:path/path.dart' as Path;
+
+
 
 class MyInformationPage extends StatelessWidget {
   @override
@@ -33,7 +38,7 @@ class InformationState extends State<EnterInformation> {
   String _schoolValue = "";
   String _gradeValue = "";
 
-  String _dropdownValue = 'Học kỳ 1';
+  String _dropdownValue = '1 học kỳ';
 
   ColorBloc colorBloc1 = new ColorBloc();
   ColorBloc colorBloc2 = new ColorBloc();
@@ -67,7 +72,6 @@ class InformationState extends State<EnterInformation> {
                         style: _biggerFont,
                         onChanged: (text) {
                           _nameValue = text;
-                          debugPrint(snapShot.data.toString());
                         },
                         decoration: InputDecoration(
                           fillColor: Colors.white,
@@ -180,7 +184,7 @@ class InformationState extends State<EnterInformation> {
                           _dropdownValue = newValue;
                         });
                       },
-                      items: <String>['Học kỳ 1', 'Học kỳ 2', 'Học kỳ 3']
+                      items: <String>['1 học kỳ', '2 học kỳ', '3 học kỳ']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -236,6 +240,15 @@ class InformationState extends State<EnterInformation> {
       colorBloc3.resumeColor();
     }
     if (name.text != "" && school.text != "" && grade.text != "") {
+      int temp;
+      if (_dropdownValue == "1 học kỳ")
+        temp = 1;
+      else if (_dropdownValue == "2 học kỳ")
+        temp = 2;
+      else temp = 3;
+      User user = User();
+      user.setInitValue(name.text, school.text, grade.text, temp);
+      user.createUser();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => MyListCoursePage()));
     } else {

@@ -184,7 +184,7 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
             ),
 //            drawer: AppDrawer(),
             floatingActionButton: canCreate ? _fab(context) : null,
-            floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+            /**floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,**/
             extendBody: true,
           );
         },
