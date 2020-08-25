@@ -62,7 +62,6 @@ class RandomWordsState extends State<RandomWords> {
                     suffixIcon: IconButton(
                         icon: Icon(Icons.add),
                         onPressed: () {
-                          debugPrint(_value);
                           addItemToList();
                         })),
               ),

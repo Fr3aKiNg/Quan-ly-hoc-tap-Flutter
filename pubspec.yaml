@@ -28,7 +28,6 @@ dependencies:
   provider: ^4.0.0
   firebase_auth: ^0.16.0
   firebase_database: ^3.0.7
-  firebase_helpers:
   google_sign_in: ^4.4.4
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -40,8 +39,6 @@ dependencies:
   #floor: ^0.12.0
   camera: any
   sqflite: ^1.3.0
-  weekly_timetable: ^0.2.2
-  flutter_local_notifications: ^1.4.4+2
 
 
 
@@ -52,8 +49,6 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^1.7.3
   permission_handler: ^5.0.0+hotfix.8
-  table_calendar: ^2.2.3
-
 
 
 # For information on the generic Dart part of this file, see the

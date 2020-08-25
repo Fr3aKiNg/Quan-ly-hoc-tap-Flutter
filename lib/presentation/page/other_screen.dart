@@ -13,11 +13,15 @@ class OtherState extends State<OtherScreen>{
   Widget build(BuildContext context)
   {
 
-    return Scaffold(appBar: AppBar(title: Text("Khác",style: TextStyle(
-      fontSize: 22, color: Colors.white,fontWeight: FontWeight.w400
-    ),),
+    return Scaffold(appBar: AppBar(title: Text("Khác",
+    softWrap: false,
+    style: TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+        fontSize: 22,)
+    ),
     backgroundColor: ColorApp.backgroundColor,),
-      bottomNavigationBar:CustomBottomNavigationBar(
+      bottomNavigationBar:BottomAppBar(child:CustomBottomNavigationBar(
     iconList: [
     Icons.home,
     Icons.assessment,
@@ -29,9 +33,9 @@ class OtherState extends State<OtherScreen>{
         _selectedItem = val;
       });
     },
-    defaultSelectedIndex: 1,
+    defaultSelectedIndex: 3,
     btnName: ["Tổng quan","Điểm","Ghi chú","Khác"],
-    ),
+      )),
     body: ListView.builder(itemCount: 4,itemBuilder: (context,index){
         return listItem(context, item[index], iconItem[index]);
     }) ,
@@ -44,13 +48,13 @@ class OtherState extends State<OtherScreen>{
     return GestureDetector(
       child: Container(width: w*100,
         height: h*7,
-        padding: EdgeInsets.only(left: w*5),
+        padding: EdgeInsets.only(left: w*2),
         child: Row(mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(icon, size: 36,color: Colors.grey,),
-            SizedBox(width: 18),
+            Icon(icon, size: 40,color: Colors.grey,),
+            SizedBox(width: 15),
             Text(title, style: TextStyle(fontSize: 18))
           ],
         ),
