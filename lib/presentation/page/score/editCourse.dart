@@ -210,10 +210,8 @@ class editCourseState extends State<editCourse> {
                   color: Colors.white,
                   disabledColor: Colors.white,
                   onPressed: () {
-                    for (int i = 0; i < _courses.length; i++) {
-                      if (_courses[i] == _courseName)
-                        _courses.removeAt(i);
-                    }
+                    User user = User();
+                    user.deleteCourse(uid, _courseName);
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) =>
@@ -310,15 +308,20 @@ class editCourseState extends State<editCourse> {
         heso[i] = HeSoController[i].text;
       }
     User user = User();
-    user.editCourse(uid, newCourseController.text, nameScoreCol, heso);
-
-    if (_courseName != newCourseController.text){}
+    print(_courseName);
+    print(newCourseController.text);
+    if (_courseName != newCourseController.text){
+      user.editCourse(uid, _courseName, nameScoreCol, heso, newCourseController.text, true);
       //user.deleteCourse(uid, _courseName);
+    }
+    else {
+      user.editCourse(uid, _courseName, nameScoreCol, heso, newCourseController.text, false);
+    }
 
-    /*Navigator.push(
+    Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
-            MyDetailCoursePage(course: _courseName, uid: uid,)));*/
+            MyDetailCoursePage(course: _courseName, uid: uid,)));
   }
 }
 

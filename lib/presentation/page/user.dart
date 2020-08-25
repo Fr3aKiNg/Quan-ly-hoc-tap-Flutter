@@ -209,35 +209,113 @@ class User {
     }
   }
 
-  void editCourse(String uid, String courseName, List nameCol, List coef) {
+  void editCourse(String uid, String courseName, List nameCol, List coef, String newCourse, bool isRename) {
     final collection = Firestore.instance.collection("users");
     String query1 = "columnScore."+courseName;
-    String query2 = "year1.HK1.ingredientScore."+courseName;
-    String query3 = "year1.HK2.ingredientScore."+courseName;
-    String query4 = "year2.HK1.ingredientScore."+courseName;
-    String query5 = "year2.HK2.ingredientScore."+courseName;
-    String query6 = "year3.HK1.ingredientScore."+courseName;
-    String query7 = "year3.HK2.ingredientScore."+courseName;
+    String query2, query3, query4, query5, query6, query7, query8;
+    if (!isRename){
+      query2 = "year1.HK1.ingredientScore."+courseName;
+      query3 = "year1.HK2.ingredientScore."+courseName;
+      query4 = "year2.HK1.ingredientScore."+courseName;
+      query5 = "year2.HK2.ingredientScore."+courseName;
+      query6 = "year3.HK1.ingredientScore."+courseName;
+      query7 = "year3.HK2.ingredientScore."+courseName;
+      query8 = "columnScore."+courseName;
+    }
+    else {
+      query2 = "year1.HK1.ingredientScore."+newCourse;
+      query3 = "year1.HK2.ingredientScore."+newCourse;
+      query4 = "year2.HK1.ingredientScore."+newCourse;
+      query5 = "year2.HK2.ingredientScore."+newCourse;
+      query6 = "year3.HK1.ingredientScore."+newCourse;
+      query7 = "year3.HK2.ingredientScore."+newCourse;
+      query8 = "columnScore."+newCourse;
+    }
 
-    var data1 = {};
+
+    final data1 = {};
+    final data2 = {};
+    final data3 = {};
+    final data4 = {};
+    final data5 = {};
+    final data6 = {};
+    final data7 = {};
     collection.document(uid).get().then((value) {
-      for (int i = 0; i < nameCol.length; i++) {
+      for (int i = 0; i < nameCol.length; i++){
         data1.addAll({
-          nameCol[i]:value.data["year1"]["HK1"]["ingredientScore"][courseName][nameCol[i]]
+          nameCol[i]: value.data["year1"]["HK1"]["ingredientScore"][courseName][nameCol[i]],
         });
-        print(nameCol[i]+ "  "+value.data["year1"]["HK1"]["ingredientScore"][courseName][nameCol[i]]);
+        data2.addAll({
+          nameCol[i]: value.data["year1"]["HK2"]["ingredientScore"][courseName][nameCol[i]],
+        });
+        data3.addAll({
+          nameCol[i]: value.data["year2"]["HK1"]["ingredientScore"][courseName][nameCol[i]],
+        });
+        data4.addAll({
+          nameCol[i]: value.data["year2"]["HK2"]["ingredientScore"][courseName][nameCol[i]],
+        });
+        data5.addAll({
+          nameCol[i]: value.data["year3"]["HK1"]["ingredientScore"][courseName][nameCol[i]],
+        });
+        data6.addAll({
+          nameCol[i]: value.data["year3"]["HK2"]["ingredientScore"][courseName][nameCol[i]],
+        });
       }
-
-    });
-    print(data1);
-    /*collection.document(uid).updateData({
-      query1: {
+      data7.addAll({
         "coef": coef,
-        "column": nameCol,
-      },
-      query2:
-    });*/
+        "column": nameCol
+      });
 
+      collection.document(uid).updateData({
+        query1: {
+          "coef": coef,
+          "column": nameCol,
+        },
+        query2: data1,
+        query3: data2,
+        query4: data3,
+        query5: data4,
+        query6: data5,
+        query7: data6,
+        query8: data7,
+        "course": FieldValue.arrayUnion([newCourse])
+      }).then((_) {
+        if (isRename) {
+          String query1 = "columnScore." + courseName;
+
+          String query21 = "year1.HK1.ingredientScore."+ courseName;
+          String query22 = "year1.HK2.ingredientScore."+ courseName;
+          String query23 = "year1.overall.ingredientScore."+ courseName;
+
+          String query31 = "year2.HK1.ingredientScore."+ courseName;
+          String query32 = "year2.HK2.ingredientScore."+ courseName;
+          String query33 = "year2.overall.ingredientScore."+ courseName;
+
+          String query41 = "year3.HK1.ingredientScore."+ courseName;
+          String query42 = "year3.HK2.ingredientScore."+ courseName;
+          String query43 = "year3.overall.ingredientScore."+ courseName;
+
+          collection.document(uid).updateData({
+            query1: FieldValue.delete(),
+            "course": FieldValue.arrayRemove([courseName]),
+            query21: FieldValue.delete(),
+            query22: FieldValue.delete(),
+            query23: FieldValue.delete(),
+            query31: FieldValue.delete(),
+            query32: FieldValue.delete(),
+            query33: FieldValue.delete(),
+            query41: FieldValue.delete(),
+            query42: FieldValue.delete(),
+            query43: FieldValue.delete(),
+          });
+        }
+        else {
+          collection.document(uid).updateData({
+            "course": FieldValue.arrayRemove([newCourse])
+          });
+        }
+      });
+    });
   }
 
   void deleteCourse(String uid, String oldName){
