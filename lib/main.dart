@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         'add_course': (context) => AddCoursePage(),
       },
       onGenerateRoute: Router.generateRoute,
-      initialRoute: RoutePaths.SplashScreen,
+      initialRoute: 'score',
 
     );
   }

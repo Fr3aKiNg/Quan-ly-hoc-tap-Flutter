@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:path/path.dart' as Path;
 import 'package:scheduleapp/utils/sign_in.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
+import '../user.dart';
 class AddCoursePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class addCourseState extends State<addCourse> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   List heso = [1,1,2,2,3];
   List nameScoreCol = ["Miệng", "15 phút", "1 tiết", "Giữa Kỳ", "Cuối Kỳ"];
-  
+  int length = 0;
   TextEditingController newCourseController = TextEditingController();
 
   List HeSoController = new List();
@@ -93,9 +94,10 @@ class addCourseState extends State<addCourse> {
                   shrinkWrap: true,
                   itemCount: nameScoreCol.length + 1,
                   itemBuilder: (BuildContext context, int index) {
+
                     if (HeSoController.length != 0 && index == 0) {
-                      HeSoController.removeRange(0, heso.length - 1);
-                      NameScoreController.removeRange(0, nameScoreCol.length - 1);
+                      HeSoController.removeRange(0, HeSoController.length);
+                      NameScoreController.removeRange(0, NameScoreController.length);
                     }
                     if (index < nameScoreCol.length) {
                       HeSoController.add(new TextEditingController(text: heso[index].toString()));
@@ -210,6 +212,7 @@ class addCourseState extends State<addCourse> {
               child: Text('Thêm', style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C) ),),
               onPressed: () {
                 setState(() {
+                  length = nameScoreCol.length + 2;
                   nameScoreCol.add(newScoreName.text);
                   heso.add(newCoef.text);
                 });
@@ -223,15 +226,16 @@ class addCourseState extends State<addCourse> {
   }
   void Accept() {
     String newCourseName = newCourseController.text;
-    //xử lí Database
 
-    //
     for (int i =0 ; i < nameScoreCol.length; i++)
     {
       nameScoreCol[i] = NameScoreController[i].text;
       heso[i] = HeSoController[i].text;
-      debugPrint(nameScoreCol[i] + " "+ heso[i].toString());
+
     }
+
+    User user = User();
+    user.addNewCourse(newCourseName, nameScoreCol, heso);
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
