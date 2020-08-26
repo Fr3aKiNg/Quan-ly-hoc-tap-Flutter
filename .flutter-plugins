@@ -10,6 +10,7 @@ firebase_database=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartl
 firebase_storage=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-3.1.6/
 flutter_facebook_login=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_login-3.0.0/
 flutter_local_notifications=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications-1.4.4+4/
+flutter_webview_plugin=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_webview_plugin-0.3.11/
 google_sign_in=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.5.3/
 google_sign_in_web=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_web-0.9.1+1/
 path_provider=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.14/
