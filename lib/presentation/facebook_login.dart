@@ -15,7 +15,7 @@ class LoginFacebook extends StatefulWidget{
 }
 class LoginFacebookState extends State<LoginFacebook>{
   final _auth = FirebaseAuth.instance;
-  final _facebooklogin = FacebookLogin();
+
 
   bool isUserSignedIn = false;
 
@@ -25,34 +25,6 @@ class LoginFacebookState extends State<LoginFacebook>{
     _checkLogin();
   }
 
-//  Future _loginWithFacebook() async {
-//
-//    final result = await _facebooklogin.logIn(['email']);
-//
-//    if (result.status == FacebookLoginStatus.loggedIn) {
-//      final credential = FacebookAuthProvider.getCredential(
-//        accessToken: result.accessToken.token,
-//      );
-//
-//      final user = (await _auth.signInWithCredential(credential)).user;
-//      setState(() {
-//        print("Logged in as ${user.displayName}");
-//        isUserSignedIn = true;
-//      });
-//    }
-//  }
-//
-//
-//  Future _logout() async {
-//
-//    await _auth.signOut();
-//
-//    await _facebooklogin.logOut();
-//    setState(() {
-//      isUserSignedIn = false;
-//    });
-//  }
-//
   Future _checkLogin() async {
     final user = await _auth.currentUser();
     if (user != null) {
@@ -172,7 +144,7 @@ class _CustomWebViewState extends State<CustomWebView> {
     return WebviewScaffold(
         url: widget.selectedUrl,
         appBar: new AppBar(
-          backgroundColor: Color.fromRGBO(66, 103, 178, 1),
+          backgroundColor: ColorApp.backgroundColor,
           title: new Text("Facebook login"),
         ));
   }
