@@ -11,6 +11,7 @@ class EventDetailsPage extends StatelessWidget {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xff07CD94),
         title: Text('Chi tiết'),
       ),
       body: Stack(
