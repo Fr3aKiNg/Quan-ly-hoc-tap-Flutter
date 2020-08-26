@@ -1,9 +1,11 @@
 import 'dart:ffi';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/presentation/page/score/detailCourse.dart';
 import 'package:scheduleapp/presentation/page/score/addCourse.dart';
 import 'dart:async';
+import '../user.dart';
 import 'package:path/path.dart' as Path;
 
 class MyTranscriptPage extends StatelessWidget {
@@ -19,77 +21,14 @@ class RandomWords extends StatefulWidget {
 }
 
 class RandomWordsState extends State<RandomWords> {
-  final List<String> _courses = <String>[
-    "Toán",
-    "Vật lý",
-    "Hóa học",
-    "Anh văn",
-    "Sinh học",
-    "Ngữ văn",
-    "Lịch sử",
-    "Địa lí",
-    "Công dân",
-    "Công nghệ",
-    "Tin học",
-    "Quốc phòng",
-    "Âm nhạc",
-    "Mỹ thuật",
-    "Thể dục"
+  User user = User();
+  int count = 0;
+  List _courses;
+  List _coursesTemp = [
+    "loading data ...",
   ];
-  final List _score = [
-    [
-      9.1,
-      8.8,
-      null,
-      null,
-      5.6,
-      9.0,
-      8.8,
-      6.8,
-      8.0,
-      6.1,
-      8.8,
-      8.1,
-      'Đạt',
-      'Đạt',
-      'Đạt'
-    ],
-    [
-      9.2,
-      8.8,
-      null,
-      null,
-      5.6,
-      9.0,
-      8.8,
-      6.8,
-      8.0,
-      6.1,
-      8.8,
-      8.1,
-      'Đạt',
-      'Đạt',
-      'Đạt'
-    ],
-    [
-      9.3,
-      8.8,
-      null,
-      null,
-      5.6,
-      9.0,
-      8.8,
-      6.8,
-      8.0,
-      6.1,
-      8.8,
-      8.1,
-      'Đạt',
-      'Đạt',
-      'Đạt'
-    ]
-  ];
-
+  List _score = [[], [], []];
+  List _scoreTemp = [[""],[""],[""]];
   List _coef = [
     [1, 2],
     [1, 2],
@@ -102,15 +41,49 @@ class RandomWordsState extends State<RandomWords> {
   String dropdownValue = "";
   int countLoop = 0;
 
+  void init() async {
+    if (count == 0) {
+      final FirebaseUser Fuser = await auth.currentUser();
+      user.id = Fuser.uid;
+      final collection = Firestore.instance.collection("users");
+      collection.document(Fuser.uid).get().then((value) {
+        _coursesTemp = value["course"];
+        var temp1 = value["year1"]["overall"]["ingredientScore"];
+        var temp2 = value["year2"]["overall"]["ingredientScore"];
+        var temp3 = value["year3"]["overall"]["ingredientScore"];
+
+        _scoreTemp[0].removeLast();
+        _scoreTemp[1].removeLast();
+        _scoreTemp[2].removeLast();
+
+        for (int i = 0; i < _coursesTemp.length; i++) {
+          _scoreTemp[0].add(temp1[_coursesTemp[i]]);
+          _scoreTemp[1].add(temp2[_coursesTemp[i]]);
+          _scoreTemp[2].add(temp3[_coursesTemp[i]]);
+        }
+
+        setState(() {
+          _courses = _coursesTemp;
+          _score = _scoreTemp;
+        });
+      });
+      count = 1;
+    }
+  }
+
   double Avg(List score) {
-    int num = 0;
+    int num = _yearChosenIndex;
     for (int i = 0; i < score.length; i++) if (_yearChosen == _year[i]) num = i;
     double result = 0;
     int count = 0;
     for (int i = 0; i < score[num].length; i++) {
       String temp = score[num][i].toString();
-      if (temp != "null" && temp != "Đạt" && temp != "Không đạt") {
-        result += score[num][i];
+      if (temp != "null" &&
+          temp != "Đạt" &&
+          temp != "Không đạt" &&
+          temp != "-" &&
+          temp != "") {
+        result += double.parse(score[num][i]);
         count++;
       }
     }
@@ -119,8 +92,12 @@ class RandomWordsState extends State<RandomWords> {
 
   final _biggerFont = const TextStyle(fontSize: 18.0);
   TextEditingController nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    init();
+    _courses = _coursesTemp;
+    _score = _scoreTemp;
     String _value = "";
     return Scaffold(
         appBar: AppBar(
@@ -174,7 +151,7 @@ class RandomWordsState extends State<RandomWords> {
                     for (int i = 0; i < _year.length; i++)
                       if (_year[i] == _yearChosen) _yearChosenIndex = i;
                   }
-                  if (index < _courses.length)
+                  if (_courses != null && index < _courses.length)
                     return Container(
                       child: Column(
                         children: <Widget>[
@@ -207,6 +184,7 @@ class RandomWordsState extends State<RandomWords> {
               MaterialPageRoute(
                   builder: (context) => MyDetailCoursePage(
                         course: course,
+                        uid: user.id
                       )));
         },
       );
@@ -215,30 +193,19 @@ class RandomWordsState extends State<RandomWords> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
-              course,
-              style: _biggerFont,
-            ),
-            Text(
-              "",
-              style: _biggerFont,
+            Center(
+              child: Text(
+                course,
+                style: _biggerFont,
+              ),
             )
           ],
         ),
-        trailing: new Icon(Icons.arrow_forward_ios, color: Color(0xFFBDBDBD)),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyDetailCoursePage(
-                        course: course,
-                      )));
-        },
       );
   }
 
-  Widget _customTextField(String hintText,
-      TextEditingController controller, Color color) {
+  Widget _customTextField(
+      String hintText, TextEditingController controller, Color color) {
     return TextFormField(
         style: _biggerFont,
         controller: controller,
@@ -268,7 +235,8 @@ class RandomWordsState extends State<RandomWords> {
       for (int i = 0; i < _year.length; i++) {
         _coefController.add(new List());
         for (int j = 0; j < 2; j++) {
-          _coefController[i].add(new TextEditingController(text: _coef[i][j].toString()));
+          _coefController[i]
+              .add(new TextEditingController(text: _coef[i][j].toString()));
         }
       }
       countLoop = 1;
@@ -282,85 +250,91 @@ class RandomWordsState extends State<RandomWords> {
           content: Container(
               height: 320,
               child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                "Hệ số học kỳ",
-                style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)),
-              ),
-              Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 10),
-                  child: ListTile(
-                    leading: Container (
-                      padding: EdgeInsets.only(top: 6),
-                      child: Text(
-                        "HK1",
-                        style: _biggerFont,
-                      ),
-                    ),
-                    title: _customTextField(
-                        "Hệ số",
-                        _coefController[_yearChosenIndex][0],
-                        Color(0xFFBDBDBD)),
-                  )),
-              Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  child: ListTile(
-                    leading: Container (
-                      padding: EdgeInsets.only(top: 6),
-                      child: Text(
-                        "HK2",
-                        style: _biggerFont,
-                      ),
-                    ),
-                    title: _customTextField(
-                        "Hệ số",
-                        _coefController[_yearChosenIndex][1],
-                        Color(0xFFBDBDBD)),
-                  )),
-              Text(
-                "Năm học",
-                style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)),
-              ),
-              Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 20),
-                  child: ListTile(
-                    leading: Text(
-                      "NH",
-                      style: _biggerFont,
-                    ),
-                    title: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        value: dropdownValue,
-                        icon: Icon(Icons.keyboard_arrow_down),
-                        iconSize: 24,
-                        style: TextStyle(fontSize: 18.0, color: Colors.black),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            _yearChosen = newValue;
-                            dropdownValue = newValue;
-                          });
-                          Navigator.of(context).pop();
-                          _showMyDialog();
-                        },
-                        items: _year
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(value, style: _biggerFont,),
-                                value == _yearChosen ? Icon(Icons.check, color: Color(0xFF00C48C)) : Icon(Icons.check, color: Colors.white)
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      )
-                    )
-                  ))
-            ],
-          )),
+                //crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Hệ số học kỳ",
+                    style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 10),
+                      child: ListTile(
+                        leading: Container(
+                          padding: EdgeInsets.only(top: 6),
+                          child: Text(
+                            "HK1",
+                            style: _biggerFont,
+                          ),
+                        ),
+                        title: _customTextField(
+                            "Hệ số",
+                            _coefController[_yearChosenIndex][0],
+                            Color(0xFFBDBDBD)),
+                      )),
+                  Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: ListTile(
+                        leading: Container(
+                          padding: EdgeInsets.only(top: 6),
+                          child: Text(
+                            "HK2",
+                            style: _biggerFont,
+                          ),
+                        ),
+                        title: _customTextField(
+                            "Hệ số",
+                            _coefController[_yearChosenIndex][1],
+                            Color(0xFFBDBDBD)),
+                      )),
+                  Text(
+                    "Năm học",
+                    style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 20),
+                      child: ListTile(
+                          leading: Text(
+                            "NH",
+                            style: _biggerFont,
+                          ),
+                          title: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                            value: dropdownValue,
+                            icon: Icon(Icons.keyboard_arrow_down),
+                            iconSize: 24,
+                            style:
+                                TextStyle(fontSize: 18.0, color: Colors.black),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                _yearChosen = newValue;
+                                dropdownValue = newValue;
+                              });
+                              Navigator.of(context).pop();
+                              _showMyDialog();
+                            },
+                            items: _year
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      value,
+                                      style: _biggerFont,
+                                    ),
+                                    value == _yearChosen
+                                        ? Icon(Icons.check,
+                                            color: Color(0xFF00C48C))
+                                        : Icon(Icons.check, color: Colors.white)
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ))))
+                ],
+              )),
           actions: <Widget>[
             FlatButton(
               child: Text("Hủy",
@@ -377,12 +351,12 @@ class RandomWordsState extends State<RandomWords> {
               onPressed: () {
                 setState(() {
                   for (int i = 0; i < _year.length; i++) {
-                    for (int j = 0; j < 2; j++)
-                      {
-                        _coef[i][j] = int.parse(_coefController[i][j].text);
-                      }
+                    for (int j = 0; j < 2; j++) {
+                      _coef[i][j] = int.parse(_coefController[i][j].text);
+                    }
                   }
                 });
+                user.updateCoefficient(user.id, _coef);
                 Navigator.of(context).pop();
               },
             ),

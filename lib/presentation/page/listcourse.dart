@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:path/path.dart';
 
 import 'home_screen.dart';
-
+import 'user.dart';
 class MyListCoursePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -90,6 +90,8 @@ class RandomWordsState extends State<RandomWords> {
                     constraints: BoxConstraints.expand(height: 50),
                     child: (RaisedButton(
                         onPressed: () {
+                          User user = User();
+                          user.addCourse(_saved);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

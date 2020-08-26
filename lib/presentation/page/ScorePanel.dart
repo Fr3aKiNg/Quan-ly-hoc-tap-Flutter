@@ -1,9 +1,12 @@
-import 'dart:ui';
+import 'dart:core';
 
+import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/data/Event.dart';
-
+import 'user.dart';
 class Score{
   String termOne;
   String termTwo;
@@ -26,10 +29,38 @@ class ScorePanel extends StatefulWidget {
 
 }
 class scorePanelState extends State<ScorePanel>{
-  Score curScore = Score(termOne: "8.1", termTwo: "-", overall: "-");
-  Score goalScore = Score(termOne: "8.0", termTwo: "9.0", overall: "8.5");
+  User user;
+  String expectedScoreTerm1 = "loading";
+  String expectedScoreTerm2 = "loading";
+  String expectedScoreOverall = "loading";
+  Score curScore;
+  Score goalScore;
+  FirebaseUser Fuser;
+  int count = 0;
+  void init() async {
+    if (count == 0) {
+      final collection = Firestore.instance.collection("users");
+      Fuser = await auth.currentUser();
+      collection.document(Fuser.uid).get().then((value) {
+        setState(() {
+          expectedScoreTerm1 = value.data["expectedScore"]["term 1"];
+          expectedScoreTerm2 = value.data["expectedScore"]["term 2"];
+          expectedScoreOverall = value.data["expectedScore"]["term 3"];
+        });
+      });
+    }
+    count = 1;
+  }
+  scorePanelState() {
+    user = User();
+  }
+
   Widget build(BuildContext context)
   {
+    curScore = Score(termOne: "8.1", termTwo: "-", overall: "10.0");
+    goalScore  = Score(termOne: expectedScoreTerm1, termTwo: expectedScoreTerm2, overall: expectedScoreOverall);
+
+    init();
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return GestureDetector (
@@ -73,7 +104,7 @@ class scorePanelState extends State<ScorePanel>{
                 SizedBox(height: h*2),
                 Text(curScore.overall,style: TextStyle(fontWeight: FontWeight.bold)),
                 SizedBox(height: h*2),
-                Text(curScore.overall,style: TextStyle(fontWeight: FontWeight.bold))
+                Text(goalScore.overall,style: TextStyle(fontWeight: FontWeight.bold))
               ],)
             ],
           ),
@@ -115,7 +146,7 @@ class scorePanelState extends State<ScorePanel>{
                   ),
                   ListTile(
                     leading: Container(
-                        child: Text("Tất cả     ", style: _biggerFont,),
+                        child: Text("Cả năm  ", style: _biggerFont,),
                         padding: EdgeInsets.only(top: 5)
                     ),
                     title: _customTextField("Nhập điểm mong muốn", All, Color(0xFFBDBDBD)),
@@ -138,9 +169,11 @@ class scorePanelState extends State<ScorePanel>{
                   HK1.text == "" ? score1 = goalScore.termOne : score1 = HK1.text;
                   HK2.text == "" ? score2 = goalScore.termTwo : score2 = HK2.text;
                   All.text == "" ? overall = goalScore.overall : overall = All.text;
-                  goalScore.setScore(score1, score2, overall);
+                  expectedScoreTerm1 = score1;
+                  expectedScoreTerm2 = score2;
+                  expectedScoreOverall = overall;
                 });
-
+                user.addExpectedScore(expectedScoreTerm1,  expectedScoreTerm2, expectedScoreOverall, Fuser.uid);
                 Navigator.of(context).pop();
               },
             ),
@@ -150,9 +183,6 @@ class scorePanelState extends State<ScorePanel>{
     );
   }
 }
-
-
-
 
 Widget _customTextField(String hintText, TextEditingController controller, Color color) {
   final _biggerFont = const TextStyle(fontSize: 18.0);

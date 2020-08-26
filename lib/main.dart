@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/application/constant.dart';
 import 'package:scheduleapp/application/route.dart';
-import 'package:scheduleapp/presentation/onBoard/on_board.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
+import 'package:scheduleapp/presentation/onBoard/on_board.dart';
+import 'package:scheduleapp/presentation/page/score/addCourse.dart';
+import 'package:scheduleapp/presentation/page/score/detailCourse.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
+import 'package:scheduleapp/presentation/page/enter_information.dart';
+import 'package:scheduleapp/utils/firestore/locator.dart';
 
 import 'presentation/page/enter_information.dart';
 import 'presentation/page/listcourse.dart';
@@ -17,7 +22,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -26,11 +30,11 @@ class MyApp extends StatelessWidget {
         'on_board': (context) => OnboardingMe(),
         'score': (context) => MyTranscriptPage(),
         'list_course':(context) => MyListCoursePage(),
-        'personal_information':(context) => MyInformationPage()
+        'personal_information':(context) => MyInformationPage(),
+        'add_course': (context) => AddCoursePage(),
       },
       onGenerateRoute: Router.generateRoute,
-
-      initialRoute: 'on_board',
+      initialRoute: 'score',
 
     );
   }
