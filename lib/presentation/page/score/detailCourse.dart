@@ -1,25 +1,28 @@
 import 'dart:ffi';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:path/path.dart' as Path;
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 import 'package:scheduleapp/presentation/page/score/editCourse.dart';
+import '../user.dart';
 class MyDetailCoursePage extends StatelessWidget {
   final String course;
-  MyDetailCoursePage({Key key, @required this.course}) : super(key: key);
+  final String uid;
+  MyDetailCoursePage({Key key, @required this.course, @required this.uid}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: this.course, home: detailCourse(course: course,));
+    return MaterialApp(title: this.course, home: detailCourse(course: course, uid: uid,));
   }
 }
 
 class detailCourse extends StatefulWidget {
   final String course;
-
-  detailCourse({Key key, @required this.course}) : super(key: key);
+  final String uid;
+  detailCourse({Key key, @required this.course, @required this.uid}) : super(key: key);
   @override
-  detailCourseState createState() => new detailCourseState(course);
+  detailCourseState createState() => new detailCourseState(course, uid);
 
   String getCourseName() {
     return course;
@@ -29,20 +32,25 @@ class detailCourse extends StatefulWidget {
 // ignore: camel_case_types
 class detailCourseState extends State<detailCourse> {
   String CourseName;
-
+  String uid;
+  int chosenYear = 0;
   //gọi hàm lấy dữ liệu từ db truyền vào các biến
-  List<String> _nameCol = <String> ["Miệng", "15 phút", "1 tiết", "Giữa kỳ", "Cuối kỳ"];
-  List _scoreSes1 = [[10.0, 9.5],[10.0, 8.5, 9.0],[8.75, 9.5],[9.5],[10.0]];
-  List _scoreSes2 = [[10.0, 9.5],[10.0, 8.5, 9.0],[8.75, 9.5],[9.5],[]];
-  List _heso = [1,1,2,2,3];
+  List _nameCol = [];
+  List _scoreSes1 = [];
+  List _scoreSes2 = [];
+  List _heso = [];
+  int count = 0;
   //
   double getAvg(List _score) {
     double res = 0.0;
     int count = 0;
     for (int i = 0; i < _heso.length; i++) {
       for (int j = 0; j < _score[i].length; j++) {
-        res += _heso[i] * _score[i][j];
-        for (int k = 0; k < _heso[i]; k++)
+        if (_score[i][j] is String)
+          res += double.parse(_heso[i]) * double.parse(_score[i][j]);
+        else
+          res += _heso[i] * _score[i][j];
+        for (int k = 0; k < int.parse(_heso[i]); k++)
           count++;
       }
     }
@@ -51,13 +59,46 @@ class detailCourseState extends State<detailCourse> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   TextEditingController nameController = TextEditingController();
   TextEditingController newScoreController = new TextEditingController();
-  detailCourseState(String course) {
+  detailCourseState(String course, String userid) {
     CourseName = course;
+    uid = userid;
   }
 
+  void init() {
+    if (count == 0) {
+      final collection = Firestore.instance.collection("users");
+      collection.document(uid).get().then((value) {
+        _nameCol = value.data["columnScore"][CourseName]["column"];
+        _heso = value.data["columnScore"][CourseName]["coef"];
+        setState(() {
+          if (chosenYear == 0) {
+            for (int i = 0; i < _nameCol.length; i++) {
+              _scoreSes1.add(value.data["year1"]["HK1"]["ingredientScore"][CourseName][_nameCol[i]]);
+              _scoreSes2.add(value.data["year1"]["HK2"]["ingredientScore"][CourseName][_nameCol[i]]);
+            }
+          }
+          else if (chosenYear == 1) {
+            for (int i = 0; i < _nameCol.length; i++) {
+              _scoreSes1.add(value.data["year2"]["HK1"]["ingredientScore"][CourseName][_nameCol[i]]);
+              _scoreSes2.add(value.data["year2"]["HK2"]["ingredientScore"][CourseName][_nameCol[i]]);
+            }
+          }
+          else {
+            for (int i = 0; i < _nameCol.length; i++) {
+              _scoreSes1.add(value.data["year3"]["HK1"]["ingredientScore"][CourseName][_nameCol[i]]);
+              _scoreSes2.add(value.data["year3"]["HK2"]["ingredientScore"][CourseName][_nameCol[i]]);
+            }
+          }
+        });
+
+      });
+      count = 1;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     String _value = "";
+    init();
     return Scaffold(
         appBar: AppBar(
           leading: GestureDetector(
@@ -77,7 +118,11 @@ class detailCourseState extends State<detailCourse> {
           actions: <Widget>[
             new IconButton(icon: const Icon(Icons.edit, color: Colors.white), onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EditCoursePage(course: this.CourseName,)));
+                  MaterialPageRoute(builder: (context) => EditCoursePage(
+                      course: this.CourseName,
+                      uid: this.uid,
+                      nameColumn: _nameCol,
+                      coef: _heso,)));
             }),
           ],
           backgroundColor: Color(0xFF00C48C),
@@ -316,6 +361,7 @@ class detailCourseState extends State<detailCourse> {
             FlatButton(
               child: Text('Thêm', style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C) ),),
               onPressed: () {
+                print(_scoreSes1);
                 String temp = newScoreController.text;
                 int num = 0;
                 if (temp != "") {
@@ -325,9 +371,8 @@ class detailCourseState extends State<detailCourse> {
                         num = i;
                     int temp2 = _scoreSes1[num].length;
                     List newList;
-                    debugPrint(_scoreSes1[num][0].toString());
                     newList = _scoreSes1[num];
-                    newList.add(double.parse(temp));
+                    newList.add(temp);
                     setState(() {
                       _scoreSes1[num] = newList;
                     });
@@ -341,7 +386,7 @@ class detailCourseState extends State<detailCourse> {
                     List newList;
 
                     newList = _scoreSes2[num];
-                    newList.add(double.parse(temp));
+                    newList.add(temp);
                     setState(() {
                       _scoreSes2[num] = newList;
                     });
@@ -349,6 +394,8 @@ class detailCourseState extends State<detailCourse> {
                   }
                   newScoreController.text = "";
                 }
+                User user = User();
+                user.updateScore(uid, CourseName, _scoreSes1, _scoreSes2, _nameCol, chosenYear);
                 Navigator.of(context).pop();
               },
             ),
@@ -358,61 +405,5 @@ class detailCourseState extends State<detailCourse> {
     );
   }
 
-  Widget _buildRowDialog(String nameCol, double score, int ses) {
-    return Dismissible(
-      child: ListTile(
-        title: TextFormField(
-            style: _biggerFont,
-            initialValue: score.toString(),
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              hintText: '',
-              hintStyle: TextStyle(fontSize: 18.0),
-              filled: true,
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color: Color(0xFF00C48C),
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color: Color(0xFFE4E4E4),
-                  width: 1.0,
-                ),
-              ),
-            )
-        ),
-        trailing: new Icon(Icons.close, color: Colors.red),
-        onTap: () {
-          int num = 0;
-          int num2 = 0;
-          for (int i = 0; i < _nameCol.length; i++)
-            if (_nameCol[i] == nameCol)
-              num = i;
-          for (int i = 0; i < _scoreSes2[num].length; i++)
-          {
-            if (_scoreSes2[num][i] == score)
-              num2 = i;
-          }
-          int temp2 = _scoreSes2[num].length;
-          List newList;
 
-          newList = _scoreSes2[num];
-          newList.removeAt(num2);
-          setState(() {
-            _scoreSes2[num] = newList;
-            Navigator.of(context).pop();
-          });
-
-        },
-      ),
-      key: ValueKey(score.toString())
-    );
-  }
-
-  void editSubject(List nameCol, List heso) {
-
-  }
 }

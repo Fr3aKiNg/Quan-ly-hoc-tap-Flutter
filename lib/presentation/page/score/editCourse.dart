@@ -1,5 +1,7 @@
 import 'dart:ffi';
-
+import '../user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:path/path.dart' as Path;
@@ -8,30 +10,44 @@ import 'package:scheduleapp/presentation/page/score/detailCourse.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 class EditCoursePage extends StatelessWidget {
   final String course;
-  EditCoursePage({Key key, @required this.course}) : super(key: key);
+  final String uid;
+  final List nameColumn;
+  final List coef;
+
+  EditCoursePage({Key key, @required this.course, @required this.uid, @required this.nameColumn, @required this.coef}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: "Sửa môn", home: editCourse(course: course,));
+    return MaterialApp(title: "Sửa môn", home: editCourse(course: course, uid: uid, nameColumn: nameColumn, coef: coef));
   }
 }
 
 class editCourse extends StatefulWidget {
   final String course;
-  editCourse({Key key, @required this.course}) : super(key: key);
+  final String uid;
+  final List nameColumn;
+  final List coef;
+  editCourse({Key key, @required this.course, @required this.uid, @required this.nameColumn, @required this.coef}) : super(key: key);
   @override
-  editCourseState createState() => new editCourseState(course);
+  editCourseState createState() => new editCourseState(course, uid, nameColumn, coef);
 }
 
 // ignore: camel_case_types
 class editCourseState extends State<editCourse> {
   String _courseName;
-  editCourseState(String course) {
-    _courseName = course;
+  String uid;
+  List nameScoreCol = [];
+  List heso = [];
+
+  editCourseState(String course, String uid, List column, List coef) {
+    this._courseName = course;
+    this.uid = uid;
+    this.nameScoreCol = column;
+    this.heso = coef;
   }
+
   final _biggerFont = const TextStyle(fontSize: 18.0);
-  List heso = [1,1,2,2,3];
-  List nameScoreCol = ["Miệng", "15 phút", "1 tiết", "Giữa Kỳ", "Cuối Kỳ"];
-  List<String> _courses = <String>[
+
+  List _courses = [
     "Toán",
     "Vật lý",
     "Hóa học",
@@ -49,11 +65,25 @@ class editCourseState extends State<editCourse> {
     "Mỹ thuật",
     "Thể dục"
   ];
-  TextEditingController newCourseController = TextEditingController();
+  int count = 0;
+  void init() {
+    if (count == 0) {
+      count=1;
+    }
+  }
+  TextEditingController newCourseController;
 
   List HeSoController = new List();
   List NameScoreController = new List();
+
   Widget build(BuildContext context) {
+    print(uid);
+    if (count == 0) {
+      newCourseController = TextEditingController(text: _courseName);
+      count = 1;
+    }
+
+    print(newCourseController.text);
     return Scaffold(
         resizeToAvoidBottomPadding:false,
         appBar: AppBar(
@@ -64,7 +94,7 @@ class editCourseState extends State<editCourse> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) =>
-                            MyDetailCoursePage(course: _courseName,)));
+                            MyDetailCoursePage(course: _courseName, uid: uid)));
                   })),
           title: Center(child: Text("Sửa môn")),
           actions: <Widget>[
@@ -83,7 +113,6 @@ class editCourseState extends State<editCourse> {
                   controller: newCourseController,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
-                    hintText: _courseName,
                     hintStyle:
                     TextStyle(fontSize: 18.0, color: Colors.black),
                     filled: true,
@@ -122,8 +151,8 @@ class editCourseState extends State<editCourse> {
                       itemCount: nameScoreCol.length + 1,
                       itemBuilder: (BuildContext context, int index) {
                         if (HeSoController.length != 0 && index == 0) {
-                          HeSoController.removeRange(0, heso.length - 1);
-                          NameScoreController.removeRange(0, nameScoreCol.length - 1);
+                          HeSoController.removeRange(0, HeSoController.length);
+                          NameScoreController.removeRange(0, NameScoreController.length);
                         }
                         if (index < nameScoreCol.length) {
                           HeSoController.add(new TextEditingController(text: heso[index].toString()));
@@ -181,10 +210,8 @@ class editCourseState extends State<editCourse> {
                   color: Colors.white,
                   disabledColor: Colors.white,
                   onPressed: () {
-                    for (int i = 0; i < _courses.length; i++) {
-                      if (_courses[i] == _courseName)
-                        _courses.removeAt(i);
-                    }
+                    User user = User();
+                    user.deleteCourse(uid, _courseName);
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) =>
@@ -275,22 +302,26 @@ class editCourseState extends State<editCourse> {
   }
 
   void Accept() {
-    //xử lí Database
-    //Tên các cột điểm: nameScoreCol
-    //List hệ số tương ứng: heso
-    //Tên môn học đang edit: _scoreName
-    //
-    _courseName = newCourseController.text;
     for (int i =0 ; i < nameScoreCol.length; i++)
       {
         nameScoreCol[i] = NameScoreController[i].text;
         heso[i] = HeSoController[i].text;
-
       }
+    User user = User();
+    print(_courseName);
+    print(newCourseController.text);
+    if (_courseName != newCourseController.text){
+      user.editCourse(uid, _courseName, nameScoreCol, heso, newCourseController.text, true);
+      //user.deleteCourse(uid, _courseName);
+    }
+    else {
+      user.editCourse(uid, _courseName, nameScoreCol, heso, newCourseController.text, false);
+    }
+
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
-            MyDetailCoursePage(course: _courseName,)));
+            MyDetailCoursePage(course: _courseName, uid: uid,)));
   }
 }
 
