@@ -223,6 +223,8 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.7):
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
+  - camera (0.0.1):
+    - Flutter
   - cloud_firestore (0.0.1):
     - Firebase/Core
     - Firebase/Firestore (~> 6.0)
@@ -243,6 +245,9 @@ PODS:
   - Firebase/Firestore (6.27.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 1.16.0)
+  - Firebase/Storage (6.27.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 3.7.0)
   - firebase_auth (0.0.1):
     - Firebase/Auth (~> 6.3)
     - Firebase/Core
@@ -252,6 +257,9 @@ PODS:
     - Flutter
   - firebase_database (0.0.1):
     - Firebase/Database
+    - Flutter
+  - firebase_storage (0.0.1):
+    - Firebase/Storage
     - Flutter
   - FirebaseAnalytics (6.6.1):
     - FirebaseCore (~> 6.8)
@@ -296,7 +304,12 @@ PODS:
     - GoogleUtilities/Environment (~> 6.6)
     - GoogleUtilities/UserDefaults (~> 6.6)
     - PromisesObjC (~> 1.2)
+  - FirebaseStorage (3.7.0):
+    - FirebaseCore (~> 6.8)
+    - GTMSessionFetcher/Core (~> 1.1)
   - Flutter (1.0.0)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -388,6 +401,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - camera (from `.symlinks/plugins/camera/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - Firebase/Analytics
   - Firebase/Auth
@@ -395,7 +409,9 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
+  - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -416,6 +432,7 @@ SPEC REPOS:
     - FirebaseDatabase
     - FirebaseFirestore
     - FirebaseInstallations
+    - FirebaseStorage
     - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
@@ -431,6 +448,8 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  camera:
+    :path: ".symlinks/plugins/camera/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_auth:
@@ -439,8 +458,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_database:
     :path: ".symlinks/plugins/firebase_database/ios"
+  firebase_storage:
+    :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
   path_provider:
@@ -458,11 +481,13 @@ SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
+  camera: a0ca5080336f7af47b88436e5e26da3dee5568f0
   cloud_firestore: 2a4f8f802fb0b701cf809b283b6bec7477ebaa6f
   Firebase: fc4cbf6f1592636431821ef9a3c557e4dfd9f268
   firebase_auth: af8784c4d8d87c36f730a305f97bfbcb24db024b
   firebase_core: 335c02abd48672b7c83c683df833d0488a72e73e
   firebase_database: 88085c38a41ad0b5c3c611ede7205831a2ece844
+  firebase_storage: 22966fce4aa6e8848cbaa017df62107cee29f327
   FirebaseAnalytics: 0ea640473474f036cabbc2576e20c2d63671c92f
   FirebaseAuth: b85c064e0ac60f82486728d50a4803f235687302
   FirebaseCore: feda061cb1ee6d8ad4824f4a4a8ffbcfe284f595
@@ -470,7 +495,9 @@ SPEC CHECKSUMS:
   FirebaseDatabase: 3d02ffa794ec174853c086cf87cf2dc79bd6da49
   FirebaseFirestore: 5ea7b0878363f9ec66bdcee0c29ad875d1b511ac
   FirebaseInstallations: 293f567159b6d66d1c990f13bb868066096c94ec
+  FirebaseStorage: af7bdbd12177cf567df00904e3e3a93704f25b15
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
   GoogleAppMeasurement: 2fd5c5a56c069db635c8e7b92d4809a9591d0a69

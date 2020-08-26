@@ -44,7 +44,7 @@ dependencies:
   flutter_local_notifications: ^1.4.4+2
 
   collection_ext: ^0.2.0
-
+  flutter_facebook_login: ^3.0.0
   tuple: ^1.0.3
   intl: ^0.16.1
   url_launcher: ^5.4.2
