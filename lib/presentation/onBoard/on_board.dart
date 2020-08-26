@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/presentation/facebook_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/presentation/atom/page_indicator.dart';
@@ -88,6 +89,7 @@ class _OnboardingMeState extends State<OnboardingMe> {
       "assets/login.png",
           title: "",
           des: "",
+          loginFacebook: LoginFacebook(),
           loginGoogle: LoginGoogle()),
     ];
     double w = MediaQuery.of(context).size.width / 100;

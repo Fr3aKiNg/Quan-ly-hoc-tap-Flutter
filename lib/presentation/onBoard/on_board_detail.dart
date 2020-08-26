@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:scheduleapp/application/color_app.dart';
+import 'package:scheduleapp/presentation/facebook_login.dart';
 
 class OnBoardDetail {
   String imgUrl;
@@ -41,14 +42,23 @@ class OnBoardInfo extends StatelessWidget {
               item.imgUrl,
               fit: BoxFit.cover,
               width: w * 100,
-              height: h * 42,
+              height: h * 40,
             ),
-            SizedBox(height: h*3),
+            SizedBox(height: h*2),
             item.title != ""  ? Expanded(
               child: Container(margin: EdgeInsets.fromLTRB(w*2, h*3, w*2, 0),child: Text(item.title,
                   style: TextStyle(fontSize: 36, color: ColorApp.backgroundColor,fontWeight: FontWeight.w600))),
-            ) : LoginGoogle(),
-            Expanded(child:Container(margin: EdgeInsets.fromLTRB(w*2, h, w*2, 0),child:Text(item.des, style: TextStyle(fontSize: 18, color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w400)))),
+            ) : Column(children: [
+              Container(width: w*100,margin: EdgeInsets.only(bottom: h*3),
+                child: Center(
+                  child: Text("Đăng nhập để bắt đầu cùng Educare !",style: TextStyle(
+                      fontSize: 20,color: ColorApp.backgroundColor,fontWeight: FontWeight.w400
+                  ),),
+                ),
+              ),
+              LoginGoogle()]),
+            item.des != "" ?Expanded(child:Container(margin: EdgeInsets.fromLTRB(w*2, h, w*2, 0),child:Text(item.des, style: TextStyle(fontSize: 18, color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w400)))):
+            Container(margin: EdgeInsets.fromLTRB(0, h*3, 0, 0),child: LoginFacebook()),
             SizedBox(height: h * 4),
             Align(alignment: Alignment.bottomRight,child: InkWell(
                 onTap: () {
