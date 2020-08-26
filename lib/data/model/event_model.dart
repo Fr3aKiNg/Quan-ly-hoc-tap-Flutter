@@ -2,16 +2,18 @@ import 'package:firebase_helpers/firebase_helpers.dart';
 
 class EventModel extends DatabaseItem{
   final String id;
+  final String uid;
   final String title;
   final String description;
   final DateTime eventDateFrom;
   final DateTime eventDateTo;
  // final int color;
 
-  EventModel({this.id,this.title, this.description, this.eventDateFrom,this.eventDateTo, }):super(id);
+  EventModel({this.id,this.uid,this.title, this.description, this.eventDateFrom,this.eventDateTo, }):super(id);
 
   factory EventModel.fromMap(Map data) {
     return EventModel(
+      uid: data['uid'],
       title: data['title'],
       description: data['description'],
       eventDateFrom: data['event_date_from'],
@@ -23,6 +25,7 @@ class EventModel extends DatabaseItem{
   factory EventModel.fromDS(String id, Map<String,dynamic> data) {
     return EventModel(
       id: id,
+      uid: data['uid'],
       title: data['title'],
       description: data['description'],
       eventDateFrom: data['event_date_from'].toDate(),
@@ -38,6 +41,7 @@ class EventModel extends DatabaseItem{
       "event_date_from":eventDateFrom,
       "event_date_to":eventDateTo,
      // "color":color,
+      "uid":uid,
       "id":id,
     };
   }

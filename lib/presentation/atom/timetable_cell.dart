@@ -195,12 +195,17 @@ class _TimeTableCellState extends State<TimeTableCell> {
                   CustomModalActionButton(
                     onClose: () => Navigator.of(context).pop(),
                     onSave: () {
-                      setState(() {
-                        this.text = _textControllerName.text;
-                        this.room = _textControllerClass.text;
-                        this.teach = _textControllerTeacher.text;
-                      });
-                      Navigator.of(context).pop();
+                      if(backgroundColor==null){
+                        showDialog(context: context,builder: (context) => AlertDialog(content: Text("Hãy chọn màu đại diện"),actions: <Widget>[FlatButton(child: Text("Ok"),onPressed: ()=>Navigator.of(context).pop(),),],));
+                      }
+                      else{
+                        setState(() {
+                          this.text = _textControllerName.text;
+                          this.room = _textControllerClass.text;
+                          this.teach = _textControllerTeacher.text;
+                        });
+                        Navigator.of(context).pop();
+                      }
                     },
                   ),
                 ],

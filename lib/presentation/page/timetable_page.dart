@@ -1,13 +1,13 @@
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/data/model/timetablenote_model.dart';
 import 'package:scheduleapp/presentation/atom/custom_button.dart';
 import 'package:intl/intl.dart';
 import 'package:scheduleapp/presentation/atom/timetable_cell.dart';
 import 'package:scheduleapp/data/model/database.dart';
 import 'package:scheduleapp/presentation/page/add_task_page.dart';
-import 'package:scheduleapp/presentation/page/other_screen.dart';
-import 'package:scheduleapp/presentation/page/user.dart';
 
 class TimetablePage extends StatefulWidget {
   @override
@@ -15,9 +15,17 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
-  User user = User();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String uid;
+  void getUid() async {
+    final FirebaseUser user = await auth.currentUser();
+    uid = user.uid;
+    // here you write the codes to input the data into firestore
+  }
+
   @override
   Widget build(BuildContext context) {
+    getUid();
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -90,13 +98,15 @@ class _TimetablePageState extends State<TimetablePage> {
                 stream: noteDBS.streamList(),
                 builder: (context, snapshot) {
                   if(snapshot.hasData){
-                    List<TimeTableNoteModel> allNotes = snapshot.data;
+                    List<TimeTableNoteModel> allNotes = [];
+                    for (int i = 0; i<snapshot.data.length;i++){
+                      if(snapshot.data.elementAt(i).uid==uid)
+                        allNotes.add(snapshot.data.elementAt(i));
+                    }
                       return ListView.builder(
                           itemCount: allNotes.length,
                           itemBuilder: (context,index){
-                            return allNotes[index].isDone
-                                ? _taskComplete(allNotes[index])
-                                : _taskUncomplete(allNotes[index]);
+                              return allNotes[index].isDone ? _taskComplete(allNotes[index]) : _taskUncomplete(allNotes[index]);
                           }
                       );
                   }
@@ -176,7 +186,7 @@ class _TimetablePageState extends State<TimetablePage> {
                               await noteDBS.updateData(data.id,{
                                 'description': data.description,
                                 'note_date': data.noteDate,
-                                'uid': user.id,
+                                'uid': uid,
                                 'is_done': true,
                               });
                               Navigator.of(context).pop();
@@ -365,7 +375,7 @@ class _TimetablePageState extends State<TimetablePage> {
                               await noteDBS.updateData(data.id,{
                                 'description': data.description,
                                 'note_date': data.noteDate,
-                                'uid': user.id,
+                                'uid': uid,
                                 'is_done': false,
                               });
                               Navigator.of(context).pop();

@@ -25,16 +25,14 @@ class _SplashPageState extends State<SplashPage> {
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
-    /*if (_seen) {
+    if (_seen) {
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new HomeScreen()));
     } else {
       prefs.setBool('seen', true);
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new OnboardingMe()));
-    }*/
-    Navigator.of(context).pushReplacement(
-        new MaterialPageRoute(builder: (context) => new OnboardingMe()));
+    }
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scheduleapp/data/model/database.dart';
@@ -24,7 +25,13 @@ class _AddEventPageState extends State<AddEventPage> {
   bool processing;
 
   PushLocalNotificationCustom _notify;
-
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String uid;
+  void getUid() async {
+    final FirebaseUser user = await auth.currentUser();
+    uid = user.uid;
+    // here you write the codes to input the data into firestore
+  }
   @override
   void initState(){
     super.initState();
@@ -34,6 +41,7 @@ class _AddEventPageState extends State<AddEventPage> {
     _selectedTimeFrom = widget.note != null ? TimeOfDay.fromDateTime(widget.note.eventDateFrom):TimeOfDay.now();
     _selectedTimeTo = widget.note != null ? TimeOfDay.fromDateTime(widget.note.eventDateTo):TimeOfDay.now();
     processing = false;
+    getUid();
   }
 
 
@@ -122,6 +130,7 @@ class _AddEventPageState extends State<AddEventPage> {
               });
               if (widget.note!= null){
                 await eventDBS.updateData(widget.note.id, {
+                  'uid': widget.note.uid,
                   'title': _textEventControlerName.text,
                   'description': _textEventControlerDesc.text,
                   'event_date_from': DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),
@@ -133,6 +142,7 @@ class _AddEventPageState extends State<AddEventPage> {
               }
               else{
                 await eventDBS.createItem(EventModel(
+                  uid: uid,
                   title: _textEventControlerName.text,
                   description:  _textEventControlerDesc.text,
                   eventDateFrom: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),
@@ -140,6 +150,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   //color: _selectedColor
                 ));
                 _notify = PushLocalNotificationCustom(context: context,event: EventModel(
+                  uid: uid,
                   title: _textEventControlerName.text,
                   description:  _textEventControlerDesc.text,
                   eventDateFrom: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),

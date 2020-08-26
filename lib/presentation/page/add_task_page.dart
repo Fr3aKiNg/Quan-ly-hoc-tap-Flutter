@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scheduleapp/data/model/database.dart';
 import 'package:scheduleapp/data/model/timetablenote_model.dart';
+import 'package:scheduleapp/data/model/user.dart';
 import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
@@ -18,7 +21,17 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  User user = User();
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String uid;
+  void getUid() async {
+    final FirebaseUser user = await auth.currentUser();
+     uid = user.uid;
+    // here you write the codes to input the data into firestore
+  }
+
+
+
   DateTime _selectedDate ;
   TextEditingController _textTaskControler;
   bool processing;
@@ -43,6 +56,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     _textTaskControler = TextEditingController(text:  widget.note != null ? widget.note.description : "");
     _selectedDate = widget.note != null ? widget.note.noteDate : DateTime.now();
     processing = false;
+    getUid();
   }
 
   @override
@@ -54,6 +68,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+
     //_textTaskControler.clear();
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -96,7 +111,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               }
               else{
                 await noteDBS.createItem(TimeTableNoteModel(
-                  uid: user.id,
+                  uid: uid,
                   description:  _textTaskControler.text,
                   noteDate: _selectedDate,
                   isDone: false,

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/constant.dart';
@@ -17,13 +18,20 @@ class _CalenderPageState extends State<CalenderPage> {
   CalendarController _calendarController;
   Map<DateTime,List<dynamic>> _events;
   List<dynamic> _selectedEvents;
-
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String uid;
+  void getUid() async {
+    final FirebaseUser user = await auth.currentUser();
+    uid = user.uid;
+    // here you write the codes to input the data into firestore
+  }
   @override
   void initState() {
     super.initState();
     _calendarController = CalendarController();
     _events = {};
     _selectedEvents = [];
+    getUid();
   }
 
   @override
@@ -75,7 +83,11 @@ class _CalenderPageState extends State<CalenderPage> {
         stream: eventDBS.streamList(),
         builder: (context, snapshot) {
           if(snapshot.hasData){
-            List<EventModel> allEvents = snapshot.data;
+            List<EventModel> allEvents = [];
+            for (int i = 0; i<snapshot.data.length;i++){
+              if(snapshot.data.elementAt(i).uid==uid)
+                allEvents.add(snapshot.data.elementAt(i));
+            }
             if(allEvents.isNotEmpty){
               _events = _groupEvents(allEvents);
             }
