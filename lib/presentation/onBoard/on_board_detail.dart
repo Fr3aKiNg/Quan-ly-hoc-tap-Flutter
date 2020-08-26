@@ -115,7 +115,7 @@ class LoginGoogleState extends State<LoginGoogle> {
   }
   void onGoogleSignIn(BuildContext context) async {
     FirebaseUser user = await _handleSignIn();
-    user ??  Navigator.of(context).pushNamed('personal_information');
+    var userSignedIn = await Navigator.of(context).pushNamed('personal_information');
 //    await Navigator.push(
 //      context,
 //      MaterialPageRoute(
@@ -123,9 +123,9 @@ class LoginGoogleState extends State<LoginGoogle> {
 //              WelcomeUserWidget(user, _googleSignIn)),
 //    );
 
-//    setState(() {
-//      isUserSignedIn = userSignedIn == null ? true : false;
-//    });
+    setState(() {
+      isUserSignedIn = userSignedIn == null ? true : false;
+    });
   }
   Widget build(BuildContext context) {
     double w = MediaQuery
