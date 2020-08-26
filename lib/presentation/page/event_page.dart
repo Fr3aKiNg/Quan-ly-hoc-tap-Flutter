@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:scheduleapp/presentation/atom/event_card.dart';
 
 class EventPage extends StatefulWidget {

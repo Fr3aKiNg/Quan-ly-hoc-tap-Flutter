@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/application/constant.dart';
 import 'package:scheduleapp/data/model/database.dart';
 import 'package:scheduleapp/data/model/event_model.dart';
 import 'package:scheduleapp/presentation/page/add_event_page.dart';
@@ -113,7 +114,7 @@ class _CalenderPageState extends State<CalenderPage> {
                             borderRadius: BorderRadius.circular(10.0)),
                         child: InkWell(
                           onDoubleTap: (){
-                              //Navigator.of(context).pushNamed('event_detail',arguments: _selectedEvents);
+                              Navigator.of(context).pushNamed('event_detail',arguments: _selectedEvents);
                           },
                           child: Text(
                             date.day.toString(),

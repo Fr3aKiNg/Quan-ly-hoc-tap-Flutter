@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/constant.dart';
 import 'package:scheduleapp/application/route.dart';
+import 'package:scheduleapp/presentation/page/event_page.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/onBoard/on_board.dart';
 import 'package:scheduleapp/presentation/page/score/addCourse.dart';
 import 'package:scheduleapp/presentation/page/score/detailCourse.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 import 'package:scheduleapp/presentation/page/enter_information.dart';
+import 'package:scheduleapp/presentation/page/splash_screen.dart';
 import 'package:scheduleapp/utils/firestore/locator.dart';
 
 import 'presentation/page/enter_information.dart';
@@ -32,9 +34,10 @@ class MyApp extends StatelessWidget {
         'list_course':(context) => MyListCoursePage(),
         'personal_information':(context) => MyInformationPage(),
         'add_course': (context) => AddCoursePage(),
+        'event_detail': (context) =>EventPage(),
       },
       onGenerateRoute: Router.generateRoute,
-      initialRoute: 'score',
+      initialRoute: RoutePaths.SplashScreen,
 
     );
   }
