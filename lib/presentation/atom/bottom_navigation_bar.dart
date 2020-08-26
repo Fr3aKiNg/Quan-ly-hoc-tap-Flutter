@@ -19,8 +19,9 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
   CustomBottomNavigationBar(
       {this.defaultSelectedIndex = 0,
-        @required this.iconList,
-        @required this.onChange,@required this.btnName});
+      @required this.iconList,
+      @required this.onChange,
+      @required this.btnName});
 
   @override
   _CustomBottomNavigationBarState createState() =>
@@ -46,10 +47,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     final uri = Uri.parse(settings.name);
     final path = uri.path ?? '';
     switch (path) {
-      case '/note': {
-        final note = (settings.arguments as Map ?? {})['note'];
-        return _buildRoute(settings, (_) => NoteEditor(note: note));
-      }
+      case '/note':
+        {
+          final note = (settings.arguments as Map ?? {})['note'];
+          return _buildRoute(settings, (_) => NoteEditor(note: note));
+        }
       default:
         return null;
     }
@@ -62,8 +64,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         builder: builder,
       );
 
-
-@override
+  @override
   void initState() {
     super.initState();
     _selectedIndex = widget.defaultSelectedIndex;
@@ -76,7 +77,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     List<Widget> _navBarItemList = [];
 
     for (var i = 0; i < _iconList.length; i++) {
-      _navBarItemList.add(buildNavBarItem(_iconList[i], i,_btnName[i]));
+      _navBarItemList.add(buildNavBarItem(_iconList[i], i, _btnName[i]));
     }
 
     return Row(
@@ -84,83 +85,92 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     );
   }
 
-  Widget buildNavBarItem(IconData icon, int index,String name) {
-    double h  = MediaQuery.of(context).size.height/100;
-    double w  = MediaQuery.of(context).size.width/100;
+  Widget buildNavBarItem(IconData icon, int index, String name) {
+    double h = MediaQuery.of(context).size.height / 100;
+    double w = MediaQuery.of(context).size.width / 100;
     return GestureDetector(
         onTap: () {
           widget.onChange(index);
           if (index == 0) {
-            Navigator.of(context).push(
-                PageRouteBuilder(pageBuilder: (context, animation1, animation2) => HomeScreen()));
+            Navigator.of(context).push(PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    HomeScreen()));
           }
           if (index == 1) {
             setState(() {
-              _selectedIndex =index;
+              _selectedIndex = index;
             });
-            Navigator.of(context).push( PageRouteBuilder(pageBuilder: (context, animation1, animation2) =>  MyTranscriptPage()));
-          }
-          else if (index == 3) {
-            Navigator.of(context).push(
-                PageRouteBuilder(pageBuilder: (context, animation1, animation2) =>  OtherScreen()));
+            Navigator.of(context).push(PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    MyTranscriptPage()));
+          } else if (index == 3) {
+            Navigator.of(context).push(PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    OtherScreen()));
             setState(() {
-              _selectedIndex =index;
+              _selectedIndex = index;
             });
-          }
-          else if (index == 2)
-          {
-            Navigator.of(context).push(
-                PageRouteBuilder(pageBuilder: (context, animation1, animation2)  =>
-                StreamProvider.value(
-    value: FirebaseAuth.instance.onAuthStateChanged.map((user) => CurrentUser.create(user)),
-    initialData: CurrentUser.initial,
-    child: Consumer<CurrentUser>(
-      builder: (context, user, _) => MaterialApp(
-        theme: Theme.of(context).copyWith(
-          brightness: Brightness.light,
-          primaryColor: Colors.white,
-          appBarTheme: AppBarTheme.of(context).copyWith(
-            elevation: 1,
-            brightness: Brightness.light,
-          ),
-          scaffoldBackgroundColor: Colors.white,
-          bottomAppBarColor: Colors.white,
-          primaryTextTheme: Theme.of(context).primaryTextTheme.copyWith(
-
-          ),
-        ),
-        home:  NoteScreen(),
-        routes: {
-          '/settings': (_) => NoteScreen(),
-        },
-        onGenerateRoute: _generateRoute,
-      ),
-    ),
-  )));
+          } else if (index == 2) {
+            Navigator.of(context).push(PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    StreamProvider.value(
+                      value: FirebaseAuth.instance.onAuthStateChanged
+                          .map((user) => CurrentUser.create(user)),
+                      initialData: CurrentUser.initial,
+                      child: Consumer<CurrentUser>(
+                        builder: (context, user, _) => MaterialApp(
+                          debugShowCheckedModeBanner: false,
+                          theme: Theme.of(context).copyWith(
+                            brightness: Brightness.light,
+                            primaryColor: Colors.white,
+                            appBarTheme: AppBarTheme.of(context).copyWith(
+                              elevation: 1,
+                              brightness: Brightness.light,
+                            ),
+                            scaffoldBackgroundColor: Colors.white,
+                            bottomAppBarColor: Colors.white,
+                            primaryTextTheme:
+                                Theme.of(context).primaryTextTheme.copyWith(),
+                          ),
+                          home: NoteScreen(),
+                          routes: {
+                            '/settings': (_) => NoteScreen(),
+                          },
+                          onGenerateRoute: _generateRoute,
+                        ),
+                      ),
+                    )));
           }
           setState(() {
             _selectedIndex = index;
           });
         },
         child: Container(
-          padding: EdgeInsets.fromLTRB(0, h*1.5, 0, h),
-          height: h*10,
+          padding: EdgeInsets.fromLTRB(0, h * 1.5, 0, h),
+          height: h * 10,
           width: MediaQuery.of(context).size.width / _iconList.length,
           decoration: _selectedIndex == index
-              ? BoxDecoration(color: Colors.white,
-            border: Border(
-              bottom: BorderSide(width: 4, color: Colors.white),
-            ),
-          )
+              ? BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    bottom: BorderSide(width: 4, color: Colors.white),
+                  ),
+                )
               : BoxDecoration(color: Colors.white),
-          child: Column(
-              children: <Widget>[
-                Icon(
-                    icon,
-                    color:  _selectedIndex == index  ? ColorApp.backgroundColor : Colors.grey,
-                    size: 28),
-                Text(name, style: TextStyle(color: _selectedIndex == index  ? ColorApp.backgroundColor : Colors.grey ),)
-              ]),
+          child: Column(children: <Widget>[
+            Icon(icon,
+                color: _selectedIndex == index
+                    ? ColorApp.backgroundColor
+                    : Colors.grey,
+                size: 28),
+            Text(
+              name,
+              style: TextStyle(
+                  color: _selectedIndex == index
+                      ? ColorApp.backgroundColor
+                      : Colors.grey),
+            )
+          ]),
         ));
   }
 }
