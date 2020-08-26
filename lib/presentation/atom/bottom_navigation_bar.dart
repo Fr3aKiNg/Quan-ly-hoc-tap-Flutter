@@ -4,10 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/application/constant.dart';
 import 'package:scheduleapp/data/model/user.dart';
+import 'package:scheduleapp/presentation/page/ScorePanel.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/note/note_editor.dart';
 import 'package:scheduleapp/presentation/page/note/note_screen.dart';
 import 'package:scheduleapp/presentation/page/other_screen.dart';
+import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final int defaultSelectedIndex;
@@ -89,23 +91,26 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         onTap: () {
           widget.onChange(index);
           if (index == 0) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+            Navigator.of(context).push(
+                PageRouteBuilder(pageBuilder: (context, animation1, animation2) => HomeScreen()));
           }
           if (index == 1) {
             setState(() {
               _selectedIndex =index;
             });
-//            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+            Navigator.of(context).push( PageRouteBuilder(pageBuilder: (context, animation1, animation2) =>  MyTranscriptPage()));
           }
           else if (index == 3) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => OtherScreen()));
+            Navigator.of(context).push(
+                PageRouteBuilder(pageBuilder: (context, animation1, animation2) =>  OtherScreen()));
             setState(() {
               _selectedIndex =index;
             });
           }
           else if (index == 2)
           {
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) =>
+            Navigator.of(context).push(
+                PageRouteBuilder(pageBuilder: (context, animation1, animation2)  =>
                 StreamProvider.value(
     value: FirebaseAuth.instance.onAuthStateChanged.map((user) => CurrentUser.create(user)),
     initialData: CurrentUser.initial,

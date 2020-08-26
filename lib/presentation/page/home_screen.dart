@@ -20,7 +20,8 @@ class HomeScreenState extends State<HomeScreen> {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return Scaffold(
-        bottomNavigationBar: BottomAppBar(
+        bottomNavigationBar:
+        BottomAppBar(
           child: CustomBottomNavigationBar(
             iconList: [
               Icons.home,
