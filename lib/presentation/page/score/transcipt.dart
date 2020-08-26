@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/presentation/atom/bottom_navigation_bar.dart';
 import 'package:scheduleapp/presentation/page/score/detailCourse.dart';
 import 'package:scheduleapp/presentation/page/score/addCourse.dart';
 import 'dart:async';
@@ -89,17 +90,35 @@ class RandomWordsState extends State<RandomWords> {
     }
     return result / count;
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _biggerFont = const TextStyle(fontSize: 18.0);
   TextEditingController nameController = TextEditingController();
-
+  int _selectedItem;
   @override
   Widget build(BuildContext context) {
     init();
     _courses = _coursesTemp;
     _score = _scoreTemp;
     String _value = "";
-    return Scaffold(
+
+    return Scaffold(bottomNavigationBar: BottomAppBar(
+      child: CustomBottomNavigationBar(
+        iconList: [
+          Icons.home,
+          Icons.assessment,
+          Icons.note,
+          Icons.dashboard,
+        ],
+        onChange: (val) {
+          setState(() {
+            _selectedItem = val;
+          });
+        },
+        defaultSelectedIndex: 1,
+        btnName: ["Tổng quan", "Điểm", "Ghi chú", "Khác"],
+      ),
+    ),
+        key: _scaffoldKey,
         appBar: AppBar(
           leading: GestureDetector(
               child: IconButton(
