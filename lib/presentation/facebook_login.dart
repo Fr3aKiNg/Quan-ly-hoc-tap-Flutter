@@ -9,19 +9,20 @@ import 'package:scheduleapp/application/color_app.dart';
 String your_client_id = "1840745959411312";
 String your_redirect_url =
     "https://www.facebook.com/connect/login_success.html";
+
 class LoginFacebook extends StatefulWidget{
   LoginFacebookState createState() => LoginFacebookState();
 }
 class LoginFacebookState extends State<LoginFacebook>{
   final _auth = FirebaseAuth.instance;
   final _facebooklogin = FacebookLogin();
-  bool isUserSignedIn = false;
 
+  bool isUserSignedIn = false;
 
   @override
   void initState() {
     super.initState();
-//    _checkLogin();
+    _checkLogin();
   }
 
 //  Future _loginWithFacebook() async {
@@ -52,15 +53,15 @@ class LoginFacebookState extends State<LoginFacebook>{
 //    });
 //  }
 //
-//  Future _checkLogin() async {
-//    final user = await _auth.currentUser();
-//    if (user != null) {
-//      setState(() {
-//        print("Logged in as ${user.displayName}");
-//        isUserSignedIn = true;
-//      });
-//    }
-//  }
+  Future _checkLogin() async {
+    final user = await _auth.currentUser();
+    if (user != null) {
+      setState(() {
+        print("Logged in as ${user.displayName}");
+        isUserSignedIn = true;
+      });
+    }
+  }
   loginWithFacebook() async {
     String result = await Navigator.push(
         context,
@@ -77,7 +78,10 @@ class LoginFacebookState extends State<LoginFacebook>{
         FacebookAuthProvider.getCredential(accessToken: result);
         final user =
         await _auth.signInWithCredential(facebookAuthCred);
+
       } catch (e) {}
+      Navigator.of(context).pushNamed(
+          'personal_information');
     }
   }
   Widget build(BuildContext context) {
@@ -93,11 +97,10 @@ class LoginFacebookState extends State<LoginFacebook>{
       onTap: () async {
         loginWithFacebook();
 //        _loginWithFacebook();
-//        FirebaseUser user = await _checkLogin();
-//        var userSignedIn = await Navigator.of(context).pushNamed('personal_information');
-//        setState(() {
-//          isUserSignedIn = userSignedIn == null ? true : false;
-//        });
+        FirebaseUser user = await _checkLogin();
+        user ??  await Navigator.of(context).pushNamed(
+              'personal_information');
+
       },
       child: Container(width: w * 75,
         height: h * 8,
