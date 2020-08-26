@@ -7,6 +7,7 @@ import 'package:scheduleapp/presentation/atom/timetable_cell.dart';
 import 'package:scheduleapp/data/model/database.dart';
 import 'package:scheduleapp/presentation/page/add_task_page.dart';
 import 'package:scheduleapp/presentation/page/other_screen.dart';
+import 'package:scheduleapp/presentation/page/user.dart';
 
 class TimetablePage extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
+  User user = User();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,11 +171,12 @@ class _TimetablePageState extends State<TimetablePage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CustomButton(
-                            buttonText: "Xong",
+                            buttonText: "Hoàn Thành",
                             onPressed: () async {
                               await noteDBS.updateData(data.id,{
                                 'description': data.description,
                                 'note_date': data.noteDate,
+                                'uid': user.id,
                                 'is_done': true,
                               });
                               Navigator.of(context).pop();
@@ -357,11 +360,12 @@ class _TimetablePageState extends State<TimetablePage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CustomButton(
-                            buttonText: "Chưa xong",
+                            buttonText: "Chưa Hoàn Thành",
                             onPressed: () async {
                               await noteDBS.updateData(data.id,{
                                 'description': data.description,
                                 'note_date': data.noteDate,
+                                'uid': user.id,
                                 'is_done': false,
                               });
                               Navigator.of(context).pop();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/application/color_app.dart';
 
 class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -18,7 +19,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      color: color,
+      color: ColorApp.backgroundColor,
       onPressed: onPressed,
       textColor: textColor,
       padding: const EdgeInsets.all(14.0),

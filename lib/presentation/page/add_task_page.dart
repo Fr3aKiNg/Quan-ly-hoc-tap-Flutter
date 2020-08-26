@@ -5,6 +5,10 @@ import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
 import 'package:intl/intl.dart';
+import 'package:scheduleapp/presentation/page/user.dart';
+
+
+
 
 class AddTaskPage extends StatefulWidget {
   final TimeTableNoteModel note;
@@ -14,7 +18,7 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-
+  User user = User();
   DateTime _selectedDate ;
   TextEditingController _textTaskControler;
   bool processing;
@@ -84,6 +88,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               });
               if (widget.note!= null){
                 await noteDBS.updateData(widget.note.id, {
+                  'uid':widget.note.uid,
                   'description': _textTaskControler.text,
                   'note_date': _selectedDate,
                   'is_done': false,
@@ -91,6 +96,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               }
               else{
                 await noteDBS.createItem(TimeTableNoteModel(
+                  uid: user.id,
                   description:  _textTaskControler.text,
                   noteDate: _selectedDate,
                   isDone: false,
