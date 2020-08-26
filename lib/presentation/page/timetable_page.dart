@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:scheduleapp/application/color_app.dart';
+import 'package:scheduleapp/data/model/timetablenote_model.dart';
 import 'package:scheduleapp/presentation/atom/custom_button.dart';
-
 import 'package:intl/intl.dart';
 import 'package:scheduleapp/presentation/atom/timetable_cell.dart';
-import 'package:scheduleapp/presentation/model/database.dart';
-import 'package:scheduleapp/presentation/model/timetablenote_model.dart';
+import 'package:scheduleapp/data/model/database.dart';
 import 'package:scheduleapp/presentation/page/add_task_page.dart';
+import 'package:scheduleapp/presentation/page/other_screen.dart';
 
 class TimetablePage extends StatefulWidget {
   @override
@@ -19,10 +19,13 @@ class _TimetablePageState extends State<TimetablePage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        backgroundColor: Color(0xff07CD94),
         title: Text("Thời khóa biểu"),
         automaticallyImplyLeading: true,
         leading: IconButton(
-          onPressed: () { /*Navigator.of(context).pop();*/ },
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           icon: Icon(Icons.arrow_back_ios),
       ),
         centerTitle: true,

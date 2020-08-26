@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:scheduleapp/presentation/atom/event_card.dart';
-import 'package:scheduleapp/presentation/model/event_model.dart';
+import 'package:scheduleapp/data/model/event_model.dart';
 
 class PushLocalNotificationCustom {
   EventModel event;

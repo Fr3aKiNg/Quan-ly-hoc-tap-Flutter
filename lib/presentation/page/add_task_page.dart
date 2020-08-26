@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleapp/data/model/database.dart';
+import 'package:scheduleapp/data/model/timetablenote_model.dart';
 import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
 import 'package:intl/intl.dart';
-import 'package:scheduleapp/presentation/model/database.dart';
-import 'package:scheduleapp/presentation/model/timetablenote_model.dart';
 
 class AddTaskPage extends StatefulWidget {
   final TimeTableNoteModel note;

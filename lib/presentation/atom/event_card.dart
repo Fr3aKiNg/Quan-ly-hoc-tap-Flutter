@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:scheduleapp/presentation/model/database.dart';
-import 'package:scheduleapp/presentation/model/event_model.dart';
 import 'package:intl/intl.dart';
+import 'package:scheduleapp/data/model/database.dart';
+import 'package:scheduleapp/data/model/event_model.dart';
 import 'package:scheduleapp/presentation/page/add_event_page.dart';
 
 
@@ -52,7 +52,7 @@ class _EventCardState extends State<EventCard> {
                       }
                       else if(_selected=="Delete"){
                         await eventDBS.removeItem(widget.event.id);
-                        Navigator.of(context).pushReplacementNamed('calendar');
+                        Navigator.of(context).pop();
                       }
                     } ,
                     itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[

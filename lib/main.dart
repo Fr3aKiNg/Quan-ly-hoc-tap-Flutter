@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/route.dart';
+import 'package:scheduleapp/presentation/onBoard/on_board.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
-import 'package:scheduleapp/presentation/page/on_board.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
-import 'package:scheduleapp/utils/firestore/locator.dart';
 
 import 'presentation/page/enter_information.dart';
 import 'presentation/page/listcourse.dart';
@@ -18,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/presentation/atom/event_card.dart';
-import 'package:scheduleapp/presentation/model/event_model.dart';
+import 'package:scheduleapp/data/model/event_model.dart';
 import 'package:intl/intl.dart';
 
 class EventDetailsPage extends StatelessWidget {

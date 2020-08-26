@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
-import 'package:scheduleapp/presentation/atom/change_bg_color_dropdown.dart';
+import 'package:scheduleapp/data/model/database.dart';
+import 'package:scheduleapp/data/model/event_model.dart';
 import 'package:scheduleapp/presentation/atom/custom_date_time_picker.dart';
 import 'package:scheduleapp/presentation/atom/custom_modal_action_button_save.dart';
 import 'package:scheduleapp/presentation/atom/custom_textfield.dart';
-import 'package:scheduleapp/presentation/atom/event_card.dart';
 import 'package:scheduleapp/presentation/atom/push_local_notification.dart';
-import 'package:scheduleapp/presentation/model/database.dart';
-import 'package:scheduleapp/presentation/model/event_model.dart';
 
 class AddEventPage extends StatefulWidget {
   final EventModel note;
@@ -136,23 +133,23 @@ class _AddEventPageState extends State<AddEventPage> {
               }
               else{
                 await eventDBS.createItem(EventModel(
-                    title: _textEventControlerName.text,
-                    description:  _textEventControlerDesc.text,
-                    eventDateFrom: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),
-                    eventDateTo: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),
-                    //color: _selectedColor
-                ));
-                _notify = PushLocalNotificationCustom(context: context,event:EventModel(
                   title: _textEventControlerName.text,
                   description:  _textEventControlerDesc.text,
                   eventDateFrom: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),
                   eventDateTo: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),
-                 // color: _selectedColor
+                  //color: _selectedColor
+                ));
+                _notify = PushLocalNotificationCustom(context: context,event: EventModel(
+                  title: _textEventControlerName.text,
+                  description:  _textEventControlerDesc.text,
+                  eventDateFrom: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeFrom.hour, _selectedTimeFrom.minute),
+                  eventDateTo: DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, _selectedTimeTo.hour, _selectedTimeTo.minute),
+                  // color: _selectedColor
                 ));
                 _notify.initializeNotifications();
                 _notify.setNotify();
               }
-              Navigator.of(context).pushReplacementNamed('calendar');
+              Navigator.of(context).pop();
               setState(() {
                 processing = false;
               });

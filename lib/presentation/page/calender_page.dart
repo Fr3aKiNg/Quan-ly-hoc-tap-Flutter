@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scheduleapp/presentation/model/database.dart';
-import 'package:scheduleapp/presentation/model/event_model.dart';
+import 'package:scheduleapp/data/model/database.dart';
+import 'package:scheduleapp/data/model/event_model.dart';
 import 'package:scheduleapp/presentation/page/add_event_page.dart';
+import 'package:scheduleapp/presentation/page/other_screen.dart';
 import 'package:scheduleapp/presentation/page/view_event_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -45,10 +46,13 @@ class _CalenderPageState extends State<CalenderPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        backgroundColor: Color(0xff07CD94),
         title: Text("Sự kiện"),
         automaticallyImplyLeading: true,
         leading: IconButton(
-          onPressed: () {  },
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           icon: Icon(Icons.arrow_back_ios),
         ),
         centerTitle: true,
@@ -109,7 +113,7 @@ class _CalenderPageState extends State<CalenderPage> {
                             borderRadius: BorderRadius.circular(10.0)),
                         child: InkWell(
                           onDoubleTap: (){
-                              Navigator.of(context).pushNamed('event',arguments: _selectedEvents);
+                              //Navigator.of(context).pushNamed('event_detail',arguments: _selectedEvents);
                           },
                           child: Text(
                             date.day.toString(),
