@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/constant.dart';
 import 'package:scheduleapp/presentation/page/calender_page.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
+import 'package:scheduleapp/presentation/page/login_screen.dart';
 import 'package:scheduleapp/presentation/page/note/note_screen.dart';
 import 'package:scheduleapp/presentation/page/other_screen.dart';
 import 'package:scheduleapp/presentation/page/splash_screen.dart';
@@ -25,6 +26,8 @@ class Router {
         return MaterialPageRoute(builder: (BuildContext context)=> TimetablePage());
       case RoutePaths.EventList:
         return MaterialPageRoute(builder: (BuildContext context)=> EventDetailsPage());
+      case RoutePaths.LoginScreen:
+        return MaterialPageRoute(builder: (BuildContext context)=> LoginScreen());
         default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
