@@ -60,142 +60,115 @@ class InformationState extends State<EnterInformation> {
         body: Center(
           child: Column(
             children: <Widget>[
-              Container(
-                  margin:
-                      EdgeInsets.only(top: 20, bottom: 10, left: 5, right: 5),
-                  padding: EdgeInsets.only(left: 3),
-                  child: StreamBuilder(
-                    initialData: Color(0xFFE4E4E4),
-                    stream: colorBloc1.colorStream,
-                    builder: (BuildContext context, snapShot) => TextFormField(
-                        controller: name,
-                        style: _biggerFont,
-                        onChanged: (text) {
-                          _nameValue = text;
-                        },
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          hintText: 'Tên',
-                          hintStyle: TextStyle(
-                              fontSize: 18.0, color: Color(0xFFBDBDBD)),
-                          filled: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              color: Color(0xFF00C48C),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              color: snapShot.data,
-                              width: 1.0,
-                            ),
-                          ),
+              SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                        margin:
+                        EdgeInsets.only(top: 20, bottom: 10, left: 5, right: 5),
+                        padding: EdgeInsets.only(left: 3),
+                        child: StreamBuilder(
+                          initialData: Color(0xFFE4E4E4),
+                          stream: colorBloc1.colorStream,
+                          builder: (BuildContext context, snapShot) => TextFormField(
+                              controller: name,
+                              style: _biggerFont,
+                              onChanged: (text) {
+                                _nameValue = text;
+                              },
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                hintText: 'Tên',
+                                hintStyle: TextStyle(
+                                    fontSize: 18.0, color: Color(0xFFBDBDBD)),
+                                filled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF00C48C),
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    color: snapShot.data,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              )),
                         )),
-                  )),
-              Container(
-                  margin:
-                      EdgeInsets.only(top: 20, bottom: 10, left: 5, right: 5),
-                  padding: EdgeInsets.only(left: 3),
-                  child: StreamBuilder(
-                    initialData: Color(0xFFE4E4E4),
-                    stream: colorBloc2.colorStream,
-                    builder: (BuildContext context, snapShot) => TextFormField(
-                        controller: school,
-                        style: _biggerFont,
-                        onChanged: (text) {
-                          _nameValue = text;
-                          debugPrint(snapShot.data.toString());
-                        },
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          hintText: 'Trường',
-                          hintStyle: TextStyle(
-                              fontSize: 18.0, color: Color(0xFFBDBDBD)),
-                          filled: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              color: Color(0xFF00C48C),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              color: snapShot.data,
-                              width: 1.0,
-                            ),
-                          ),
+                    Container(
+                        margin:
+                        EdgeInsets.only(top: 20, bottom: 10, left: 5, right: 5),
+                        padding: EdgeInsets.only(left: 3),
+                        child: StreamBuilder(
+                          initialData: Color(0xFFE4E4E4),
+                          stream: colorBloc2.colorStream,
+                          builder: (BuildContext context, snapShot) => TextFormField(
+                              controller: school,
+                              style: _biggerFont,
+                              onChanged: (text) {
+                                _nameValue = text;
+                                debugPrint(snapShot.data.toString());
+                              },
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                hintText: 'Trường',
+                                hintStyle: TextStyle(
+                                    fontSize: 18.0, color: Color(0xFFBDBDBD)),
+                                filled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF00C48C),
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    color: snapShot.data,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              )),
                         )),
-                  )),
-              Container(
-                  margin:
-                      EdgeInsets.only(top: 20, bottom: 10, left: 5, right: 5),
-                  padding: EdgeInsets.only(left: 3),
-                  child: StreamBuilder(
-                    initialData: Color(0xFFE4E4E4),
-                    stream: colorBloc3.colorStream,
-                    builder: (BuildContext context, snapShot) => TextFormField(
-                        controller: grade,
-                        style: _biggerFont,
-                        onChanged: (text) {
-                          _nameValue = text;
-                          debugPrint(snapShot.data.toString());
-                        },
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          hintText: 'Lớp',
-                          hintStyle: TextStyle(
-                              fontSize: 18.0, color: Color(0xFFBDBDBD)),
-                          filled: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              color: Color(0xFF00C48C),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              color: snapShot.data,
-                              width: 1.0,
-                            ),
-                          ),
+                    Container(
+                        margin:
+                        EdgeInsets.only(top: 20, bottom: 10, left: 5, right: 5),
+                        padding: EdgeInsets.only(left: 3),
+                        child: StreamBuilder(
+                          initialData: Color(0xFFE4E4E4),
+                          stream: colorBloc3.colorStream,
+                          builder: (BuildContext context, snapShot) => TextFormField(
+                              controller: grade,
+                              style: _biggerFont,
+                              onChanged: (text) {
+                                _nameValue = text;
+                                debugPrint(snapShot.data.toString());
+                              },
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                hintText: 'Lớp',
+                                hintStyle: TextStyle(
+                                    fontSize: 18.0, color: Color(0xFFBDBDBD)),
+                                filled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF00C48C),
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    color: snapShot.data,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              )),
                         )),
-                  )),
-              Container(
-                margin: EdgeInsets.only(top: 20, bottom: 10, left: 7, right: 5),
-                padding: EdgeInsets.only(left: 10),
-                child: (ConstrainedBox(
-                    constraints: BoxConstraints.expand(height: 60),
-                    child: (DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                      value: _dropdownValue,
-                      icon: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Color(0xFFBDBDBD),
-                      ),
-                      iconSize: 24,
-                      style: _biggerFont,
-                      onChanged: (String newValue) {
-                        debugPrint(newValue);
-                        setState(() {
-                          _dropdownValue = newValue;
-                        });
-                      },
-                      items: <String>['1 học kỳ', '2 học kỳ', '3 học kỳ']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ))))),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.white,
-                    border: Border.all(color: Color(0xFFE4E4E4))),
+                  ],
+                ),
               ),
               Center(
                 child: Text('$_alert',

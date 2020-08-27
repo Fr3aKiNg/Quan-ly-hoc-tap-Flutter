@@ -44,13 +44,17 @@ class detailCourseState extends State<detailCourse> {
   double getAvg(List _score) {
     double res = 0.0;
     int count = 0;
+    for (int i = 0; i <_heso.length; i++) {
+      if (_heso[i] is String)
+        _heso[i] = int.parse(_heso[i]);
+    }
     for (int i = 0; i < _heso.length; i++) {
       for (int j = 0; j < _score[i].length; j++) {
         if (_score[i][j] is String)
-          res += double.parse(_heso[i]) * double.parse(_score[i][j]);
+          res +=_heso[i] * double.parse(_score[i][j]);
         else
           res += _heso[i] * _score[i][j];
-        for (int k = 0; k < int.parse(_heso[i]); k++)
+        for (int k = 0; k < _heso[i]; k++)
           count++;
       }
     }
@@ -395,7 +399,7 @@ class detailCourseState extends State<detailCourse> {
                   newScoreController.text = "";
                 }
                 User user = User();
-                user.updateScore(uid, CourseName, _scoreSes1, _scoreSes2, _nameCol, chosenYear);
+                user.updateScore(uid, CourseName, _scoreSes1, _scoreSes2, _nameCol, chosenYear, getAvg(_scoreSes1).toStringAsFixed(1).toString(), getAvg(_scoreSes2).toStringAsFixed(1).toString());
                 Navigator.of(context).pop();
               },
             ),

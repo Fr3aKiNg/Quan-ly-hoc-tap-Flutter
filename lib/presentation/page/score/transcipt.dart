@@ -61,7 +61,6 @@ class RandomWordsState extends State<RandomWords> {
           _scoreTemp[1].add(temp2[_coursesTemp[i]]);
           _scoreTemp[2].add(temp3[_coursesTemp[i]]);
         }
-
         setState(() {
           _courses = _coursesTemp;
           _score = _scoreTemp;

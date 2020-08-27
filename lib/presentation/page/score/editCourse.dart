@@ -83,7 +83,6 @@ class editCourseState extends State<editCourse> {
       count = 1;
     }
 
-    print(newCourseController.text);
     return Scaffold(
         resizeToAvoidBottomPadding:false,
         appBar: AppBar(
@@ -144,57 +143,59 @@ class editCourseState extends State<editCourse> {
               ),
               Container(
                 width: double.maxFinite,
-                child: SizedBox(
-                  height: 500,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: nameScoreCol.length + 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (HeSoController.length != 0 && index == 0) {
-                          HeSoController.removeRange(0, HeSoController.length);
-                          NameScoreController.removeRange(0, NameScoreController.length);
-                        }
-                        if (index < nameScoreCol.length) {
-                          HeSoController.add(new TextEditingController(text: heso[index].toString()));
-                          NameScoreController.add(new TextEditingController(text: nameScoreCol[index]));
-                          return Dismissible(
-                            background: Container(
-                              color: Colors.red,
-                              child: Icon(Icons.cancel),
-                            ),
-                            child: Container (
-                              margin: EdgeInsets.only(top: 10),
-                              child: Row (
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Flexible(
-                                    flex: 1,
-                                    child: Icon(Icons.close, color: Colors.red),
-                                  ),
-                                  Flexible(
-                                    flex: 4,
-                                    child: _customTextField(nameScoreCol[index], NameScoreController[index], Colors.black),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    child: _customTextField(heso[index].toString(), HeSoController[index], Colors.black),
-                                  )
-                                ],
+                child: SingleChildScrollView(
+                  child: SizedBox(
+                    height: 500,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: nameScoreCol.length + 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (HeSoController.length != 0 && index == 0) {
+                            HeSoController.removeRange(0, HeSoController.length);
+                            NameScoreController.removeRange(0, NameScoreController.length);
+                          }
+                          if (index < nameScoreCol.length) {
+                            HeSoController.add(new TextEditingController(text: heso[index].toString()));
+                            NameScoreController.add(new TextEditingController(text: nameScoreCol[index]));
+                            return Dismissible(
+                              background: Container(
+                                color: Colors.red,
+                                child: Icon(Icons.cancel),
                               ),
-                            ),
-                            key: UniqueKey(),
-                            onDismissed: (direction) {
-                              setState(() {
-                                nameScoreCol.removeAt(index);
-                                heso.removeAt(index);
-                                HeSoController.removeAt(index);
-                                NameScoreController.removeAt(index);
-                              });
-                            },
-                          );
+                              child: Container (
+                                margin: EdgeInsets.only(top: 10),
+                                child: Row (
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Flexible(
+                                      flex: 1,
+                                      child: Icon(Icons.close, color: Colors.red),
+                                    ),
+                                    Flexible(
+                                      flex: 4,
+                                      child: _customTextField(nameScoreCol[index], NameScoreController[index], Colors.black),
+                                    ),
+                                    Flexible(
+                                      flex: 2,
+                                      child: _customTextField(heso[index].toString(), HeSoController[index], Colors.black),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              key: UniqueKey(),
+                              onDismissed: (direction) {
+                                setState(() {
+                                  nameScoreCol.removeAt(index);
+                                  heso.removeAt(index);
+                                  HeSoController.removeAt(index);
+                                  NameScoreController.removeAt(index);
+                                });
+                              },
+                            );
+                          }
+                          return null;
                         }
-                        return null;
-                      }
+                    ),
                   ),
                 )
               ),
