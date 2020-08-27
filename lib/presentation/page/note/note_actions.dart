@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/data/model/note.dart';
 import 'package:scheduleapp/data/model/note_service.dart';

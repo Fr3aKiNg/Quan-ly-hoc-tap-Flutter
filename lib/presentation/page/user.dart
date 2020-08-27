@@ -10,8 +10,7 @@ class User {
   String grade;
   int numSemester;
   List expectedScore;
-  User (){
-  }
+  User (){}
   void setUid() async {
     final FirebaseUser user = await auth.currentUser();
     this.id = user.uid;

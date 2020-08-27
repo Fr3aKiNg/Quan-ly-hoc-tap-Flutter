@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:scheduleapp/application/color_app.dart';
+import 'package:scheduleapp/presentation/facebook_login.dart';
 
 class OnBoardDetail {
   String imgUrl;
@@ -30,7 +31,7 @@ class OnBoardInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Container(margin: EdgeInsets.fromLTRB(0, h*15, w*3, h),
+    return Container(margin: EdgeInsets.fromLTRB(0, h*15, w*3, h*6),
         padding: EdgeInsets.fromLTRB(w*4, 0, w*2, 0),
         width: w*100,height: h*100,
         child: Column(
@@ -41,18 +42,27 @@ class OnBoardInfo extends StatelessWidget {
               item.imgUrl,
               fit: BoxFit.cover,
               width: w * 100,
-              height: h * 42,
+              height: h * 40,
             ),
-            SizedBox(height: h*3),
+            SizedBox(height: h*2),
             item.title != ""  ? Expanded(
               child: Container(margin: EdgeInsets.fromLTRB(w*2, h*3, w*2, 0),child: Text(item.title,
                   style: TextStyle(fontSize: 36, color: ColorApp.backgroundColor,fontWeight: FontWeight.w600))),
-            ) : LoginGoogle(),
-            Expanded(child:Container(margin: EdgeInsets.fromLTRB(w*2, h*2, w*2, 0),child:Text(item.des, style: TextStyle(fontSize: 18, color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w400)))),
+            ) : Column(children: [
+              Container(width: w*100,margin: EdgeInsets.only(bottom: h*3),
+                child: Center(
+                  child: Text("Đăng nhập để bắt đầu cùng Educare !",style: TextStyle(
+                      fontSize: 20,color: ColorApp.backgroundColor,fontWeight: FontWeight.w400
+                  ),),
+                ),
+              ),
+              LoginGoogle()]),
+            item.des != "" ?Expanded(child:Container(margin: EdgeInsets.fromLTRB(w*2, h, w*2, 0),child:Text(item.des, style: TextStyle(fontSize: 18, color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w400)))):
+            Container(margin: EdgeInsets.fromLTRB(0, h*3, 0, 0),child: LoginFacebook()),
             SizedBox(height: h * 4),
             Align(alignment: Alignment.bottomRight,child: InkWell(
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('home');
+                  Navigator.of(context).pushReplacementNamed('login_screen');
                 },
                 child: item.skipOnboard ? Text("Bỏ qua",
                     style: TextStyle(fontSize: 16, color: Colors.grey)): Container()))
@@ -116,12 +126,7 @@ class LoginGoogleState extends State<LoginGoogle> {
   void onGoogleSignIn(BuildContext context) async {
     FirebaseUser user = await _handleSignIn();
     var userSignedIn = await Navigator.of(context).pushNamed('personal_information');
-//    await Navigator.push(
-//      context,
-//      MaterialPageRoute(
-//          builder: (context) =>
-//              WelcomeUserWidget(user, _googleSignIn)),
-//    );
+
 
     setState(() {
       isUserSignedIn = userSignedIn == null ? true : false;
@@ -154,80 +159,14 @@ class LoginGoogleState extends State<LoginGoogle> {
                 child: CircleAvatar(backgroundColor: Colors.white,
                     child: Image.asset(
                         "assets/gg_logo.png", width: h * 3, height: h * 3))),
-            SizedBox(width: w * 5),
-            Text("Đăng nhập bằng Google", style: TextStyle(
-                fontSize: 18, color: Colors.white
-            ))
+            SizedBox(width: w * 3),
+            Expanded(
+              child: Text("Đăng nhập bằng Google", style: TextStyle(
+                  fontSize: 18, color: Colors.white
+              )),
+            )
           ],
         ),),
-    );
-  }
-}
-class WelcomeUserWidget extends StatelessWidget {
-
-  GoogleSignIn _googleSignIn;
-  FirebaseUser _user;
-
-  WelcomeUserWidget(FirebaseUser user, GoogleSignIn signIn) {
-    _user = user;
-    _googleSignIn = signIn;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black),
-          elevation: 0,
-        ),
-        body: Container(
-            color: Colors.white,
-            padding: EdgeInsets.all(50),
-            child: Align(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ClipOval(
-                        child: Image.network(
-                            _user.photoUrl,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover
-                        )
-                    ),
-                    SizedBox(height: 20),
-                    Text('Welcome,', textAlign: TextAlign.center),
-                    Text(_user.displayName, textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
-                    SizedBox(height: 20),
-                    FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        onPressed: () {
-                          _googleSignIn.signOut();
-                          Navigator.pop(context, false);
-                        },
-                        color: Colors.redAccent,
-                        child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(Icons.exit_to_app, color: Colors.white),
-                                SizedBox(width: 10),
-                                Text('Log out of Google', style: TextStyle(color: Colors.white))
-                              ],
-                            )
-                        )
-                    )
-                  ],
-                )
-            )
-        )
     );
   }
 }
