@@ -167,7 +167,7 @@ class User {
     });
   }
 
-  void updateScore(String uid, String courseName, List score1, List score2, List nameCol, int chosenYear) {
+  void updateScore(String uid, String courseName, List score1, List score2, List nameCol, int chosenYear, String term1, String term2) {
     final collection = Firestore.instance.collection("users");
     final data = {};
     final data2 = {};
@@ -188,24 +188,124 @@ class User {
     String query5 = "year3.HK1.ingredientScore."+courseName;
     String query6 = "year3.HK2.ingredientScore."+courseName;
 
-    if (chosenYear == 0) {
-      collection.document(uid).updateData({
-        query1: data,
-        query2: data2,
-      });
-    }
-    else if (chosenYear == 1) {
-      collection.document(uid).updateData({
-        query3: data,
-        query4: data2,
-      });
-    }
-    else {
-      collection.document(uid).updateData({
-        query5: data,
-        query6: data2,
-      });
-    }
+    String query7 = "year1.overall.ingredientScore."+courseName;
+    String query8 = "year2.overall.ingredientScore."+courseName;
+    String query9 = "year3.overall.ingredientScore."+courseName;
+
+    collection.document(uid).get().then((value) {
+      int co1, co2;
+
+      if (chosenYear == 0) {
+        co1 = value.data["year1"]["coefficient"]["HK1"];
+        co2 = value.data["year1"]["coefficient"]["HK2"];
+        String temp;
+        print(term1);
+        print(term2);
+        if (term1 == "NaN" || term2 == "NaN")
+          temp = "-";
+        else
+          temp = ((double.parse(term1) * co1 + double.parse(term2) * co2) / (co1 + co2)).toStringAsFixed(1).toString();
+        String finalHK1 = value.data["year1"]["HK1"]["final"];
+        String finalHK2 = value.data["year1"]["HK2"]["final"];
+        String overall;
+        if (term1 != "NaN"){
+          if (finalHK1 == "-")
+            finalHK1 = term1;
+          else
+            finalHK1 = ((double.parse(term1) + double.parse(finalHK1))/ 2).toStringAsFixed(1).toString();
+        }
+        if (term2 != "NaN"){
+          if (finalHK2 == "-")
+            finalHK2 = term2;
+          else
+            finalHK2 = ((double.parse(term2) + double.parse(finalHK2))/ 2).toStringAsFixed(1).toString();
+        }
+        if (term1 == "NaN" || term2 == "NaN")
+          overall = "-";
+        else
+          overall = ((double.parse(finalHK1) * co1 + double.parse(finalHK2) * co2) / (co1 + co2)).toStringAsFixed(1).toString();
+        collection.document(uid).updateData({
+          query1: data,
+          query2: data2,
+          query7: temp,
+          "year1.HK1.final": finalHK1,
+          "year1.HK2.final": finalHK2,
+          "year1.overall.final": overall,
+        });
+      }
+      else if (chosenYear == 1) {
+        co1 = value.data["year2"]["coefficient"]["HK1"];
+        co2 = value.data["year2"]["coefficient"]["HK2"];
+        String temp;
+        if (term1 == null || term2 == null)
+          temp = "-";
+        else
+          temp = ((double.parse(term1) * co1 + double.parse(term2) * co2) / (co1 + co2)).toStringAsFixed(1).toString();
+        String finalHK1 = value.data["year2"]["HK1"]["final"];
+        String finalHK2 = value.data["year2"]["HK2"]["final"];
+        String overall;
+        if (term1 != "NaN") {
+          if (finalHK1 == "-")
+            finalHK1 = term1;
+          else
+            finalHK1 = ((double.parse(term1) + double.parse(finalHK1))/ 2).toStringAsFixed(1).toString();
+        }
+        if (term2 != "NaN") {
+          if (finalHK2 == "-")
+            finalHK2 = term2;
+          else
+            finalHK2 = ((double.parse(term2) + double.parse(finalHK2))/ 2).toStringAsFixed(1).toString();
+        }
+        if (term1 == "NaN" || term2 == "NaN")
+          overall = "-";
+        else
+          overall = ((double.parse(finalHK1) * co1 + double.parse(finalHK2) * co2) / (co1 + co2)).toStringAsFixed(1).toString();
+        collection.document(uid).updateData({
+          query3: data,
+          query4: data2,
+          query8: temp,
+          "year2.HK1.final": finalHK1,
+          "year2.HK2.final": finalHK2,
+          "year2.overall.final": overall
+        });
+      }
+      else {
+        co1 = value.data["year3"]["coefficient"]["HK1"];
+        co2 = value.data["year3"]["coefficient"]["HK2"];
+        String temp;
+        if (term1 == null || term2 == null)
+          temp = "-";
+        else
+          temp = ((double.parse(term1) * co1 + double.parse(term2) * co2) / (co1 + co2)).toStringAsFixed(1).toString();
+        String finalHK1 = value.data["year3"]["HK1"]["final"];
+        String finalHK2 = value.data["year3"]["HK2"]["final"];
+        String overall;
+        if (term1 != "NaN") {
+          if (finalHK1 == "-")
+            finalHK1 = term1;
+          else
+            finalHK1 = ((double.parse(term1) + double.parse(finalHK1))/ 2).toStringAsFixed(1).toString();
+        }
+        if (term2 != "NaN") {
+          if (finalHK2 == "-")
+            finalHK2 = term2;
+          else
+            finalHK2 = ((double.parse(term2) + double.parse(finalHK2))/ 2).toStringAsFixed(1).toString();
+        }
+        if (term1 == "NaN" || term2 == "NaN")
+          overall = "-";
+        else
+          overall = ((double.parse(finalHK1) * co1 + double.parse(finalHK2) * co2) / (co1 + co2)).toStringAsFixed(1).toString();
+        collection.document(uid).updateData({
+          query5: data,
+          query6: data2,
+          query9: temp,
+          "year3.HK1.final": finalHK1,
+          "year3.HK2.final": finalHK2,
+          "year3.overall.final": overall,
+        });
+      }
+    });
   }
 
   void editCourse(String uid, String courseName, List nameCol, List coef, String newCourse, bool isRename) {
@@ -346,5 +446,9 @@ class User {
       query42: FieldValue.delete(),
       query43: FieldValue.delete(),
     });
+  }
+
+  void updateFinalScore() {
+
   }
 }

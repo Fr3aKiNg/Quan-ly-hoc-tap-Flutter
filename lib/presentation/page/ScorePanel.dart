@@ -33,6 +33,11 @@ class scorePanelState extends State<ScorePanel>{
   String expectedScoreTerm1 = "loading";
   String expectedScoreTerm2 = "loading";
   String expectedScoreOverall = "loading";
+
+  String scoreTerm1 = "loading";
+  String scoreTerm2 = "loading";
+  String scoreOverall = "loading";
+
   Score curScore;
   Score goalScore;
   FirebaseUser Fuser;
@@ -46,6 +51,9 @@ class scorePanelState extends State<ScorePanel>{
           expectedScoreTerm1 = value.data["expectedScore"]["term 1"];
           expectedScoreTerm2 = value.data["expectedScore"]["term 2"];
           expectedScoreOverall = value.data["expectedScore"]["term 3"];
+          scoreTerm1 = value.data["year1"]["HK1"]["final"];
+          scoreTerm2 = value.data["year1"]["HK2"]["final"];
+          scoreOverall = value.data["year1"]["overall"]["final"];
         });
       });
     }
@@ -57,7 +65,7 @@ class scorePanelState extends State<ScorePanel>{
 
   Widget build(BuildContext context)
   {
-    curScore = Score(termOne: "8.1", termTwo: "-", overall: "10.0");
+    curScore = Score(termOne: scoreTerm1, termTwo: scoreTerm2, overall: scoreOverall);
     goalScore  = Score(termOne: expectedScoreTerm1, termTwo: expectedScoreTerm2, overall: expectedScoreOverall);
 
     init();
