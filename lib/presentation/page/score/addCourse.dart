@@ -3,7 +3,6 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:path/path.dart' as Path;
-import 'package:scheduleapp/utils/sign_in.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 import '../user.dart';
 class AddCoursePage extends StatelessWidget {
