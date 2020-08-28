@@ -12,6 +12,7 @@ import 'package:scheduleapp/presentation/page/enter_information.dart';
 
 import 'presentation/page/enter_information.dart';
 import 'presentation/page/listcourse.dart';
+import 'presentation/page/news_screen.dart';
 
 void main() {
 //  setupLocator();
@@ -34,10 +35,10 @@ class MyApp extends StatelessWidget {
         'personal_information':(context) => MyInformationPage(),
         'add_course': (context) => AddCoursePage(),
         'event_detail': (context) =>EventPage(),
+        'news_screen':(context)=>MyTabbedPage(),
       },
       onGenerateRoute: Router.generateRoute,
       initialRoute: RoutePaths.SplashScreen,
-
     );
   }
 }
