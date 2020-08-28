@@ -157,7 +157,6 @@ class EventList extends StatelessWidget {
                     return ListView.builder(
                         padding: EdgeInsets.only(top: 0),
                         itemCount: allEvents.length,
-                        padding: EdgeInsets.only(top:0),
                         itemBuilder: (context,index){
                           return EventInDayUI(allEvents[index]);
                           //return Text(allEvents[index].title);
