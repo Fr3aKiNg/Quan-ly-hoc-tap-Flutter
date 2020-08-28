@@ -79,7 +79,7 @@ class LoginGoogleState extends State<LoginGoogle> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isUserSignedIn = false;
-
+  bool isNewUser = true;
   @override
   void initState() {
     super.initState();
@@ -114,6 +114,9 @@ class LoginGoogleState extends State<LoginGoogle> {
         idToken: googleAuth.idToken,
       );
 
+      AuthResult authResult = await _auth.signInWithCredential(credential);
+      isNewUser = authResult.additionalUserInfo.isNewUser;
+
       user = (await _auth.signInWithCredential(credential)).user;
       userSignedIn = await _googleSignIn.isSignedIn();
       setState(() {
@@ -125,12 +128,17 @@ class LoginGoogleState extends State<LoginGoogle> {
   }
   void onGoogleSignIn(BuildContext context) async {
     FirebaseUser user = await _handleSignIn();
-    var userSignedIn = await Navigator.of(context).pushNamed('personal_information');
+    if(isNewUser) {
+      var userSignedIn = await Navigator.of(context).pushNamed('personal_information');
 
-
-    setState(() {
-      isUserSignedIn = userSignedIn == null ? true : false;
-    });
+      setState(() {
+        isUserSignedIn = userSignedIn == null ? true : false;
+      });
+    }
+    else {
+      isUserSignedIn = true;
+      Navigator.of(context).pushNamed('home');
+    }
   }
   Widget build(BuildContext context) {
     double w = MediaQuery

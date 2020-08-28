@@ -1,34 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scheduleapp/data/Event.dart';
+import 'package:scheduleapp/data/model/event_model.dart';
+import 'package:intl/intl.dart';
 
 class EventInDayUI extends StatelessWidget{
   ScrollController scrollController = ScrollController();
-  EventInDay event;
-  EventInDayUI(EventInDay eventInDay): event = eventInDay;
+  EventModel event;
+  EventInDayUI(EventModel event): event = event;
   Widget build(BuildContext context)
   {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Container(padding: EdgeInsets.fromLTRB(w, h, w, h),
+    return Container(
+      padding: EdgeInsets.fromLTRB(w, h, w, h),
       width: w*100,
-      height: h*15,
-      child: Row(children: <Widget>[
+      height: h*12,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
         Expanded(flex:2,
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: <Widget>[
-            Text(event.date,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
-            Text(event.dayInWeek, style: TextStyle(fontSize: 12) )
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+            Text(DateFormat.yMMM().format(event.eventDateFrom),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+            Text(DateFormat.d().format(event.eventDateFrom), style: TextStyle(fontSize: 12) )
           ]),
         ),
-        Expanded(flex: 10, child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          controller: scrollController,
-          itemCount: event.eventOfTheDay.length,
-          itemBuilder: (context,index){
-            final item = event.eventOfTheDay[index];
-            return eventCard(context, item.name, item.timeline);
-          },
-        ))
+        Expanded(flex: 4, child: eventCard(context, event.title, DateFormat.Hm().format(event.eventDateFrom))),
       ]),
     );
   }
@@ -41,7 +39,7 @@ Widget eventCard(BuildContext context, String name, String timeLine)
     margin: EdgeInsets.fromLTRB(w, 0, 0, h),
     padding: EdgeInsets.fromLTRB(w, h, w, h),
     width: w*25,
-    height: w*12,
+    height: w*15,
     decoration: BoxDecoration(shape: BoxShape.rectangle,color: Colors.amberAccent,
       borderRadius: BorderRadius.circular(10),),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
