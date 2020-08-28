@@ -39,8 +39,7 @@ class MyApp extends StatelessWidget {
         'news_screen':(context)=>MyTabbedPage(),
       },
       onGenerateRoute: Router.generateRoute,
-      //initialRoute: RoutePaths.SplashScreen,
-      initialRoute: 'home',
+      initialRoute: RoutePaths.SplashScreen,
     );
   }
 }
