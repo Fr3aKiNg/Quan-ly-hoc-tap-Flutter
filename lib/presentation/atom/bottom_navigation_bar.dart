@@ -106,7 +106,29 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           } else if (index == 3) {
             Navigator.of(context).push(PageRouteBuilder(
                 pageBuilder: (context, animation1, animation2) =>
-                    OtherScreen()));
+                    StreamProvider.value(
+                      value: FirebaseAuth.instance.onAuthStateChanged
+                          .map((user) => CurrentUser.create(user)),
+                      initialData: CurrentUser.initial,
+                      child: Consumer<CurrentUser>(
+                        builder: (context, user, _) => MaterialApp(
+                          debugShowCheckedModeBanner: false,
+                          theme: Theme.of(context).copyWith(
+                            brightness: Brightness.light,
+                            primaryColor: Colors.white,
+                            appBarTheme: AppBarTheme.of(context).copyWith(
+                              elevation: 1,
+                              brightness: Brightness.light,
+                            ),
+                            scaffoldBackgroundColor: Colors.white,
+                            bottomAppBarColor: Colors.white,
+                            primaryTextTheme:
+                            Theme.of(context).primaryTextTheme.copyWith(),
+                          ),
+                          home: OtherScreen(),
+                        ),
+                      ),
+                    )));
             setState(() {
               _selectedIndex = index;
             });

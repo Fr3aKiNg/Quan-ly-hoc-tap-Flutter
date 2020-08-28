@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:scheduleapp/application/color_app.dart';
+import 'package:scheduleapp/presentation/page/enter_information.dart';
 
 
 String your_client_id = "1840745959411312";
@@ -78,10 +79,9 @@ class LoginFacebookState extends State<LoginFacebook>{
     return GestureDetector(
       onTap: () async {
         loginWithFacebook();
-//        _loginWithFacebook();
         FirebaseUser user = await _checkLogin();
-        user ??  await Navigator.of(context).pushNamed(
-              'personal_information');
+        user ??  await Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => MyInformationPage()));
       },
       child: Container(width: w * 75,
         height: h * 8,
