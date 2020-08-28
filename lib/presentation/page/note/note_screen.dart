@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,8 @@ import 'package:scheduleapp/data/model/note.dart';
 import 'package:scheduleapp/data/model/note_service.dart';
 import 'package:scheduleapp/data/model/user.dart';
 import 'package:scheduleapp/presentation/atom/bottom_navigation_bar.dart';
+import 'package:scheduleapp/presentation/page/login_screen.dart';
+import 'package:scheduleapp/presentation/page/user.dart';
 import 'package:tuple/tuple.dart';
 
 import 'package:collection_ext/iterables.dart';
@@ -123,6 +126,7 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _gridView = true;
   int _selectedItem;
+  String userName;
 
   @override
   Widget build(BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
@@ -275,7 +279,16 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
           ),
         ),
       );
-
+  void getName() async {
+    FirebaseUser user = await auth.currentUser();
+    setState(() {
+      userName = user.displayName;
+    });
+  }
+  Future<void> nav() async {
+    final command = await Navigator.pushNamed(context, '/note');
+    processNoteCommand(_scaffoldKey.currentState, command);
+  }
   Widget _fab(BuildContext context) => Transform.translate(
         offset: Offset(3, -35),
         child: FloatingActionButton(
@@ -284,8 +297,9 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
           elevation: 0,
           child: Icon(Icons.add, size: 24),
           onPressed: () async {
-            final command = await Navigator.pushNamed(context, '/note');
-            processNoteCommand(_scaffoldKey.currentState, command);
+            getName();
+            userName != null ? nav() : Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => LoginScreen()));
           },
         ),
       );

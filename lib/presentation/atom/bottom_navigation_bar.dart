@@ -155,10 +155,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                                 Theme.of(context).primaryTextTheme.copyWith(),
                           ),
                           home: NoteScreen(),
-                          routes: {
-                            '/settings': (_) => NoteScreen(),
-                          },
-                          onGenerateRoute: _generateRoute,
                         ),
                       ),
                     )));
