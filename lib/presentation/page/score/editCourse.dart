@@ -233,7 +233,7 @@ class editCourseState extends State<editCourse> {
           fillColor: Colors.white,
           hintStyle: TextStyle(fontSize: 18.0, color: color),
           filled: true,
-          enabled: false,
+          enabled: true,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
