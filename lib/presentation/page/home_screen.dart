@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/color_app.dart';
+import 'package:scheduleapp/application/constant.dart';
 import 'package:scheduleapp/data/Event.dart';
 import 'package:scheduleapp/data/model/database.dart';
 import 'package:scheduleapp/data/model/event_model.dart';
@@ -10,6 +11,7 @@ import 'package:scheduleapp/presentation/atom/event_in_day.dart';
 import 'package:scheduleapp/presentation/atom/schedule_of_today.dart';
 import 'package:scheduleapp/presentation/atom/thumbnail_new.dart';
 import 'package:scheduleapp/presentation/page/ScorePanel.dart';
+import 'package:scheduleapp/presentation/page/calender_page.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
@@ -99,24 +101,6 @@ class Score {
 
 
 class EventList extends StatelessWidget {
-  List<EventInDay> listEvent = [
-    EventInDay(
-        date: "16",
-        list: [
-          Event("Họp hội đồng với bô lão", "12:23 AM"),
-          Event("Họp hội đồng với bô lão", "12:23 AM"),
-          Event("Họp hội đồng với bô lão", "12:23 AM"),
-        ],
-        day: "Hôm nay"),
-    EventInDay(
-        date: "18",
-        list: [
-          Event("Họp hội đồng với bô lão", "12:23 AM"),
-          Event("Họp hội đồng với bô lão", "12:23 AM"),
-          Event("Họp hội đồng với bô lão", "12:23 AM"),
-        ],
-        day: "Thứ 7"),
-  ];
   final FirebaseAuth auth = FirebaseAuth.instance;
   String uid;
   void getUid() async {
@@ -146,14 +130,20 @@ class EventList extends StatelessWidget {
             Expanded(
                 flex: 1,
                 child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CalenderPage()),
+                      );
+                    },
                     child: Icon(Icons.add,
                         color: ColorApp.backgroundColor, size: 24)))
           ],
         ),
         Container(
           width: w * 100,
-          height: h * listEvent.length * 16,
+          height: h  * 16,
           child: StreamBuilder<List<EventModel>>(
               stream: eventDBS.streamList(),
               builder: (context, snapshot) {

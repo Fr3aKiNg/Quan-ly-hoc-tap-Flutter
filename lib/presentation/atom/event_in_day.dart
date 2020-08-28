@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scheduleapp/data/Event.dart';
 import 'package:scheduleapp/data/model/event_model.dart';
 import 'package:intl/intl.dart';
 
@@ -12,7 +11,8 @@ class EventInDayUI extends StatelessWidget{
   {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
-    return Container(padding: EdgeInsets.fromLTRB(w, h, w, h),
+    return Container(
+      padding: EdgeInsets.fromLTRB(w, h, w, h),
       width: w*100,
       height: h*15,
       child: Row(
