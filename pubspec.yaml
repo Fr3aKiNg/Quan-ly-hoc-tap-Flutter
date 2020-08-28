@@ -58,6 +58,7 @@ dev_dependencies:
   permission_handler: ^5.0.0+hotfix.8
   shared_preferences: ^0.5.10
   table_calendar: ^2.2.3
+  test: ^1.14.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
