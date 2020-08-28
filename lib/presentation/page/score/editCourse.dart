@@ -102,124 +102,127 @@ class editCourseState extends State<editCourse> {
           ],
           backgroundColor: Color(0xFF00C48C),
         ),
-        body: Center(
-          child: Container(
-            margin: EdgeInsets.only(top: 20, left: 10, right: 10),
-            child: Column(children: <Widget>[
-              TextFormField(
-                  style: _biggerFont,
-                  controller: newCourseController,
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    hintStyle:
-                    TextStyle(fontSize: 18.0, color: Colors.black),
-                    filled: true,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(
-                        color: Color(0xFF00C48C),
+        body: 
+        SingleChildScrollView(
+          child: Center(
+            child: Container(
+              margin: EdgeInsets.only(top: 20, left: 10, right: 10),
+              child: Column(children: <Widget>[
+                TextFormField(
+                    style: _biggerFont,
+                    controller: newCourseController,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      hintStyle:
+                      TextStyle(fontSize: 18.0, color: Colors.black),
+                      filled: true,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: Color(0xFF00C48C),
+                        ),
                       ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(
-                        color: Color(0xFFE4E4E4),
-                        width: 1.0,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: Color(0xFFE4E4E4),
+                          width: 1.0,
+                        ),
                       ),
-                    ),
-                  )),
-              Container(
-                margin: EdgeInsets.only(top: 20, bottom: 10),
-                child:Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("Cột điểm", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-                    IconButton(icon: Icon(Icons.add, color: Color(0xFF00C48C)),onPressed: () {
-                      _showMyDialog();
-                    },),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.maxFinite,
-                child: SingleChildScrollView(
-                  child: SizedBox(
-                    height: 500,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: nameScoreCol.length + 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (HeSoController.length != 0 && index == 0) {
-                            HeSoController.removeRange(0, HeSoController.length);
-                            NameScoreController.removeRange(0, NameScoreController.length);
-                          }
-                          if (index < nameScoreCol.length) {
-                            HeSoController.add(new TextEditingController(text: heso[index].toString()));
-                            NameScoreController.add(new TextEditingController(text: nameScoreCol[index]));
-                            return Dismissible(
-                              background: Container(
-                                color: Colors.red,
-                                child: Icon(Icons.cancel),
-                              ),
-                              child: Container (
-                                margin: EdgeInsets.only(top: 10),
-                                child: Row (
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Flexible(
-                                      flex: 1,
-                                      child: Icon(Icons.close, color: Colors.red),
-                                    ),
-                                    Flexible(
-                                      flex: 4,
-                                      child: _customTextField(nameScoreCol[index], NameScoreController[index], Colors.black),
-                                    ),
-                                    Flexible(
-                                      flex: 2,
-                                      child: _customTextField(heso[index].toString(), HeSoController[index], Colors.black),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              key: UniqueKey(),
-                              onDismissed: (direction) {
-                                setState(() {
-                                  nameScoreCol.removeAt(index);
-                                  heso.removeAt(index);
-                                  HeSoController.removeAt(index);
-                                  NameScoreController.removeAt(index);
-                                });
-                              },
-                            );
-                          }
-                          return null;
-                        }
-                    ),
-                  ),
-                )
-              ),
-              Container (
-                child: RaisedButton(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    )),
+                Container(
+                  margin: EdgeInsets.only(top: 20, bottom: 10),
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Icon(Icons.restore_from_trash, color: Colors.red),
-                      Text(" Xóa môn", style: TextStyle(fontSize: 18.0, color: Colors.red),),
+                      Text("Cột điểm", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                      IconButton(icon: Icon(Icons.add, color: Color(0xFF00C48C)),onPressed: () {
+                        _showMyDialog();
+                      },),
                     ],
                   ),
-                  color: Colors.white,
-                  disabledColor: Colors.white,
-                  onPressed: () {
-                    User user = User();
-                    user.deleteCourse(uid, _courseName);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>
-                            MyTranscriptPage()));
-                  },
-                )
-              ),
-            ]),
+                ),
+                Container(
+                  width: double.maxFinite,
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      height: 500,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: nameScoreCol.length + 1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (HeSoController.length != 0 && index == 0) {
+                              HeSoController.removeRange(0, HeSoController.length);
+                              NameScoreController.removeRange(0, NameScoreController.length);
+                            }
+                            if (index < nameScoreCol.length) {
+                              HeSoController.add(new TextEditingController(text: heso[index].toString()));
+                              NameScoreController.add(new TextEditingController(text: nameScoreCol[index]));
+                              return Dismissible(
+                                background: Container(
+                                  color: Colors.red,
+                                  child: Icon(Icons.cancel),
+                                ),
+                                child: Container (
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: Row (
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Flexible(
+                                        flex: 1,
+                                        child: Icon(Icons.close, color: Colors.red),
+                                      ),
+                                      Flexible(
+                                        flex: 4,
+                                        child: _customTextField(nameScoreCol[index], NameScoreController[index], Colors.black),
+                                      ),
+                                      Flexible(
+                                        flex: 2,
+                                        child: _customTextField(heso[index].toString(), HeSoController[index], Colors.black),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                key: UniqueKey(),
+                                onDismissed: (direction) {
+                                  setState(() {
+                                    nameScoreCol.removeAt(index);
+                                    heso.removeAt(index);
+                                    HeSoController.removeAt(index);
+                                    NameScoreController.removeAt(index);
+                                  });
+                                },
+                              );
+                            }
+                            return null;
+                          }
+                      ),
+                    ),
+                  )
+                ),
+                Container (
+                  child: RaisedButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.restore_from_trash, color: Colors.red),
+                        Text(" Xóa môn", style: TextStyle(fontSize: 18.0, color: Colors.red),),
+                      ],
+                    ),
+                    color: Colors.white,
+                    disabledColor: Colors.white,
+                    onPressed: () {
+                      User user = User();
+                      user.deleteCourse(uid, _courseName);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              MyTranscriptPage()));
+                    },
+                  )
+                ),
+              ]),
+            ),
           ),
         ));
   }

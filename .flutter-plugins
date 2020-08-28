@@ -1,4 +1,3 @@
-# This is a generated file; do not edit or check into version control.
 cloud_firestore=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.13.7/
 cloud_firestore_web=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-0.1.1+2/
 firebase_auth=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.16.1/
@@ -24,3 +23,4 @@ url_launcher=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.o
 url_launcher_linux=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_linux-0.0.1+1/
 url_launcher_macos=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_macos-0.0.1+7/
 url_launcher_web=/Users/nghngtran/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_web-0.1.2+1/
+
