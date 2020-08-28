@@ -5,20 +5,19 @@ import 'package:webfeed/webfeed.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:scheduleapp/presentation/atom/date_time_convert.dart';
+//import 'getRSS.dart';
 
-// Class ListItem: Cấu trúc của một bài báo
 class ListItem {
   String title;
   String subtitle;
   String imgUrl;
   String link;
+  ListItem(this.title, this.subtitle,this.imgUrl, this.link);
 }
-
 
 class MyTabbedPage extends StatefulWidget {
   const MyTabbedPage({Key key}) : super(key: key);
-
-  final String title = 'news feed';
 
   @override
   _MyTabbedPageState createState() => _MyTabbedPageState();
@@ -27,29 +26,23 @@ class MyTabbedPage extends StatefulWidget {
 class _MyTabbedPageState extends State<MyTabbedPage>
     with SingleTickerProviderStateMixin {
 
+
   // rss url
   static const List<String> FEED_URL = [
     'https://thanhnien.vn/rss/giao-duc.rss',
     'https://tuoitre.vn/rss/giao-duc.rss',
-   'https://nld.com.vn/giao-duc-khoa-hoc.rss',
-    //'https://vnexpress.net/rss/giao-duc.rss'
-
   ];
+
+  static const String placeholderImg = 'assets/no_image.png';
   RssFeed _feed;
   List<RssFeed> _feedList = [];
-  //String _title;
-  //static const String loadingFeedMsg = 'Loading Feed...';
-  //static const String feedLoadErrorMsg = 'Error Loading Feed.';
-  //static const String feedOpenErrorMsg = 'Error Opening Feed.';
-  static const String placeholderImg = 'assets/no_image.png';
-  //GlobalKey<RefreshIndicatorState> _refreshKey;
+
   List<ListItem> listItemDH = [];
   List<ListItem> listItemCD = [];
   List<ListItem> listItemC3 = [];
   List<ListItem> listItemC2 = [];
   List<ListItem> listItemC1 = [];
   List<ListItem> listItemAll = [];
-
   List<String> uniKeyword = ['đại học', 'đh'];
   List<String> colKeyword = ['cao đẳng', 'cđ', 'trung cấp'];
   List<String> higKeyword = [
@@ -79,19 +72,6 @@ class _MyTabbedPageState extends State<MyTabbedPage>
   List<String> eleKeyword = ['cấp 1', 'tiểu học', 'lớp 1'];
   List<String> allTabKeyword = ['học sinh'];
 
-  /*updateTitle(title) {
-    setState(() {
-      _title = title;
-    });
-  }*/
-
-  updateFeed(feed) {
-    setState(() {
-      _feed = feed;
-    });
-    _feedList.add(_feed);
-  }
-
   Future<void> openFeed(String url) async {
     if (await canLaunch(url)) {
       await launch(
@@ -101,22 +81,24 @@ class _MyTabbedPageState extends State<MyTabbedPage>
       );
       return;
     }
-    //updateTitle(feedOpenErrorMsg);
+  }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    load();
   }
 
   load() async {
-    //updateTitle(loadingFeedMsg);
     for (int i = 0; i < FEED_URL.length; i++) {
-      print(FEED_URL[i]);
       loadFeed(FEED_URL[i]).then((result) {
         if (null == result || result.toString().isEmpty) {
-          print(
-              'empty-----------------------------------------------------------------');
-          // updateTitle(feedLoadErrorMsg);
           return;
         }
         updateFeed(result);
-        // updateTitle(_feed.title);
         getItems();
       });
     }
@@ -125,22 +107,19 @@ class _MyTabbedPageState extends State<MyTabbedPage>
   Future<RssFeed> loadFeed(url) async {
     try {
       final client = http.Client();
-      //final response = await client.get(FEED_URL);
       final response = await client.get(url);
       return RssFeed.parse(response.body);
     } catch (e) {
       //
     }
-
     return null;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // _refreshKey = GlobalKey<RefreshIndicatorState>();
-    // updateTitle(widget.title);
-    load();
+  updateFeed(feed) {
+    setState(() {
+      _feed = feed;
+    });
+    _feedList.add(_feed);
   }
 
   title(title) {
@@ -218,11 +197,12 @@ class _MyTabbedPageState extends State<MyTabbedPage>
     listItemAll.clear();
     for (int x = 0; x < _feedList.length; x++) {
       for (int i = 0; i < _feedList[x].items.length; i++) {
-        var item = ListItem();
-        item.title = _feedList[x].items[i].title;
-        item.subtitle = _feedList[x].items[i].pubDate;
-        item.imgUrl = getImgUrl(_feedList[x].items[i].description);
-        item.link = getUrl(_feedList[x].items[i].link);
+        var item = ListItem(
+        _feedList[x].items[i].title,
+        getDate(_feedList[x].items[i].pubDate)+' '+getTime(_feedList[x].items[i].pubDate),
+        getImgUrl(_feedList[x].items[i].description),
+        getUrl(_feedList[x].items[i].link),);
+
         listItemAll.add(item);
         String str = _feedList[x].items[i].description;
         if (isTabContain(uniKeyword, str)) {
@@ -244,22 +224,6 @@ class _MyTabbedPageState extends State<MyTabbedPage>
     }
   }
 
-  getImgUrl(str)
-  {
-    final imgTag = 'img';
-    final idx = str.indexOf(imgTag);
-    final subStr = str.substring(idx);
-    return getUrl(subStr);
-  }
-
-  getUrl( str) {
-    var urlPattern =
-        r"(https?|ftp)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
-    final imgSrc = new RegExp(urlPattern, caseSensitive: false)
-        .firstMatch(str)
-        .group(0);
-    return imgSrc;
-  }
 
   list(listItem) {
     //getTHCS();
@@ -281,7 +245,15 @@ class _MyTabbedPageState extends State<MyTabbedPage>
   }
 
   isFeedEmpty() {
-    return null == _feedList;
+    if( null == _feedList)
+      return true;
+    else {
+      for (int i = 0; i < _feedList.length; i++) {
+        if (_feedList[i] == null || _feedList[i].items == null)
+          return true;
+      }
+    }
+    return false;
   }
 
   body(listItem) {
@@ -305,7 +277,11 @@ class _MyTabbedPageState extends State<MyTabbedPage>
           appBar: AppBar(
             backgroundColor: ColorApp.backgroundColor,
             centerTitle: true,
-            leading: Icon(Icons.arrow_back),
+            leading: GestureDetector(
+                child:Icon(Icons.arrow_back),
+              onTap: (){  Navigator.of(context).pushReplacementNamed('home');},
+
+            ),
             title: Text(
               'Đọc báo',
               style: TextStyle(fontSize: 20.0),
@@ -395,4 +371,19 @@ class _MyTabbedPageState extends State<MyTabbedPage>
     );
   }
 }
+getImgUrl(str)
+{
+  final imgTag = 'img';
+  final idx = str.indexOf(imgTag);
+  final subStr = str.substring(idx);
+  return getUrl(subStr);
+}
 
+getUrl( str) {
+  var urlPattern =
+      r"(https?|ftp)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+  final imgSrc = new RegExp(urlPattern, caseSensitive: false)
+      .firstMatch(str)
+      .group(0);
+  return imgSrc;
+}
