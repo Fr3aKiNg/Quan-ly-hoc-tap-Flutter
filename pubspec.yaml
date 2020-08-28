@@ -48,12 +48,16 @@ dependencies:
   tuple: ^1.0.3
   intl: ^0.16.1
   url_launcher: ^5.4.2
-
+  cloud_firestore_mocks: ^0.4.7
   flutter_launcher_icons: ^0.7.5
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^4.1.1
+  rxdart:
+  flutter_automation: any
   build_runner: ^1.7.3
   permission_handler: ^5.0.0+hotfix.8
   shared_preferences: ^0.5.10

@@ -15,8 +15,6 @@ class LoginFacebook extends StatefulWidget{
 }
 class LoginFacebookState extends State<LoginFacebook>{
   final _auth = FirebaseAuth.instance;
-
-
   bool isUserSignedIn = false;
 
   @override
@@ -68,7 +66,6 @@ class LoginFacebookState extends State<LoginFacebook>{
     return GestureDetector(
       onTap: () async {
         loginWithFacebook();
-//        _loginWithFacebook();
         FirebaseUser user = await _checkLogin();
         user ??  await Navigator.of(context).pushNamed(
               'personal_information');

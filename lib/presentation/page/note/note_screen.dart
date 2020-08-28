@@ -7,6 +7,7 @@ import 'package:scheduleapp/data/model/note.dart';
 import 'package:scheduleapp/data/model/note_service.dart';
 import 'package:scheduleapp/data/model/user.dart';
 import 'package:scheduleapp/presentation/atom/bottom_navigation_bar.dart';
+import 'package:scheduleapp/utils/firestore/repository/UserRepository.dart';
 import 'package:tuple/tuple.dart';
 
 import 'package:collection_ext/iterables.dart';
@@ -125,7 +126,10 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
   int _selectedItem;
 
   @override
-  Widget build(BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
+  Widget build(BuildContext context){
+
+    return
+      AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
           systemNavigationBarColor: Colors.white,
           systemNavigationBarIconBrightness: Brightness.dark,
@@ -209,13 +213,13 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
                 ),
 //            drawer: AppDrawer(),
                 floatingActionButton: canCreate ? _fab(context) : null,
-                /**floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,**/
+
                 extendBody: true,
               );
             },
           ),
         ),
-      );
+      );}
 
   Widget _appBar(BuildContext context, NoteFilter filter, Widget bottom) =>
       filter.noteState < NoteState.archived

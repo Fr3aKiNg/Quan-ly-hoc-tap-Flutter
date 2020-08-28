@@ -16,6 +16,7 @@ import 'presentation/page/listcourse.dart';
 
 void main() {
 //  setupLocator();
+//   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
