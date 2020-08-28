@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/data/Event.dart';
+import 'package:scheduleapp/data/model/database.dart';
+import 'package:scheduleapp/data/model/event_model.dart';
 import 'package:scheduleapp/presentation/atom/bottom_navigation_bar.dart';
 import 'package:scheduleapp/presentation/atom/event_in_day.dart';
 import 'package:scheduleapp/presentation/atom/schedule_of_today.dart';
@@ -114,6 +117,16 @@ class EventList extends StatelessWidget {
         ],
         day: "Thứ 7"),
   ];
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String uid;
+  void getUid() async {
+    final FirebaseUser user = await auth.currentUser();
+    uid = user.uid;
+    // here you write the codes to input the data into firestore
+  }
+  EventList(){
+   getUid();
+  }
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
@@ -127,7 +140,7 @@ class EventList extends StatelessWidget {
           children: <Widget>[
             Expanded(
                 flex: 12,
-                child: Text("Sự kiện sắp tới",
+                child: Text("Sự kiện",
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
             Expanded(
@@ -141,13 +154,40 @@ class EventList extends StatelessWidget {
         Container(
           width: w * 100,
           height: h * listEvent.length * 16,
-          child: ListView.builder(
+          child: StreamBuilder<List<EventModel>>(
+              stream: eventDBS.streamList(),
+              builder: (context, snapshot) {
+                if(snapshot.hasData){
+                  List<EventModel> allEvents = [];
+                  for (int i = 0; i<snapshot.data.length;i++){
+                    if(snapshot.data.elementAt(i).uid==uid)
+                      allEvents.add(snapshot.data.elementAt(i));
+                  }
+                  if (allEvents.isNotEmpty){
+                    return ListView.builder(
+                        itemCount: allEvents.length,
+                        itemBuilder: (context,index){
+                          return EventInDayUI(allEvents[index]);
+                          //return Text(allEvents[index].title);
+                        }
+                    );
+                  }
+                  else{
+                    return Text("No event");
+                  }
+                }
+                else{
+                  return Center(child: CircularProgressIndicator()) ;
+                }
+              }
+          ),
+          /*ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               itemCount: listEvent.length,
               itemBuilder: (context, index) {
                 final item = listEvent[index];
                 return EventInDayUI(item);
-              }),
+              }),*/
         )
       ],
     );
