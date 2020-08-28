@@ -29,7 +29,11 @@ class RandomWordsState extends State<RandomWords> {
     "loading data ...",
   ];
   List _score = [[], [], []];
-  List _scoreTemp = [[""],[""],[""]];
+  List _scoreTemp = [
+    [""],
+    [""],
+    [""]
+  ];
   List _coef = [
     [1, 2],
     [1, 2],
@@ -89,6 +93,7 @@ class RandomWordsState extends State<RandomWords> {
     }
     return result / count;
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _biggerFont = const TextStyle(fontSize: 18.0);
   TextEditingController nameController = TextEditingController();
@@ -100,23 +105,24 @@ class RandomWordsState extends State<RandomWords> {
     _score = _scoreTemp;
     String _value = "";
 
-    return Scaffold(bottomNavigationBar: BottomAppBar(
-      child: CustomBottomNavigationBar(
-        iconList: [
-          Icons.home,
-          Icons.assessment,
-          Icons.note,
-          Icons.dashboard,
-        ],
-        onChange: (val) {
-          setState(() {
-            _selectedItem = val;
-          });
-        },
-        defaultSelectedIndex: 1,
-        btnName: ["Tổng quan", "Điểm", "Ghi chú", "Khác"],
-      ),
-    ),
+    return Scaffold(
+        bottomNavigationBar: BottomAppBar(
+          child: CustomBottomNavigationBar(
+            iconList: [
+              Icons.home,
+              Icons.assessment,
+              Icons.note,
+              Icons.dashboard,
+            ],
+            onChange: (val) {
+              setState(() {
+                _selectedItem = val;
+              });
+            },
+            defaultSelectedIndex: 1,
+            btnName: ["Tổng quan", "Điểm", "Ghi chú", "Khác"],
+          ),
+        ),
         key: _scaffoldKey,
         appBar: AppBar(
           leading: GestureDetector(
@@ -200,10 +206,8 @@ class RandomWordsState extends State<RandomWords> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => MyDetailCoursePage(
-                        course: course,
-                        uid: user.id
-                      )));
+                  builder: (context) =>
+                      MyDetailCoursePage(course: course, uid: user.id)));
         },
       );
     else

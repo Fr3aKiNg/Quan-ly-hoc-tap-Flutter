@@ -28,6 +28,7 @@ class ScorePanel extends StatefulWidget {
   scorePanelState createState() => new scorePanelState();
 
 }
+
 class scorePanelState extends State<ScorePanel>{
   User user;
   String expectedScoreTerm1 = "loading";
@@ -42,6 +43,9 @@ class scorePanelState extends State<ScorePanel>{
   Score goalScore;
   FirebaseUser Fuser;
   int count = 0;
+
+  bool valid = false;
+  String scoreError = "";
   void init() async {
     if (count == 0) {
       final collection = Firestore.instance.collection("users");
@@ -133,15 +137,15 @@ class scorePanelState extends State<ScorePanel>{
         return AlertDialog(
           title: Center(child: Text("Điểm mục tiêu", style: _greenFont)),
           content: Container(
-              height: 210,
+              height: 250,
               width: 150,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ListTile(
                     leading: Container(
-                      child: Text("Học kỳ 1", style: _biggerFont,),
-                      padding: EdgeInsets.only(top: 5)
+                        child: Text("Học kỳ 1", style: _biggerFont,),
+                        padding: EdgeInsets.only(top: 5)
                     ),
                     title: _customTextField("Nhập điểm mong muốn", HK1, Color(0xFFBDBDBD)),
                   ),
@@ -158,7 +162,14 @@ class scorePanelState extends State<ScorePanel>{
                         padding: EdgeInsets.only(top: 5)
                     ),
                     title: _customTextField("Nhập điểm mong muốn", All, Color(0xFFBDBDBD)),
-                  )
+                  ),
+                  Container (
+                      margin: EdgeInsets.only(top: 10),
+                      child:
+                      Center(
+                        child: Text(scoreError, style: TextStyle(color: Colors.red),),
+                      )
+                  ),
                 ],
               )
           ),
@@ -170,20 +181,80 @@ class scorePanelState extends State<ScorePanel>{
               },
             ),
             FlatButton(
-              child: Text('Thêm', style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C) ),),
-              onPressed: () {
-                setState(() {
+                child: Text('Thêm', style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C) ),),
+                onPressed: () {
+                  valid = false;
                   String score1, score2, overall;
-                  HK1.text == "" ? score1 = goalScore.termOne : score1 = HK1.text;
-                  HK2.text == "" ? score2 = goalScore.termTwo : score2 = HK2.text;
-                  All.text == "" ? overall = goalScore.overall : overall = All.text;
-                  expectedScoreTerm1 = score1;
-                  expectedScoreTerm2 = score2;
-                  expectedScoreOverall = overall;
-                });
-                user.addExpectedScore(expectedScoreTerm1,  expectedScoreTerm2, expectedScoreOverall, Fuser.uid);
-                Navigator.of(context).pop();
-              },
+                  double tempScore1 = 0;
+                  double tempScore2 = 0;
+                  double tempScore3 = 0;
+
+                  bool check1 = false;
+                  bool check2 = false;
+                  bool check3 = false;
+
+                  if (HK1.text == "-" || HK1.text == "")
+                    check1 = true;
+                  if (HK2.text == "-" || HK2.text == "")
+                    check2 = true;
+                  if (All.text == "-" || All.text == "")
+                    check3 = true;
+
+                  if (check1 == false) {
+                    tempScore1 = double.parse(HK1.text);
+                    if (tempScore1 < 0)
+                      tempScore1 *= -1;
+                  }
+
+                  if (check2 == false) {
+                    tempScore2 = double.parse(HK2.text);
+                    if (tempScore2 < 0)
+                      tempScore2 *= -1;
+                  }
+                  if (check3 == false) {
+                    tempScore3 = double.parse(All.text);
+                    if (tempScore3 < 0)
+                      tempScore3 *= -1;
+                  }
+
+                  if (check1 == false)
+                    if (tempScore1 > 10)
+                    {
+                      valid = true;
+                    }
+                  if (check2 == false)
+                    if (tempScore2 > 10)
+                    {
+                      valid = true;
+                    }
+
+                  if (check3 == false)
+                    if (tempScore3 > 10)
+                    {
+                      valid = true;
+                    }
+
+                  if (valid) {
+                    setState(() {
+                      scoreError = "Nhập điểm <= 10";
+                    });
+                    Navigator.of(context).pop();
+                    _showMyDialog();
+                  }
+                  else {
+                    scoreError = "";
+                    setState(() {
+                      HK1.text == "" ? expectedScoreTerm1 = "-" : expectedScoreTerm1 = HK1.text;
+                      HK2.text == "" ? expectedScoreTerm2 = "-" : expectedScoreTerm2 = HK2.text;
+                      All.text == "" ? expectedScoreOverall = "-" : expectedScoreOverall = All.text;
+                    });
+                    User user = User();
+                    user.addExpectedScore(expectedScoreTerm1, expectedScoreTerm2, expectedScoreOverall, Fuser.uid);
+                    Navigator.of(context).pop();
+                  }
+                  //scoreError = "";
+
+                }
             ),
           ],
         );
@@ -197,6 +268,7 @@ Widget _customTextField(String hintText, TextEditingController controller, Color
   return TextFormField(
       style: _biggerFont,
       controller: controller,
+      keyboardType: TextInputType.number,
       decoration: InputDecoration(
         fillColor: Colors.white,
         hintStyle: TextStyle(fontSize: 18.0, color: color),

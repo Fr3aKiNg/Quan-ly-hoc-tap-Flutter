@@ -8,5 +8,6 @@ class CurrentUser {
   factory CurrentUser.create(FirebaseUser data)
   => CurrentUser._(data,false);
 
+
   static const initial = CurrentUser._(null,true);
 }

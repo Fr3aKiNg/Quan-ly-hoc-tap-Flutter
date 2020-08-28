@@ -220,8 +220,12 @@ class User {
           else
             finalHK2 = ((double.parse(term2) + double.parse(finalHK2))/ 2).toStringAsFixed(1).toString();
         }
-        if (term1 == "NaN" || term2 == "NaN")
-          overall = "-";
+        if (term1 == "NaN" || term2 == "NaN"){
+          if (term1 == "NaN")
+            overall = term2;
+          else
+            overall = term1;
+        }
         else
           overall = ((double.parse(finalHK1) * co1 + double.parse(finalHK2) * co2) / (co1 + co2)).toStringAsFixed(1).toString();
         collection.document(uid).updateData({

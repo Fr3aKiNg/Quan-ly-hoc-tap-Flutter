@@ -5,6 +5,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/presentation/facebook_login.dart';
+import 'package:scheduleapp/presentation/page/enter_information.dart';
+import 'package:scheduleapp/presentation/page/home_screen.dart';
 
 class OnBoardDetail {
   String imgUrl;
@@ -83,7 +85,6 @@ class LoginGoogleState extends State<LoginGoogle> {
   @override
   void initState() {
     super.initState();
-
     checkIfUserIsSignedIn();
   }
   void checkIfUserIsSignedIn() async {
@@ -129,7 +130,8 @@ class LoginGoogleState extends State<LoginGoogle> {
   void onGoogleSignIn(BuildContext context) async {
     FirebaseUser user = await _handleSignIn();
     if(isNewUser) {
-      var userSignedIn = await Navigator.of(context).pushNamed('personal_information');
+      var userSignedIn = await Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => MyInformationPage()));
 
       setState(() {
         isUserSignedIn = userSignedIn == null ? true : false;
@@ -137,7 +139,8 @@ class LoginGoogleState extends State<LoginGoogle> {
     }
     else {
       isUserSignedIn = true;
-      Navigator.of(context).pushNamed('home');
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => HomeScreen()));
     }
   }
   Widget build(BuildContext context) {

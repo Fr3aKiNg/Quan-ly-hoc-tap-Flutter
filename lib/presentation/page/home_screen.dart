@@ -64,7 +64,7 @@ class HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Center(
-                        child: Text("Xin chào, An !",
+                        child: Text("Xin chào bạn",
                             style: TextStyle(
                                 fontSize: 24,
                                 color: Colors.white,
@@ -157,8 +157,8 @@ class EventList extends StatelessWidget {
                   }
                   if (allEvents.isNotEmpty){
                     return ListView.builder(
+                        padding: EdgeInsets.only(top: 0),
                         itemCount: allEvents.length,
-                        padding: EdgeInsets.only(top:0),
                         itemBuilder: (context,index){
                           return EventInDayUI(allEvents[index]);
                           //return Text(allEvents[index].title);
