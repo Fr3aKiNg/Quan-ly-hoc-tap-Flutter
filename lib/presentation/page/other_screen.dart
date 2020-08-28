@@ -65,7 +65,6 @@ class OtherState extends State<OtherScreen> {
 
   Widget build(BuildContext context) {
     final name = Provider.of<CurrentUser>(context)?.data?.displayName;
-
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return Scaffold(
@@ -75,7 +74,7 @@ class OtherState extends State<OtherScreen> {
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
-              fontSize: 22,
+              fontSize: 20,
             )),
         backgroundColor: ColorApp.backgroundColor,
       ),
@@ -97,12 +96,13 @@ class OtherState extends State<OtherScreen> {
       )),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
+            // decoration: BoxDecoration(shape: BoxShape.rectangle,borderRadius:
+            // BorderRadius.circular(20),color: ColorApp.backgroundColor.withOpacity(0.2)),
             width: w * 100,
-            height: h * 8,
+            height: h * 18,
+            margin: EdgeInsets.fromLTRB(w/2, h, w/2, h*2),
             child: GestureDetector(
               onTap: () {
-
-
                 setState(() {
                    userName != null ?
                 showDialog(
@@ -134,7 +134,7 @@ class OtherState extends State<OtherScreen> {
                                     RaisedButton(
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
-                                                15)),
+                                                5)),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
@@ -150,7 +150,7 @@ class OtherState extends State<OtherScreen> {
                                     RaisedButton(
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
-                                                15)),
+                                                5)),
                                         onPressed: () {
                                           setState(() {
                                             _signOut();
@@ -176,13 +176,16 @@ class OtherState extends State<OtherScreen> {
                     builder: (BuildContext context) => LoginScreen()));
               });
               },
-              child: MergeSemantics(
-                child: ListTile(
-                  title: Text(name != null ? name : "Tài khoản",
-                      style: TextStyle(fontSize: 18)),
-                  leading: _buildAvatar(context),
-                ),
-              ),
+              child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(height: h),
+                  _buildAvatar(context),
+                  SizedBox(height: h),
+                  Text(name != null ? name : "Tài khoản",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+                  SizedBox(height: h),
+                ],
+              )
+
             )),
         Container(
           width: w * 100,
@@ -242,7 +245,7 @@ Widget _buildAvatar(BuildContext context) {
   return CircleAvatar(
     backgroundImage: url != null ? NetworkImage(url) : null,
     child: url == null ? const Icon(Icons.face) : null,
-    radius: 20,
+    radius: 35,
   );
 }
 
