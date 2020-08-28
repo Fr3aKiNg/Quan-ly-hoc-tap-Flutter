@@ -3,7 +3,6 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:path/path.dart' as Path;
-import 'package:scheduleapp/utils/sign_in.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 import '../user.dart';
 class AddCoursePage extends StatelessWidget {
@@ -156,7 +155,7 @@ class addCourseState extends State<addCourse> {
           hintText: hintText,
           hintStyle: TextStyle(fontSize: 18.0, color: color),
           filled: true,
-          enabled: false,
+          enabled: true,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
