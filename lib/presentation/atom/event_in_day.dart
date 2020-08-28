@@ -14,7 +14,7 @@ class EventInDayUI extends StatelessWidget{
     return Container(
       padding: EdgeInsets.fromLTRB(w, h, w, h),
       width: w*100,
-      height: h*15,
+      height: h*12,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
