@@ -1,4 +1,13 @@
-  build ios:
+name: IOS CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+ build ios:
     runs-on: macos-latest
     container:
       image:  google/dart:latest
