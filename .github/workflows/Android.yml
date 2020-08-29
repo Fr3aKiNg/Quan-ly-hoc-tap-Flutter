@@ -30,5 +30,6 @@ jobs:
     - name: Push APK to Releases
       uses: ncipollo/release-action@v1
       with:
+        tag: "v1.0"
         artifacts: "build/app/outputs/apk/debug/*.apk"
         token: ${{ secrets.TOKEN  }}
