@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:scheduleapp/presentation/atom/date_time_convert.dart';
+import 'package:scheduleapp/presentation/page/home_screen.dart';
 //import 'getRSS.dart';
 
 class ListItem {
@@ -13,7 +14,7 @@ class ListItem {
   String subtitle;
   String imgUrl;
   String link;
-  ListItem(this.title, this.subtitle,this.imgUrl, this.link);
+  ListItem(this.title, this.subtitle, this.imgUrl, this.link);
 }
 
 class MyTabbedPage extends StatefulWidget {
@@ -25,8 +26,6 @@ class MyTabbedPage extends StatefulWidget {
 
 class _MyTabbedPageState extends State<MyTabbedPage>
     with SingleTickerProviderStateMixin {
-
-
   // rss url
   static const List<String> FEED_URL = [
     'https://thanhnien.vn/rss/giao-duc.rss',
@@ -82,8 +81,6 @@ class _MyTabbedPageState extends State<MyTabbedPage>
       return;
     }
   }
-
-
 
   @override
   void initState() {
@@ -198,10 +195,13 @@ class _MyTabbedPageState extends State<MyTabbedPage>
     for (int x = 0; x < _feedList.length; x++) {
       for (int i = 0; i < _feedList[x].items.length; i++) {
         var item = ListItem(
-        _feedList[x].items[i].title,
-        getDate(_feedList[x].items[i].pubDate)+' '+getTime(_feedList[x].items[i].pubDate),
-        getImgUrl(_feedList[x].items[i].description),
-        getUrl(_feedList[x].items[i].link),);
+          _feedList[x].items[i].title,
+          getDate(_feedList[x].items[i].pubDate) +
+              ' ' +
+              getTime(_feedList[x].items[i].pubDate),
+          getImgUrl(_feedList[x].items[i].description),
+          getUrl(_feedList[x].items[i].link),
+        );
 
         listItemAll.add(item);
         String str = _feedList[x].items[i].description;
@@ -224,7 +224,6 @@ class _MyTabbedPageState extends State<MyTabbedPage>
     }
   }
 
-
   list(listItem) {
     //getTHCS();
     return ListView.builder(
@@ -245,12 +244,11 @@ class _MyTabbedPageState extends State<MyTabbedPage>
   }
 
   isFeedEmpty() {
-    if( null == _feedList)
+    if (null == _feedList)
       return true;
     else {
       for (int i = 0; i < _feedList.length; i++) {
-        if (_feedList[i] == null || _feedList[i].items == null)
-          return true;
+        if (_feedList[i] == null || _feedList[i].items == null) return true;
       }
     }
     return false;
@@ -272,15 +270,19 @@ class _MyTabbedPageState extends State<MyTabbedPage>
     double tabHeight = 50.0;
 
     return DefaultTabController(
-      length: 6,
+      length: 5,
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: ColorApp.backgroundColor,
             centerTitle: true,
             leading: GestureDetector(
-                child:Icon(Icons.arrow_back),
-              onTap: (){  Navigator.of(context).pushReplacementNamed('home');},
-
+              child: Icon(Icons.arrow_back),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              },
             ),
             title: Text(
               'Đọc báo',
@@ -304,12 +306,12 @@ class _MyTabbedPageState extends State<MyTabbedPage>
                         alignment: Alignment.center,
                         child: Text('ĐẠI HỌC'),
                       ),
-                      Container(
+                      /*Container(
                         width: yourWidth,
                         height: tabHeight,
                         alignment: Alignment.center,
                         child: Text('CAO ĐẲNG'),
-                      ),
+                      ),*/
                       Container(
                         width: yourWidth,
                         height: tabHeight,
@@ -346,11 +348,11 @@ class _MyTabbedPageState extends State<MyTabbedPage>
                   child: body(listItemDH),
                 ),
               ),
-              Container(
+              /*Container(
                 child: Center(
                   child: body(listItemCD),
                 ),
-              ),
+              ),*/
               Container(
                 child: Center(
                   child: body(listItemC3),
@@ -371,19 +373,18 @@ class _MyTabbedPageState extends State<MyTabbedPage>
     );
   }
 }
-getImgUrl(str)
-{
+
+getImgUrl(str) {
   final imgTag = 'img';
   final idx = str.indexOf(imgTag);
   final subStr = str.substring(idx);
   return getUrl(subStr);
 }
 
-getUrl( str) {
+getUrl(str) {
   var urlPattern =
       r"(https?|ftp)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
-  final imgSrc = new RegExp(urlPattern, caseSensitive: false)
-      .firstMatch(str)
-      .group(0);
+  final imgSrc =
+      new RegExp(urlPattern, caseSensitive: false).firstMatch(str).group(0);
   return imgSrc;
 }
