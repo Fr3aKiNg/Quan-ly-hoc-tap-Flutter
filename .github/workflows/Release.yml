@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-#     tags:
-#       - 'v*'
+    tags:
+      - 'v*'
     branches: [ master ]
   pull_request:
     branches: [ master ]
