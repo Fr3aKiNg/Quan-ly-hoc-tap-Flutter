@@ -19,8 +19,8 @@ jobs:
         channel: 'stable'
     - name: Install dependencies
       run: flutter pub get
-    - name: Run tests
-      run: flutter pub run test
+#     - name: Run tests
+#       run: flutter pub run test
     - name: Release APK  
       run: flutter build apk
     - name: Release IOS 
