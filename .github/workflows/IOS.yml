@@ -6,7 +6,7 @@ on:
     branches: [ master ]
 
 jobs:
- build ios:
+ build_ios:
     runs-on: macos-latest
     container:
       image:  google/dart:latest
