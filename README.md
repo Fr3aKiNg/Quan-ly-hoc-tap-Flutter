@@ -1,7 +1,6 @@
-# scheduleapp
+# EDUCARE
 ![Android CI](https://github.com/nghngtran/Quan-ly-hoc-tap-Flutter/workflows/Android%20CI/badge.svg)
 ![IOS CI](https://github.com/nghngtran/Quan-ly-hoc-tap-Flutter/workflows/IOS%20CI/badge.svg)
-A Flutter application.
 
 ## Getting Started
 
