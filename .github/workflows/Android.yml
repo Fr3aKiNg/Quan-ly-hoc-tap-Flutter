@@ -22,6 +22,8 @@ jobs:
       run: flutter pub get
 #     - name: Run tests
 #       run: flutter pub run test
+    - name: Clean Gradle Cache
+      run: rm -rf ~/.gradle/caches
     - name: Release APK  
       run: flutter build apk
     - name: Push APK to Releases
