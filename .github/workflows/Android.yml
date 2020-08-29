@@ -31,5 +31,5 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         tag: "v1.0"
-        artifacts: "build/app/outputs/apk/debug/*.apk"
+        artifacts: "build/app/outputs/flutter-apk/*.apk"
         token: ${{ secrets.TOKEN  }}
