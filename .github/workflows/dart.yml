@@ -7,16 +7,48 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  build apk:
     runs-on: ubuntu-latest
-
     container:
       image:  google/dart:latest
-
+    
     steps:
     - uses: actions/checkout@v2
+    - uses: action/setup-java@v1
+      with:
+       java-version: '14.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable'
     - name: Install dependencies
       run: flutter pub get
     - name: Run tests
       run: flutter pub run test
+    - name: Release APK  
+      run: flutter build apk
+    - name: Push APK to Releases
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "build/app/outputs/apk/debug/*.apk"
+        token: ${{ secrets.GITHUB_TOKEN  }
+  build ios:
+    runs-on: macos-latest
+    container:
+      image:  google/dart:latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - uses: action/setup-java@v1
+      with:
+       java-version: '14.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable'
+    - name: Install dependencies
+      run: flutter pub get
+    - name: Run tests
+      run: flutter pub run test
+    - name: Release APK  
+      run: flutter build apk
+    - name: Release IOS 
+      run: flutter build ios --release --no-codesign
