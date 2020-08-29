@@ -12,6 +12,7 @@ import 'package:scheduleapp/presentation/page/login_screen.dart';
 import 'package:scheduleapp/presentation/page/note/note_screen.dart';
 import 'package:scheduleapp/presentation/page/timetable_page.dart';
 import 'package:scheduleapp/presentation/page/user.dart';
+import 'package:scheduleapp/presentation/page/news_screen.dart';
 
 class OtherScreen extends StatefulWidget {
   OtherState createState() => OtherState();
@@ -211,6 +212,12 @@ class OtherState extends State<OtherScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => CalenderPage()),
+          );
+        }
+        else if (title == "Đọc báo") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyTabbedPage()),
           );
         }
       },
