@@ -1,5 +1,4 @@
 name: IOS CI
-
 on:
   push:
     branches: [ master ]
