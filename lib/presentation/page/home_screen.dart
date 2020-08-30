@@ -161,12 +161,12 @@ class EventList extends StatelessWidget {
                         itemCount: allEvents.length,
                         itemBuilder: (context,index){
                           return EventInDayUI(allEvents[index]);
-                          //return Text(allEvents[index].title);
+                         
                         }
                     );
                   }
                   else{
-                    return Text("No event");
+                    return Center(child:Text("Không có sự kiện sắp đến."));
                   }
                 }
                 else{
@@ -174,13 +174,7 @@ class EventList extends StatelessWidget {
                 }
               }
           ),
-          /*ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: listEvent.length,
-              itemBuilder: (context, index) {
-                final item = listEvent[index];
-                return EventInDayUI(item);
-              }),*/
+        
         )
       ],
     );
