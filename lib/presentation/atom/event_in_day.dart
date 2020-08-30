@@ -36,8 +36,8 @@ Widget eventCard(BuildContext context, String name, String timeLine)
   double w = MediaQuery.of(context).size.width / 100;
   double h = MediaQuery.of(context).size.height / 100;
   return Container(
-    margin: EdgeInsets.fromLTRB(w, 0, 0, h),
-    padding: EdgeInsets.fromLTRB(w, h, w, h),
+    margin: EdgeInsets.fromLTRB(w, 0, 0, 0),
+    padding: EdgeInsets.fromLTRB(w*2, h, w, h),
     width: w*25,
     height: w*15,
     decoration: BoxDecoration(shape: BoxShape.rectangle,color: Colors.amberAccent,
@@ -46,7 +46,7 @@ Widget eventCard(BuildContext context, String name, String timeLine)
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Text(name,style: TextStyle(fontSize: 14,color: Colors.white)),
-        SizedBox(height: h*2),
+        SizedBox(height: h),
         Expanded(child: Text(timeLine,style:TextStyle(fontSize: 14,color: Colors.white)))
       ],),
   );
