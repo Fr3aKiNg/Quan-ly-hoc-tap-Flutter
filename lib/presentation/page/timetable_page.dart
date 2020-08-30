@@ -94,7 +94,7 @@ class _TimetablePageState extends State<TimetablePage> {
                             SizedBox(),
                             SizedBox(),
                           ]),
-                          buildTimeTableRow("1", _events[0], 1),
+                          buildTimeTableRow("1", _events[0], 0),
                           buildTimeTableRow("2", _events[1], 1),
                           buildTimeTableRow("3", _events[2], 2),
                           buildTimeTableRow("4", _events[3], 3),

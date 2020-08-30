@@ -18,11 +18,11 @@ class CustomModalActionButton extends StatelessWidget {
       children: <Widget>[
         CustomButton(
           onPressed: onClose,
-          buttonText: "Close",
+          buttonText: "Đóng",
         ),
         CustomButton(
           onPressed: onSave,
-          buttonText: "Save",
+          buttonText: "Lưu",
           color: Theme.of(context).accentColor,
           textColor: Colors.white,
         ),
