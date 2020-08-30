@@ -98,8 +98,8 @@ class ThumbnailNewsState extends State<ThumbnailNews> {
 
   getItems() {
     listItemAll.clear();
-    for (int x = 0; x < _feedList.length; x++) {
-      for (int i = 0; i < _feedList[x].items.length; i++) {
+    for (int x = 0; x < 3; x++) {
+      for (int i = 0; i < 3; i++) {
         var item = ListItem(
           _feedList[x].items[i].title,
           getDate(_feedList[x].items[i].pubDate) +
@@ -120,7 +120,37 @@ class ThumbnailNewsState extends State<ThumbnailNews> {
     load();
   }
 
+  isFeedEmpty() {
+    if (_feedList.isEmpty)
+      return true;
+    else {
+      for (int i = 0; i < _feedList.length; i++) {
+        if (_feedList[i] == null || _feedList[i].items == null) return true;
+      }
+    }
+    return false;
+  }
 
+  body() {
+
+    return isFeedEmpty()
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : list();
+  }
+
+  list() {
+    //getTHCS();
+    return ListView.builder(
+        itemCount: listItemAll.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final item = listItemAll[index];
+
+          return ThumbnailNewcard(item);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,14 +178,7 @@ class ThumbnailNewsState extends State<ThumbnailNews> {
       Container(
         width: w * 100,
         height: h * 18,
-        child: ListView.builder(
-            itemCount: 3,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              final item = listItemAll[index];
-
-              return ThumbnailNewcard(item);
-            }),
+        child: body(),
       )
     ]);
   }

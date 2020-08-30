@@ -244,7 +244,7 @@ class _MyTabbedPageState extends State<MyTabbedPage>
   }
 
   isFeedEmpty() {
-    if (null == _feedList)
+    if (_feedList.isEmpty)
       return true;
     else {
       for (int i = 0; i < _feedList.length; i++) {
