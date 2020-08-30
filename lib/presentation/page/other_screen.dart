@@ -68,7 +68,6 @@ class OtherState extends State<OtherScreen> {
 
   Widget build(BuildContext context) {
     final name = Provider.of<CurrentUser>(context)?.data?.displayName;
-
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return Scaffold(
@@ -78,7 +77,7 @@ class OtherState extends State<OtherScreen> {
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
-              fontSize: 22,
+              fontSize: 20,
             )),
         backgroundColor: ColorApp.backgroundColor,
       ),
@@ -99,92 +98,93 @@ class OtherState extends State<OtherScreen> {
         btnName: ["Tổng quan", "Điểm", "Ghi chú", "Khác"],
       )),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Container(
-            width: w * 100,
-            height: h * 8,
+          Center(
             child: GestureDetector(
-              onTap: () {
-                setState(() {
-                   userName != null ?
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: Container(
-                            color: Colors.white,
-                            width: w * 100,
-                            height: h * 18,
-                            padding: EdgeInsets.fromLTRB(
-                                w * 3, h * 2, w * 3, h),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(
-                                  "Bạn có muốn đăng xuất khỏi Educare?",
-                                  style: (TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400)),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
+                  onTap: () {
+                    setState(() {
+                       userName != null ?
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Container(
+                                color: Colors.white,
+                                width: w * 100,
+                                height: h * 18,
+                                padding: EdgeInsets.fromLTRB(
+                                    w * 3, h * 2, w * 3, h),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
-                                    RaisedButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                15)),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Center(
-                                            child: Text(
-                                              "Hủy",
-                                              style: TextStyle(
-                                                  color: ColorApp
-                                                      .backgroundColor,
-                                                  fontSize: 16),
-                                            )),
-                                        color: Colors.white),
-                                    RaisedButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                15)),
-                                        onPressed: () {
-                                          setState(() {
-                                            _signOut();
-                                            userName = null;
-                                          });
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Center(
-                                            child: Text(
-                                              "Đăng xuất",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16),
-                                            )),
-                                        color: ColorApp.backgroundColor)
+                                    Text(
+                                      "Bạn có muốn đăng xuất khỏi Educare?",
+                                      style: (TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400)),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceBetween,
+                                      children: [
+                                        RaisedButton(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    5)),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Center(
+                                                child: Text(
+                                                  "Hủy",
+                                                  style: TextStyle(
+                                                      color: ColorApp
+                                                          .backgroundColor,
+                                                      fontSize: 16),
+                                                )),
+                                            color: Colors.white),
+                                        RaisedButton(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    5)),
+                                            onPressed: () {
+                                              setState(() {
+                                                _signOut();
+                                                userName = null;
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Center(
+                                                child: Text(
+                                                  "Đăng xuất",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16),
+                                                )),
+                                            color: ColorApp.backgroundColor)
+                                      ],
+                                    )
                                   ],
-                                )
-                              ],
-                            )),
-                      );
-                    })
-                    :
-                   Navigator.of(context).pushNamed('login_screen');
-              });
-              },
-              child: MergeSemantics(
-                child: ListTile(
-                  title: Text(name != null ? name : "Tài khoản",
-                      style: TextStyle(fontSize: 18)),
-                  leading: _buildAvatar(context),
+                                )),
+                          );
+                        })
+                        : Navigator.of(context).pushNamed('login_screen');
+                  });
+                  },
+                  child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(height: h),
+                      _buildAvatar(context),
+                      SizedBox(height: h),
+                      Text(name != null ? name : "Tài khoản",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+                      SizedBox(height: h),
+                    ],
+                  )
                 ),
-              ),
-            )),
+          ),
+      SizedBox(height: 10),
         Container(
           width: w * 100,
           height: h * 7 * item.length,
@@ -223,8 +223,8 @@ class OtherState extends State<OtherScreen> {
       },
       child: Container(
         width: w * 100,
-        height: h * 6,
-        margin: EdgeInsets.only(left: w * 4, bottom: h * 0.6),
+        height: h * 7,
+        margin: EdgeInsets.only(left: w * 4, bottom: h * 0.6,right: w*2),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -232,11 +232,13 @@ class OtherState extends State<OtherScreen> {
           children: <Widget>[
             Icon(
               icon,
-              size: 40,
+              size: 36,
               color: Colors.grey,
             ),
-            SizedBox(width: 15),
-            Text(title, style: TextStyle(fontSize: 18))
+            SizedBox(width: 10),
+            Text(title, style: TextStyle(fontSize: 18)),
+            Spacer(flex: 10),
+            Expanded(child: Icon(Icons.arrow_forward_ios,size:16, color: Colors.grey ))
           ],
         ),
       ),
@@ -249,7 +251,7 @@ Widget _buildAvatar(BuildContext context) {
   return CircleAvatar(
     backgroundImage: url != null ? NetworkImage(url) : null,
     child: url == null ? const Icon(Icons.face) : null,
-    radius: 20,
+    radius: 35,
   );
 }
 
@@ -290,6 +292,7 @@ Widget _logOutDialog(BuildContext context) {
   double w = MediaQuery.of(context).size.width / 100;
   return Dialog(
     child: Container(
+        decoration: BoxDecoration(shape: BoxShape.rectangle,borderRadius: BorderRadius.circular(15)),
         color: Colors.white,
         width: w * 100,
         height: h * 18,
@@ -309,7 +312,7 @@ Widget _logOutDialog(BuildContext context) {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                RaisedButton(
+                RaisedButton(elevation: 0,splashColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
                     onPressed: () {
@@ -322,7 +325,7 @@ Widget _logOutDialog(BuildContext context) {
                           color: ColorApp.backgroundColor, fontSize: 16),
                     )),
                     color: Colors.white),
-                RaisedButton(
+                RaisedButton(elevation: 0,splashColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
                     onPressed: () {

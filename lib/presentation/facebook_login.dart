@@ -6,19 +6,20 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/presentation/page/enter_information.dart';
 
-
 String your_client_id = "1840745959411312";
 String your_redirect_url =
     "https://www.facebook.com/connect/login_success.html";
 
-class LoginFacebook extends StatefulWidget{
+class LoginFacebook extends StatefulWidget {
   LoginFacebookState createState() => LoginFacebookState();
 }
-class LoginFacebookState extends State<LoginFacebook>{
+
+
+class LoginFacebookState extends State<LoginFacebook> {
   final _auth = FirebaseAuth.instance;
 
-
   bool isUserSignedIn;
+
   bool isNewUser = true;
 
   @override
@@ -57,17 +58,16 @@ class LoginFacebookState extends State<LoginFacebook>{
         FacebookAuthProvider.getCredential(accessToken: result);
         final user = await _auth.signInWithCredential(facebookAuthCred);
 
-        AuthResult authResult = await _auth.signInWithCredential(facebookAuthCred);
+        AuthResult authResult =
+        await _auth.signInWithCredential(facebookAuthCred);
         isNewUser = authResult.additionalUserInfo.isNewUser;
-
       } catch (e) {}
-      if(isNewUser) {
-        Navigator.of(context).pushNamed(
-            'personal_information');
-      }
-      else {
+      if (isNewUser) {
+        Navigator.of(context).pushNamed('personal_information');
+      } else {
         isUserSignedIn = true;
         Navigator.of(context).pushNamed('home');
+        // }
       }
     }
   }
@@ -109,8 +109,10 @@ class LoginFacebookState extends State<LoginFacebook>{
           ],
         ),),
     );
+
   }
-}
+
+
 class CustomWebView extends StatefulWidget {
   final String selectedUrl;
 
