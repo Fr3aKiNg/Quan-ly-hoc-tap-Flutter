@@ -14,15 +14,21 @@ class LoginFacebook extends StatefulWidget {
   LoginFacebookState createState() => LoginFacebookState();
 }
 
+
 class LoginFacebookState extends State<LoginFacebook> {
   final _auth = FirebaseAuth.instance;
-  bool isUserSignedIn = false;
+
+  bool isUserSignedIn;
+
   bool isNewUser = true;
 
   @override
   void initState() {
     super.initState();
     _checkLogin();
+    setState(() {
+      isUserSignedIn = false;
+    });
   }
 
   Future _checkLogin() async {
@@ -36,7 +42,8 @@ class LoginFacebookState extends State<LoginFacebook> {
   }
 
   loginWithFacebook() async {
-    String result = await Navigator.push(
+    String result = await
+    Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
@@ -44,7 +51,7 @@ class LoginFacebookState extends State<LoginFacebook> {
                   selectedUrl:
                   'https://www.facebook.com/dialog/oauth?client_id=$your_client_id&redirect_uri=$your_redirect_url&response_type=token&scope=email,public_profile,',
                 ),
-            maintainState: true));
+            maintainState: false));
     if (result != null) {
       try {
         final facebookAuthCred =
@@ -64,46 +71,45 @@ class LoginFacebookState extends State<LoginFacebook> {
       }
     }
   }
-    Widget build(BuildContext context) {
-      double w = MediaQuery.of(context).size.width / 100;
-      double h = MediaQuery.of(context).size.height / 100;
-      return GestureDetector(
-        onTap: () async {
-          loginWithFacebook();
-          FirebaseUser user = await _checkLogin();
-          user ??
-              await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => MyInformationPage()));
-        },
-        child: Container(
-          width: w * 75,
-          height: h * 8,
-          decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(10),
-              color: ColorApp.Blue),
-          padding: EdgeInsets.fromLTRB(w * 2, h, w * 8, h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(width: w * 3),
-              SizedBox(
-                  width: w * 8,
-                  height: w * 8,
-                  child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Image.asset("assets/fb_logo.png",
-                          width: h * 3, height: h * 3))),
-              SizedBox(width: w * 3),
-              Expanded(
-                child: Text("Đăng nhập với Facebook",
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-              )
-            ],
-          ),
-        ),
-      );
-    }
+  Widget build(BuildContext context) {
+    double w = MediaQuery
+        .of(context)
+        .size
+        .width / 100;
+    double h = MediaQuery
+        .of(context)
+        .size
+        .height / 100;
+    return GestureDetector(
+      onTap: () async {
+        loginWithFacebook();
+        FirebaseUser user = await _checkLogin();
+        user ??  await Navigator.of(context).pushNamed('personal_information');
+      },
+      child: Container(width: w * 75,
+        height: h * 8,
+        decoration: BoxDecoration(shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(10),
+            color: ColorApp.Blue),
+        padding: EdgeInsets.fromLTRB(w * 2, h, w * 8, h),
+        child: Row(mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(width: w * 3),
+            SizedBox(width: w * 8,
+                height: w * 8,
+                child: CircleAvatar(backgroundColor: Colors.white,
+                    child: Image.asset(
+                        "assets/fb_logo.png", width: h * 3, height: h * 3))),
+            SizedBox(width: w * 3),
+            Expanded(
+              child: Text("Đăng nhập với Facebook", style: TextStyle(
+                  fontSize: 18, color: Colors.white
+              )),
+            )
+          ],
+        ),),
+    );
+
   }
 
 

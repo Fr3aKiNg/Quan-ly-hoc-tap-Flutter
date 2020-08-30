@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:scheduleapp/application/color_app.dart';
+import 'package:scheduleapp/application/constant.dart';
+import 'package:scheduleapp/application/route.dart';
 import 'package:scheduleapp/data/model/note.dart';
 import 'package:scheduleapp/data/model/user.dart';
 import 'package:scheduleapp/presentation/atom/bottom_navigation_bar.dart';
@@ -12,6 +14,7 @@ import 'package:scheduleapp/presentation/page/login_screen.dart';
 import 'package:scheduleapp/presentation/page/note/note_screen.dart';
 import 'package:scheduleapp/presentation/page/timetable_page.dart';
 import 'package:scheduleapp/presentation/page/user.dart';
+import 'package:scheduleapp/presentation/page/news_screen.dart';
 
 class OtherScreen extends StatefulWidget {
   OtherState createState() => OtherState();
@@ -95,15 +98,6 @@ class OtherState extends State<OtherScreen> {
         btnName: ["Tổng quan", "Điểm", "Ghi chú", "Khác"],
       )),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        // Container(
-        //     // decoration: BoxDecoration(shape: BoxShape.rectangle,borderRadius:
-        //     // BorderRadius.circular(20),color: ColorApp.backgroundColor.withOpacity(0.2)),
-        //     width: w * 100,
-        //     height: h * 18,
-        //     margin: EdgeInsets.fromLTRB(w/2, h, w/2, h*2),
-        //     child:
-        //     (
-        //       child:
           Center(
             child: GestureDetector(
                   onTap: () {
@@ -176,8 +170,7 @@ class OtherState extends State<OtherScreen> {
                                 )),
                           );
                         })
-                        : Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => LoginScreen()));
+                        : Navigator.of(context).pushNamed('login_screen');
                   });
                   },
                   child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -219,6 +212,12 @@ class OtherState extends State<OtherScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => CalenderPage()),
+          );
+        }
+        else if (title == "Đọc báo") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyTabbedPage()),
           );
         }
       },

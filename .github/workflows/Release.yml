@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
+
+jobs:
+  build_android:
+    runs-on: ubuntu-latest
+        
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v1
+      with:
+       java-version: '12.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable'
+    - name: Install dependencies
+      run: flutter pub get
+    - name: Clean Gradle Cache
+      run: rm -rf ~/.gradle/caches
+    - run: rm -rf /home/runner/work/Quan-ly-hoc-tap-Flutter/Quan-ly-hoc-tap-Flutter/.gradle/caches/ && rm -rf /home/runner/work/Quan-ly-hoc-tap-Flutter/Quan-ly-hoc-tap-Flutter/build/
+    - name: Release APK  
+      run: flutter build apk
+    - name: Push APK to Releases
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ github.ref }}
+        artifacts: "build/app/outputs/flutter-apk/*.apk"
+        token: ${{ secrets.TOKEN  }}
