@@ -293,7 +293,9 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
     processNoteCommand(_scaffoldKey.currentState, command);
   }
   Widget _fab(BuildContext context) =>
-
+      Transform.translate(
+          offset: Offset(3, -30),
+          child:
         FloatingActionButton(
           key: UniqueKey(),
           backgroundColor: ColorApp.backgroundColor,
@@ -302,7 +304,7 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
           onPressed: () async {
             userName != null ? nav() : Navigator.of(context).pushNamed('login_screen');
           },
-        );
+        ));
 
 
   Widget _buildAvatar(BuildContext context) {
@@ -386,24 +388,7 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
     processNoteCommand(_scaffoldKey.currentState, command);
   }
 
-  /// Create notes query
-//  Stream<List<Note>> _createNoteStream(BuildContext context, NoteFilter filter) {
-//    final user = Provider.of<CurrentUser>(context)?.data;
-//    final sinceSignUp = DateTime.now().millisecondsSinceEpoch -
-//        (user?.metadata?.creationTime?.millisecondsSinceEpoch ?? 0);
-//    final useIndexes = sinceSignUp >= _10_min_millis; // since creating indexes takes time, avoid using composite index until later
-//    final collection = notesCollection(user?.uid);
-//    final query = filter.noteState == NoteState.unspecified
-//        ? collection
-//        .where('state', isLessThan: NoteState.archived.index) // show both normal/pinned notes when no filter specified
-//        .orderBy('state', descending: true) // pinned notes come first
-//        : collection.where('state', isEqualTo: filter.noteState.index);
-//
-//    return (useIndexes ? query.orderBy('createdAt', descending: true) : query)
-//        .snapshots()
-//        .handleError((e) => debugPrint('query notes failed: $e'))
-//        .map((snapshot) => Note.fromQuery(snapshot));
-//  }
+  
 
   Stream<List<Note>> _createNoteStream(BuildContext context) {
     final uid = Provider.of<CurrentUser>(context)?.data?.uid;
@@ -430,68 +415,4 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
 
 const _10_min_millis = 600000;
 
-//{
-//
-//  Widget build(BuildContext context) => StreamProvider.value(
-//    value: FirebaseAuth.instance.onAuthStateChanged.map((user) => CurrentUser.create(user)),
-//    initialData: CurrentUser.initial,
-//    child: Consumer<CurrentUser>(
-//      builder: (context, user, _) => MaterialApp(
-//        title: 'Flutter Keep',
-//        theme: Theme.of(context).copyWith(
-//          brightness: Brightness.light,
-//          primaryColor: Colors.white,
-//          appBarTheme: AppBarTheme.of(context).copyWith(
-//            elevation: 0,
-//            brightness: Brightness.light,
-//          ),
-//          scaffoldBackgroundColor: Colors.white,
-//          primaryTextTheme: Theme.of(context).primaryTextTheme.copyWith(
-//          ),
-//        ),
-//        home: user.isInitialValue
-//            ? Scaffold(body: const SizedBox(),floatingActionButton:
-//          FloatingActionButton(backgroundColor: ColorApp.Blue,
-//            child: Icon(Icons.add,size: 24,color: Colors.white),
-//            onPressed: ()
-//            {
-//              Navigator.of(context).pushNamed('note_editor');
-//            },
-//          ),)
-//            : user.data != null ? HomeScreen() : null,
-//        routes: {
-//
-//        },
-//        onGenerateRoute: _generateRoute,
-//      ),
-//    ),
-//  );
-//  Route _doGenerateRoute(RouteSettings settings) {
-//    if (settings.name?.isNotEmpty != true) return null;
-//
-//    final uri = Uri.parse(settings.name);
-//    final path = uri.path ?? '';
-//    // final q = uri.queryParameters ?? <String, String>{};
-//    switch (path) {
-//      case '/note': {
-//        final note = (settings.arguments as Map ?? {})['note'];
-//        return _buildRoute(settings, (_) => NoteEditor(note: note));
-//      }
-//      default:
-//        return null;
-//    }
-//  }
-//  Route _generateRoute(RouteSettings settings) {
-//    try {
-//      return _doGenerateRoute(settings);
-//    } catch (e, s) {
-//      debugPrint("failed to generate route for $settings: $e $s");
-//      return null;
-//    }
-//  }
-//  Route _buildRoute(RouteSettings settings, WidgetBuilder builder) =>
-//      MaterialPageRoute<void>(
-//        settings: settings,
-//        builder: builder,
-//      );
-//}
+
