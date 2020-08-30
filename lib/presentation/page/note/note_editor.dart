@@ -146,12 +146,12 @@ class _NoteEditorState extends State<NoteEditor> with CommandHandler {
                   borderSide: BorderSide(color: Colors.teal, width: 1.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                   borderSide:
                       BorderSide(width: 1, color: ColorApp.backgroundColor),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                   borderSide: BorderSide(width: 1, color: Colors.black38),
                 ),
                 counter: const SizedBox(),
@@ -162,7 +162,7 @@ class _NoteEditorState extends State<NoteEditor> with CommandHandler {
               readOnly: !_note.state.canEdit,
             ),
           ),
-          const SizedBox(height: 14),
+
           Container(
             padding: EdgeInsets.fromLTRB(10, 10, 5, 10),
             decoration: BoxDecoration(

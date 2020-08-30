@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,8 @@ import 'package:scheduleapp/data/model/note.dart';
 import 'package:scheduleapp/data/model/note_service.dart';
 import 'package:scheduleapp/data/model/user.dart';
 import 'package:scheduleapp/presentation/atom/bottom_navigation_bar.dart';
+import 'package:scheduleapp/presentation/page/login_screen.dart';
+import 'package:scheduleapp/presentation/page/user.dart';
 import 'package:tuple/tuple.dart';
 
 import 'package:collection_ext/iterables.dart';
@@ -123,7 +126,11 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _gridView = true;
   int _selectedItem;
-
+  String userName;
+  void initState(){
+    super.initState();
+    getName();
+  }
   @override
   Widget build(BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
@@ -275,20 +282,30 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
           ),
         ),
       );
-
-  Widget _fab(BuildContext context) => Transform.translate(
-        offset: Offset(3, -35),
-        child: FloatingActionButton(
+  void getName() async {
+    FirebaseUser user = await auth.currentUser();
+    setState(() {
+      userName = user.displayName;
+    });
+  }
+  Future<void> nav() async {
+    final command = await Navigator.pushNamed(context, '/note');
+    processNoteCommand(_scaffoldKey.currentState, command);
+  }
+  Widget _fab(BuildContext context) =>
+      Transform.translate(
+          offset: Offset(3, -30),
+          child:
+        FloatingActionButton(
           key: UniqueKey(),
           backgroundColor: ColorApp.backgroundColor,
           elevation: 0,
           child: Icon(Icons.add, size: 24),
           onPressed: () async {
-            final command = await Navigator.pushNamed(context, '/note');
-            processNoteCommand(_scaffoldKey.currentState, command);
+            userName != null ? nav() : Navigator.of(context).pushNamed('login_screen');
           },
-        ),
-      );
+        ));
+
 
   Widget _buildAvatar(BuildContext context) {
     final url = Provider.of<CurrentUser>(context)?.data?.photoUrl;
@@ -371,24 +388,7 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
     processNoteCommand(_scaffoldKey.currentState, command);
   }
 
-  /// Create notes query
-//  Stream<List<Note>> _createNoteStream(BuildContext context, NoteFilter filter) {
-//    final user = Provider.of<CurrentUser>(context)?.data;
-//    final sinceSignUp = DateTime.now().millisecondsSinceEpoch -
-//        (user?.metadata?.creationTime?.millisecondsSinceEpoch ?? 0);
-//    final useIndexes = sinceSignUp >= _10_min_millis; // since creating indexes takes time, avoid using composite index until later
-//    final collection = notesCollection(user?.uid);
-//    final query = filter.noteState == NoteState.unspecified
-//        ? collection
-//        .where('state', isLessThan: NoteState.archived.index) // show both normal/pinned notes when no filter specified
-//        .orderBy('state', descending: true) // pinned notes come first
-//        : collection.where('state', isEqualTo: filter.noteState.index);
-//
-//    return (useIndexes ? query.orderBy('createdAt', descending: true) : query)
-//        .snapshots()
-//        .handleError((e) => debugPrint('query notes failed: $e'))
-//        .map((snapshot) => Note.fromQuery(snapshot));
-//  }
+  
 
   Stream<List<Note>> _createNoteStream(BuildContext context) {
     final uid = Provider.of<CurrentUser>(context)?.data?.uid;
@@ -415,68 +415,4 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
 
 const _10_min_millis = 600000;
 
-//{
-//
-//  Widget build(BuildContext context) => StreamProvider.value(
-//    value: FirebaseAuth.instance.onAuthStateChanged.map((user) => CurrentUser.create(user)),
-//    initialData: CurrentUser.initial,
-//    child: Consumer<CurrentUser>(
-//      builder: (context, user, _) => MaterialApp(
-//        title: 'Flutter Keep',
-//        theme: Theme.of(context).copyWith(
-//          brightness: Brightness.light,
-//          primaryColor: Colors.white,
-//          appBarTheme: AppBarTheme.of(context).copyWith(
-//            elevation: 0,
-//            brightness: Brightness.light,
-//          ),
-//          scaffoldBackgroundColor: Colors.white,
-//          primaryTextTheme: Theme.of(context).primaryTextTheme.copyWith(
-//          ),
-//        ),
-//        home: user.isInitialValue
-//            ? Scaffold(body: const SizedBox(),floatingActionButton:
-//          FloatingActionButton(backgroundColor: ColorApp.Blue,
-//            child: Icon(Icons.add,size: 24,color: Colors.white),
-//            onPressed: ()
-//            {
-//              Navigator.of(context).pushNamed('note_editor');
-//            },
-//          ),)
-//            : user.data != null ? HomeScreen() : null,
-//        routes: {
-//
-//        },
-//        onGenerateRoute: _generateRoute,
-//      ),
-//    ),
-//  );
-//  Route _doGenerateRoute(RouteSettings settings) {
-//    if (settings.name?.isNotEmpty != true) return null;
-//
-//    final uri = Uri.parse(settings.name);
-//    final path = uri.path ?? '';
-//    // final q = uri.queryParameters ?? <String, String>{};
-//    switch (path) {
-//      case '/note': {
-//        final note = (settings.arguments as Map ?? {})['note'];
-//        return _buildRoute(settings, (_) => NoteEditor(note: note));
-//      }
-//      default:
-//        return null;
-//    }
-//  }
-//  Route _generateRoute(RouteSettings settings) {
-//    try {
-//      return _doGenerateRoute(settings);
-//    } catch (e, s) {
-//      debugPrint("failed to generate route for $settings: $e $s");
-//      return null;
-//    }
-//  }
-//  Route _buildRoute(RouteSettings settings, WidgetBuilder builder) =>
-//      MaterialPageRoute<void>(
-//        settings: settings,
-//        builder: builder,
-//      );
-//}
+

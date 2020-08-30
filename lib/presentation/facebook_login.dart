@@ -4,26 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:scheduleapp/application/color_app.dart';
-
+import 'package:scheduleapp/presentation/page/enter_information.dart';
 
 String your_client_id = "1840745959411312";
 String your_redirect_url =
     "https://www.facebook.com/connect/login_success.html";
 
-class LoginFacebook extends StatefulWidget{
+class LoginFacebook extends StatefulWidget {
   LoginFacebookState createState() => LoginFacebookState();
 }
-class LoginFacebookState extends State<LoginFacebook>{
+
+
+class LoginFacebookState extends State<LoginFacebook> {
   final _auth = FirebaseAuth.instance;
 
+  bool isUserSignedIn;
 
-  bool isUserSignedIn = false;
   bool isNewUser = true;
 
   @override
   void initState() {
     super.initState();
     _checkLogin();
+    setState(() {
+      isUserSignedIn = false;
+    });
   }
 
   Future _checkLogin() async {
@@ -35,8 +40,10 @@ class LoginFacebookState extends State<LoginFacebook>{
       });
     }
   }
+
   loginWithFacebook() async {
-    String result = await Navigator.push(
+    String result = await
+    Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
@@ -49,23 +56,22 @@ class LoginFacebookState extends State<LoginFacebook>{
       try {
         final facebookAuthCred =
         FacebookAuthProvider.getCredential(accessToken: result);
-        final user =
+        final user = await _auth.signInWithCredential(facebookAuthCred);
+
+        AuthResult authResult =
         await _auth.signInWithCredential(facebookAuthCred);
-
-        AuthResult authResult = await _auth.signInWithCredential(facebookAuthCred);
         isNewUser = authResult.additionalUserInfo.isNewUser;
-
       } catch (e) {}
-      if(isNewUser) {
-        Navigator.of(context).pushNamed(
-            'personal_information');
-      }
-      else {
+      if (isNewUser) {
+        Navigator.of(context).pushNamed('personal_information');
+      } else {
         isUserSignedIn = true;
         Navigator.of(context).pushNamed('home');
+        // }
       }
     }
   }
+
   Widget build(BuildContext context) {
     double w = MediaQuery
         .of(context)
@@ -78,10 +84,8 @@ class LoginFacebookState extends State<LoginFacebook>{
     return GestureDetector(
       onTap: () async {
         loginWithFacebook();
-//        _loginWithFacebook();
         FirebaseUser user = await _checkLogin();
-        user ??  await Navigator.of(context).pushNamed(
-              'personal_information');
+        user ?? await Navigator.of(context).pushNamed('personal_information');
       },
       child: Container(width: w * 75,
         height: h * 8,
@@ -108,6 +112,8 @@ class LoginFacebookState extends State<LoginFacebook>{
     );
   }
 }
+
+
 class CustomWebView extends StatefulWidget {
   final String selectedUrl;
 

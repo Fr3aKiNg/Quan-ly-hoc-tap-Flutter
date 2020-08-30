@@ -1,0 +1,30 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_android:
+    runs-on: ubuntu-latest
+        
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v1
+      with:
+       java-version: '12.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable'
+    - name: Install dependencies
+      run: flutter pub get
+#     - name: Run tests
+#       run: flutter pub run test
+    - name: Clean Gradle Cache
+      run: rm -rf ~/.gradle/caches
+    - run: rm -rf /home/runner/work/Quan-ly-hoc-tap-Flutter/Quan-ly-hoc-tap-Flutter/.gradle/caches/ && rm -rf /home/runner/work/Quan-ly-hoc-tap-Flutter/Quan-ly-hoc-tap-Flutter/build/
+    - name: Release APK  
+      run: flutter build apk
+      
