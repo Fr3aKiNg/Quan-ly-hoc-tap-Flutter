@@ -5,12 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/application/constant.dart';
 import 'package:scheduleapp/application/route.dart';
+import 'package:scheduleapp/data/model/note.dart';
 import 'package:scheduleapp/data/model/user.dart';
 import 'package:scheduleapp/presentation/facebook_login.dart';
 import 'package:scheduleapp/presentation/page/ScorePanel.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/login_screen.dart';
 import 'package:scheduleapp/presentation/page/note/note_editor.dart';
+import 'package:scheduleapp/presentation/page/note/note_item.dart';
 import 'package:scheduleapp/presentation/page/note/note_screen.dart';
 import 'package:scheduleapp/presentation/page/other_screen.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
@@ -142,6 +144,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             });
           } else if (index == 2) {
             Navigator.of(context).push(PageRouteBuilder(
+
                 pageBuilder: (context, animation1, animation2) =>
                     StreamProvider.value(
                       value: FirebaseAuth.instance.onAuthStateChanged
@@ -163,10 +166,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                                 Theme.of(context).primaryTextTheme.copyWith(),
                           ),
                           home: NoteScreen(),
-                          routes: {'login_screen':(context) => LoginScreen(),
+                          routes: {
+                            'login_screen':(context) => LoginScreen(),
                             'facebook_login': (context) => LoginFacebook(),
-                          '/note': (context) => NoteEditor()},
-                          onGenerateRoute: Router.generateRoute,
+                            // '/note': (context) => NoteEditor(),
+                            // // '/note_edit':(context)=> NoteEditor(arguments: {'note': note})
+                          },
+                          onGenerateRoute: _generateRoute,
 
                         ),
                       ),
