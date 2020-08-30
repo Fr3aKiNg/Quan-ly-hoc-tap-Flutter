@@ -16,10 +16,8 @@ class LoginFacebook extends StatefulWidget{
 }
 class LoginFacebookState extends State<LoginFacebook>{
   final _auth = FirebaseAuth.instance;
-
-
   bool isUserSignedIn = false;
-  bool isNewUser = true;
+  // bool isNewUser = true;
 
   @override
   void initState() {
@@ -54,17 +52,17 @@ class LoginFacebookState extends State<LoginFacebook>{
         await _auth.signInWithCredential(facebookAuthCred);
 
         AuthResult authResult = await _auth.signInWithCredential(facebookAuthCred);
-        isNewUser = authResult.additionalUserInfo.isNewUser;
+        // isNewUser = authResult.additionalUserInfo.isNewUser;
 
       } catch (e) {}
-      if(isNewUser) {
-        Navigator.of(context).pushNamed(
-            'personal_information');
-      }
-      else {
+      // if(isNewUser) {
+      //   Navigator.of(context).pushNamed(
+      //       'personal_information');
+      // }
+      // else {
         isUserSignedIn = true;
         Navigator.of(context).pushNamed('home');
-      }
+      // }
     }
   }
   Widget build(BuildContext context) {
