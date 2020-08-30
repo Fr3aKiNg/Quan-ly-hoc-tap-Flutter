@@ -8,4 +8,5 @@ class RoutePaths {
   static const String TimetablePage = 'timetable_page';
   static const String EventList = 'event_detail';
   static const String LoginScreen = 'login_screen';
+  static const String MyInformationPage = 'personal_information';
 }
