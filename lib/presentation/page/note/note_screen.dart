@@ -127,7 +127,10 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
   bool _gridView = true;
   int _selectedItem;
   String userName;
-
+  void initState(){
+    super.initState();
+    getName();
+  }
   @override
   Widget build(BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
@@ -289,20 +292,18 @@ class NoteScreenState extends State<NoteScreen> with CommandHandler {
     final command = await Navigator.pushNamed(context, '/note');
     processNoteCommand(_scaffoldKey.currentState, command);
   }
-  Widget _fab(BuildContext context) => Transform.translate(
-        offset: Offset(3, -35),
-        child: FloatingActionButton(
+  Widget _fab(BuildContext context) =>
+
+        FloatingActionButton(
           key: UniqueKey(),
           backgroundColor: ColorApp.backgroundColor,
           elevation: 0,
           child: Icon(Icons.add, size: 24),
           onPressed: () async {
-            getName();
-            userName != null ? nav() : Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => LoginScreen()));
+            userName != null ? nav() : Navigator.of(context).pushNamed('login_screen');
           },
-        ),
-      );
+        );
+
 
   Widget _buildAvatar(BuildContext context) {
     final url = Provider.of<CurrentUser>(context)?.data?.photoUrl;
