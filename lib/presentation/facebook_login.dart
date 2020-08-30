@@ -51,7 +51,7 @@ class LoginFacebookState extends State<LoginFacebook> {
                   selectedUrl:
                   'https://www.facebook.com/dialog/oauth?client_id=$your_client_id&redirect_uri=$your_redirect_url&response_type=token&scope=email,public_profile,',
                 ),
-            maintainState: false));
+            maintainState: true));
     if (result != null) {
       try {
         final facebookAuthCred =
@@ -71,6 +71,7 @@ class LoginFacebookState extends State<LoginFacebook> {
       }
     }
   }
+
   Widget build(BuildContext context) {
     double w = MediaQuery
         .of(context)
@@ -84,7 +85,7 @@ class LoginFacebookState extends State<LoginFacebook> {
       onTap: () async {
         loginWithFacebook();
         FirebaseUser user = await _checkLogin();
-        user ??  await Navigator.of(context).pushNamed('personal_information');
+        user ?? await Navigator.of(context).pushNamed('personal_information');
       },
       child: Container(width: w * 75,
         height: h * 8,
@@ -109,8 +110,8 @@ class LoginFacebookState extends State<LoginFacebook> {
           ],
         ),),
     );
-
   }
+}
 
 
 class CustomWebView extends StatefulWidget {
