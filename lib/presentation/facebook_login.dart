@@ -6,18 +6,18 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/presentation/page/enter_information.dart';
 
-
 String your_client_id = "1840745959411312";
 String your_redirect_url =
     "https://www.facebook.com/connect/login_success.html";
 
-class LoginFacebook extends StatefulWidget{
+class LoginFacebook extends StatefulWidget {
   LoginFacebookState createState() => LoginFacebookState();
 }
-class LoginFacebookState extends State<LoginFacebook>{
+
+class LoginFacebookState extends State<LoginFacebook> {
   final _auth = FirebaseAuth.instance;
   bool isUserSignedIn = false;
-  // bool isNewUser = true;
+  bool isNewUser = true;
 
   @override
   void initState() {
@@ -34,6 +34,7 @@ class LoginFacebookState extends State<LoginFacebook>{
       });
     }
   }
+
   loginWithFacebook() async {
     String result = await Navigator.push(
         context,
@@ -48,64 +49,64 @@ class LoginFacebookState extends State<LoginFacebook>{
       try {
         final facebookAuthCred =
         FacebookAuthProvider.getCredential(accessToken: result);
-        final user =
+        final user = await _auth.signInWithCredential(facebookAuthCred);
+
+        AuthResult authResult =
         await _auth.signInWithCredential(facebookAuthCred);
-
-        AuthResult authResult = await _auth.signInWithCredential(facebookAuthCred);
-        // isNewUser = authResult.additionalUserInfo.isNewUser;
-
+        isNewUser = authResult.additionalUserInfo.isNewUser;
       } catch (e) {}
-      // if(isNewUser) {
-      //   Navigator.of(context).pushNamed(
-      //       'personal_information');
-      // }
-      // else {
+      if (isNewUser) {
+        Navigator.of(context).pushNamed('personal_information');
+      } else {
         isUserSignedIn = true;
         Navigator.of(context).pushNamed('home');
-      // }
+        // }
+      }
     }
   }
-  Widget build(BuildContext context) {
-    double w = MediaQuery
-        .of(context)
-        .size
-        .width / 100;
-    double h = MediaQuery
-        .of(context)
-        .size
-        .height / 100;
-    return GestureDetector(
-      onTap: () async {
-        loginWithFacebook();
-        FirebaseUser user = await _checkLogin();
-        user ??  await Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => MyInformationPage()));
-      },
-      child: Container(width: w * 75,
-        height: h * 8,
-        decoration: BoxDecoration(shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(10),
-            color: ColorApp.Blue),
-        padding: EdgeInsets.fromLTRB(w * 2, h, w * 8, h),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(width: w * 3),
-            SizedBox(width: w * 8,
-                height: w * 8,
-                child: CircleAvatar(backgroundColor: Colors.white,
-                    child: Image.asset(
-                        "assets/fb_logo.png", width: h * 3, height: h * 3))),
-            SizedBox(width: w * 3),
-            Expanded(
-              child: Text("Đăng nhập với Facebook", style: TextStyle(
-                  fontSize: 18, color: Colors.white
-              )),
-            )
-          ],
-        ),),
-    );
+    Widget build(BuildContext context) {
+      double w = MediaQuery.of(context).size.width / 100;
+      double h = MediaQuery.of(context).size.height / 100;
+      return GestureDetector(
+        onTap: () async {
+          loginWithFacebook();
+          FirebaseUser user = await _checkLogin();
+          user ??
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => MyInformationPage()));
+        },
+        child: Container(
+          width: w * 75,
+          height: h * 8,
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(10),
+              color: ColorApp.Blue),
+          padding: EdgeInsets.fromLTRB(w * 2, h, w * 8, h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(width: w * 3),
+              SizedBox(
+                  width: w * 8,
+                  height: w * 8,
+                  child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Image.asset("assets/fb_logo.png",
+                          width: h * 3, height: h * 3))),
+              SizedBox(width: w * 3),
+              Expanded(
+                child: Text("Đăng nhập với Facebook",
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
+              )
+            ],
+          ),
+        ),
+      );
+    }
   }
-}
+
+
 class CustomWebView extends StatefulWidget {
   final String selectedUrl;
 
