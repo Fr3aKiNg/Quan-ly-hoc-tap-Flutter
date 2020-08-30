@@ -163,6 +163,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                                 Theme.of(context).primaryTextTheme.copyWith(),
                           ),
                           home: NoteScreen(),
+                          routes: {'login_screen':(context) => LoginScreen(),
+                            'facebook_login': (context) => LoginFacebook(),
+                          '/note': (context) => NoteEditor()},
+                          onGenerateRoute: Router.generateRoute,
+
                         ),
                       ),
                     )));
