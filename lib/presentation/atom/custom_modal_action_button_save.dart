@@ -18,9 +18,8 @@ class CustomModalActionButton extends StatelessWidget {
       children: <Widget>[
 
         CustomButton(
-            onPressed: onClose,
-            buttonText: "Đóng",
-
+          onPressed: onClose,
+          buttonText: "Đóng",
         ),
 
         CustomButton(
