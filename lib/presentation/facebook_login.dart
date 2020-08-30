@@ -18,13 +18,16 @@ class LoginFacebookState extends State<LoginFacebook>{
   final _auth = FirebaseAuth.instance;
 
 
-  bool isUserSignedIn = false;
+  bool isUserSignedIn;
   bool isNewUser = true;
 
   @override
   void initState() {
     super.initState();
     _checkLogin();
+    setState(() {
+      isUserSignedIn = false;
+    });
   }
 
   Future _checkLogin() async {
@@ -36,8 +39,10 @@ class LoginFacebookState extends State<LoginFacebook>{
       });
     }
   }
+
   loginWithFacebook() async {
-    String result = await Navigator.push(
+    String result = await
+    Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
@@ -45,13 +50,12 @@ class LoginFacebookState extends State<LoginFacebook>{
                   selectedUrl:
                   'https://www.facebook.com/dialog/oauth?client_id=$your_client_id&redirect_uri=$your_redirect_url&response_type=token&scope=email,public_profile,',
                 ),
-            maintainState: true));
+            maintainState: false));
     if (result != null) {
       try {
         final facebookAuthCred =
         FacebookAuthProvider.getCredential(accessToken: result);
-        final user =
-        await _auth.signInWithCredential(facebookAuthCred);
+        final user = await _auth.signInWithCredential(facebookAuthCred);
 
         AuthResult authResult = await _auth.signInWithCredential(facebookAuthCred);
         isNewUser = authResult.additionalUserInfo.isNewUser;
@@ -80,8 +84,7 @@ class LoginFacebookState extends State<LoginFacebook>{
       onTap: () async {
         loginWithFacebook();
         FirebaseUser user = await _checkLogin();
-        user ??  await Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) => MyInformationPage()));
+        user ??  await Navigator.of(context).pushNamed('personal_information');
       },
       child: Container(width: w * 75,
         height: h * 8,

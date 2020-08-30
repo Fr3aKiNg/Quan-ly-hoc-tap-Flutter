@@ -4,10 +4,12 @@ import 'package:scheduleapp/application/route.dart';
 import 'package:scheduleapp/presentation/page/event_page.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/onBoard/on_board.dart';
+import 'package:scheduleapp/presentation/page/login_screen.dart';
 import 'package:scheduleapp/presentation/page/score/addCourse.dart';
 import 'package:scheduleapp/presentation/page/score/detailCourse.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 import 'package:scheduleapp/presentation/page/enter_information.dart';
+import 'package:scheduleapp/presentation/page/splash_screen.dart';
 
 
 import 'presentation/page/enter_information.dart';
@@ -15,7 +17,7 @@ import 'presentation/page/listcourse.dart';
 import 'presentation/page/news_screen.dart';
 
 void main() {
-//  setupLocator();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: {
+        // '/':(context) => HomeScreen(),
         'home': (context) => HomeScreen(),
         'on_board': (context) => OnboardingMe(),
         'score': (context) => MyTranscriptPage(),
@@ -35,10 +38,12 @@ class MyApp extends StatelessWidget {
         'personal_information':(context) => MyInformationPage(),
         'add_course': (context) => AddCoursePage(),
         'event_detail': (context) =>EventPage(),
-        'news_screen':(context)=>MyTabbedPage(),
+        'news_screen':(context)=> MyTabbedPage(),
+        'login_screen':(context) => LoginScreen()
       },
       onGenerateRoute: Router.generateRoute,
       initialRoute: RoutePaths.SplashScreen,
+      home: SplashPage(),
     );
   }
 }
