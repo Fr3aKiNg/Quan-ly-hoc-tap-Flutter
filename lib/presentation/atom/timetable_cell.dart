@@ -434,6 +434,7 @@ class _TimeTableCellState extends State<TimeTableCell> {
                 content: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
+
                     children: <Widget>[
                       Center(
                         child: Text(

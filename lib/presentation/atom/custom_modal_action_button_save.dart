@@ -13,16 +13,19 @@ class CustomModalActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Row(mainAxisSize: MainAxisSize.max,
       mainAxisAlignment:  MainAxisAlignment.spaceBetween,
       children: <Widget>[
+
         CustomButton(
-          onPressed: onClose,
-          buttonText: "Close",
+            onPressed: onClose,
+            buttonText: "Đóng",
+
         ),
+
         CustomButton(
           onPressed: onSave,
-          buttonText: "Save",
+          buttonText: "Lưu",
           color: Theme.of(context).accentColor,
           textColor: Colors.white,
         ),
