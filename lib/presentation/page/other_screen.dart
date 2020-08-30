@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:scheduleapp/application/color_app.dart';
+import 'package:scheduleapp/application/constant.dart';
+import 'package:scheduleapp/application/route.dart';
 import 'package:scheduleapp/data/model/note.dart';
 import 'package:scheduleapp/data/model/user.dart';
 import 'package:scheduleapp/presentation/atom/bottom_navigation_bar.dart';
@@ -102,8 +104,6 @@ class OtherState extends State<OtherScreen> {
             height: h * 8,
             child: GestureDetector(
               onTap: () {
-
-
                 setState(() {
                    userName != null ?
                 showDialog(
@@ -173,8 +173,8 @@ class OtherState extends State<OtherScreen> {
                             )),
                       );
                     })
-                    : Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => LoginScreen()));
+                    :
+                   Navigator.of(context).pushNamed('login_screen');
               });
               },
               child: MergeSemantics(

@@ -1,11 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:provider/provider.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/application/constant.dart';
+import 'package:scheduleapp/application/route.dart';
 import 'package:scheduleapp/data/model/user.dart';
+import 'package:scheduleapp/presentation/facebook_login.dart';
 import 'package:scheduleapp/presentation/page/ScorePanel.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
+import 'package:scheduleapp/presentation/page/login_screen.dart';
 import 'package:scheduleapp/presentation/page/note/note_editor.dart';
 import 'package:scheduleapp/presentation/page/note/note_screen.dart';
 import 'package:scheduleapp/presentation/page/other_screen.dart';
@@ -126,6 +130,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                             Theme.of(context).primaryTextTheme.copyWith(),
                           ),
                           home: OtherScreen(),
+                          routes: {'login_screen':(context) => LoginScreen(),
+                          'facebook_login': (context) => LoginFacebook()},
+                          onGenerateRoute: Router.generateRoute,
+                          initialRoute: RoutePaths.OtherScreen,
                         ),
                       ),
                     )));
