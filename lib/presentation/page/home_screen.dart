@@ -64,7 +64,7 @@ class HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Center(
-                        child: Text("Xin chào bạn",
+                        child: Text("Xin chào",
                             style: TextStyle(
                                 fontSize: 24,
                                 color: Colors.white,
@@ -145,7 +145,7 @@ class EventList extends StatelessWidget {
         ),
         Container(
           width: w * 100,
-          height: h  * 16,
+          height: h  * 20,
           child: StreamBuilder<List<EventModel>>(
               stream: eventDBS.streamList(),
               builder: (context, snapshot) {
@@ -161,12 +161,11 @@ class EventList extends StatelessWidget {
                         itemCount: allEvents.length,
                         itemBuilder: (context,index){
                           return EventInDayUI(allEvents[index]);
-                          //return Text(allEvents[index].title);
                         }
                     );
                   }
                   else{
-                    return Text("No event");
+                    return Center(child: Text("Không có sự kiện sắp xảy đến"));
                   }
                 }
                 else{
