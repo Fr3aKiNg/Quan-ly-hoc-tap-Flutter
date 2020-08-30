@@ -58,14 +58,12 @@ class LoginFacebookState extends State<LoginFacebook> {
         FacebookAuthProvider.getCredential(accessToken: result);
         final user = await _auth.signInWithCredential(facebookAuthCred);
 
-        AuthResult authResult =
-        await _auth.signInWithCredential(facebookAuthCred);
-        isNewUser = authResult.additionalUserInfo.isNewUser;
+        isNewUser = user.additionalUserInfo.isNewUser;
+        print("New user: ${isNewUser}");
       } catch (e) {}
       if (isNewUser) {
         Navigator.of(context).pushNamed('personal_information');
       } else {
-        isUserSignedIn = true;
         Navigator.of(context).pushNamed('home');
         // }
       }
