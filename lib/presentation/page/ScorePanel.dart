@@ -140,7 +140,7 @@ class scorePanelState extends State<ScorePanel>{
         return AlertDialog(
           title: Center(child: Text("Điểm mục tiêu", style: _greenFont)),
           content: Container(
-              height: 250,
+              height: 290,
               width: 150,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
