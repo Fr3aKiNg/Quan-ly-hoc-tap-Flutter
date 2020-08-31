@@ -22,6 +22,7 @@ on:
 # #     - name: Run tests
 # #       run: flutter pub run test
 #     - name: Release IOS 
+    
 
 jobs:
   test:
@@ -43,5 +44,14 @@ jobs:
       run: flutter build ios --release --no-codesign
     - name: Flutter Deployment
       uses: jeanluc243/Flutter-Deployment@0.1
+    - name: install dependencies
+      uses: geowatson/flutter-latest@1.0.0
+      with:
+        args: pub get
+
+    - name: run tests
+      uses: geowatson/flutter-latest@1.0.0
+      with:
+        args: test
 
               
