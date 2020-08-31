@@ -75,7 +75,7 @@ class HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: h * 2),
                       EventList(),
                       SizedBox(height: h * 2),
-                      Text("Thời khóa biểu hôm nay (16/07)",
+                      Text("Thời khóa biểu hôm nay",
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       SizedBox(height: h * 2),
@@ -165,7 +165,7 @@ class EventList extends StatelessWidget {
                     );
                   }
                   else{
-                    return Center(child: Text("Không có sự kiện sắp xảy đến"));
+                    return Center(child: Text("Không có sự kiện nào"));
                   }
                 }
                 else{
