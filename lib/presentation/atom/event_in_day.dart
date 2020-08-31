@@ -12,9 +12,10 @@ class EventInDayUI extends StatelessWidget{
     double w = MediaQuery.of(context).size.width / 100;
     double h = MediaQuery.of(context).size.height / 100;
     return Container(
-      padding: EdgeInsets.fromLTRB(w, h, w, h),
+      padding: EdgeInsets.fromLTRB(w, h, w, h/2),
+      margin: EdgeInsets.all(0),
       width: w*100,
-      height: h*12,
+      height: h*10,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
