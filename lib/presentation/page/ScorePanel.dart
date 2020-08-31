@@ -46,10 +46,13 @@ class scorePanelState extends State<ScorePanel>{
 
   bool valid = false;
   String scoreError = "";
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   void init() async {
     if (count == 0) {
       final collection = Firestore.instance.collection("users");
       Fuser = await auth.currentUser();
+      print("aaaa " + Fuser.uid );
       collection.document(Fuser.uid).get().then((value) {
         setState(() {
           expectedScoreTerm1 = value.data["expectedScore"]["term 1"];
@@ -137,7 +140,7 @@ class scorePanelState extends State<ScorePanel>{
         return AlertDialog(
           title: Center(child: Text("Điểm mục tiêu", style: _greenFont)),
           content: Container(
-              height: 250,
+              height: 290,
               width: 150,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

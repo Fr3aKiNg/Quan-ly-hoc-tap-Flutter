@@ -68,6 +68,7 @@ Widget eventCard(BuildContext context, String name, String timeLine)
         Text(name,style: TextStyle(fontSize: 14,color: Colors.black,fontWeight: FontWeight.w500)),
         SizedBox(height: h),
         Expanded(child: Text(timeLine,style:TextStyle(fontSize: 14,color: Colors.black)))
+
       ],),
   );
 }
