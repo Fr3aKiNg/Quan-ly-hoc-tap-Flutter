@@ -28,7 +28,7 @@ jobs:
   test:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        platform: [macos-latest]
     runs-on: ${{ matrix.platform }}
     steps:
     - uses: actions/checkout@v1
@@ -40,10 +40,10 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable'
-    - name: Install dependencies
-      run: flutter pub get
-    - name: Release IOS 
-      run: flutter build ios --release --no-codesign
+#     - name: Install dependencies
+#       run: flutter pub get
+#     - name: Release IOS 
+#       run: flutter build ios --release --no-codesign
 
     - name: install dependencies
       uses: geowatson/flutter-latest@1.0.0
