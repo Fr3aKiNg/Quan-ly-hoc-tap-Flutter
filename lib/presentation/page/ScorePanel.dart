@@ -85,7 +85,7 @@ class scorePanelState extends State<ScorePanel>{
           width:  w*90,
           height: h*15,
           decoration: BoxDecoration(shape: BoxShape.rectangle,color: Colors.white,
-              borderRadius: BorderRadius.circular(15),border: Border.all(color: ColorApp.backgroundColor,width: 1.0)),
+              borderRadius: BorderRadius.circular(15)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
