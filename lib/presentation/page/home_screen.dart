@@ -169,7 +169,7 @@ class EventList extends StatelessWidget {
                   }
                 }
                 else{
-                  return Center(child: CircularProgressIndicator()) ;
+                  return Center(child: Text("Không có sự kiện nào"));
                 }
               }
           ),
