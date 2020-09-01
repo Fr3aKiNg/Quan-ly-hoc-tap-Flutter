@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/color_app.dart';
 import 'package:scheduleapp/presentation/page/news_screen.dart';
+import '../page/news_screen.dart';
 import 'date_time_convert.dart';
 import 'package:webfeed/webfeed.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:scheduleapp/presentation/atom/date_time_convert.dart';
+import 'package:scheduleapp/presentation/page/news_screen.dart';
 
 class ThumbnailNewcard extends StatelessWidget {
   ListItem _new;
@@ -168,7 +170,11 @@ class ThumbnailNewsState extends State<ThumbnailNews> {
               flex: 2,
               child: GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushReplacementNamed('news_screen');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyTabbedPage()),
+                    );
                   },
                   child: Text("Xem thêm",
                       style: TextStyle(

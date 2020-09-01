@@ -79,19 +79,23 @@ class HomeScreenState extends State<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Thời khóa biểu hôm nay",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TimetablePage()),
-                              );
-                            },
-                          ),
+                          Expanded(
+                              flex: 12,
+                              child: Text("Thời khóa biểu hôm nay",
+                                  style:
+                                  TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
+                          Expanded(
+                              flex: 1,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CalenderPage()),
+                                    );
+                                  },
+                                  child: Icon(Icons.add,
+                                      color: ColorApp.backgroundColor, size: 24))),
                         ],
                       ),
                       SizedBox(height: h * 2),
