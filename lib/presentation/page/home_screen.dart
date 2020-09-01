@@ -12,6 +12,7 @@ import 'package:scheduleapp/presentation/atom/schedule_of_today.dart';
 import 'package:scheduleapp/presentation/atom/thumbnail_new.dart';
 import 'package:scheduleapp/presentation/page/ScorePanel.dart';
 import 'package:scheduleapp/presentation/page/calender_page.dart';
+import 'package:scheduleapp/presentation/page/timetable_page.dart';
 
 
 class HomeScreen extends StatefulWidget {
