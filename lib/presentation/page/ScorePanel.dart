@@ -31,13 +31,13 @@ class ScorePanel extends StatefulWidget {
 
 class scorePanelState extends State<ScorePanel>{
   User user;
-  String expectedScoreTerm1 = "loading";
-  String expectedScoreTerm2 = "loading";
-  String expectedScoreOverall = "loading";
+  String expectedScoreTerm1 = "-";
+  String expectedScoreTerm2 = "-";
+  String expectedScoreOverall = "-";
 
-  String scoreTerm1 = "loading";
-  String scoreTerm2 = "loading";
-  String scoreOverall = "loading";
+  String scoreTerm1 = "-";
+  String scoreTerm2 = "-";
+  String scoreOverall = "-";
 
   Score curScore;
   Score goalScore;
