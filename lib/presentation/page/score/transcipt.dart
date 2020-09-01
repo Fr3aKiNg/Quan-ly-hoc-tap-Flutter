@@ -45,9 +45,10 @@ class RandomWordsState extends State<RandomWords> {
   int _yearChosenIndex = 0;
   String dropdownValue = "";
   int countLoop = 0;
-
+  bool check = false;
   void init() async {
     if (count == 0) {
+      count = 1;
       final FirebaseUser Fuser = await auth.currentUser();
       user.id = Fuser.uid;
       final collection = Firestore.instance.collection("users");
@@ -69,12 +70,19 @@ class RandomWordsState extends State<RandomWords> {
         setState(() {
           _courses = _coursesTemp;
           _score = _scoreTemp;
+          check = true;
         });
       });
-      count = 1;
+
     }
   }
-
+  void checkLogin() {
+    if (check == false && count != 0)
+      setState(() {
+        _coursesTemp.removeRange(0, _coursesTemp.length);
+      });
+    print(check.toString() + count.toString());
+  }
   double Avg(List score) {
     int num = _yearChosenIndex;
     for (int i = 0; i < score.length; i++) if (_yearChosen == _year[i]) num = i;
@@ -101,6 +109,7 @@ class RandomWordsState extends State<RandomWords> {
   @override
   Widget build(BuildContext context) {
     init();
+    checkLogin();
     _courses = _coursesTemp;
     _score = _scoreTemp;
     String _value = "";
