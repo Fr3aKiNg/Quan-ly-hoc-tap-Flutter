@@ -269,94 +269,96 @@ class RandomWordsState extends State<RandomWords> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Container(
-              height: 320,
-              child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Hệ số học kỳ",
-                    style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(top: 20, bottom: 10),
-                      child: ListTile(
-                        leading: Container(
-                          padding: EdgeInsets.only(top: 6),
-                          child: Text(
-                            "HK1",
-                            style: _biggerFont,
+          content: SingleChildScrollView(
+            child: Container(
+                height: 350,
+                child: Column(
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Hệ số học kỳ",
+                      style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(top: 20, bottom: 10),
+                        child: ListTile(
+                          leading: Container(
+                            padding: EdgeInsets.only(top: 6),
+                            child: Text(
+                              "HK1",
+                              style: _biggerFont,
+                            ),
                           ),
-                        ),
-                        title: _customTextField(
-                            "Hệ số",
-                            _coefController[_yearChosenIndex][0],
-                            Color(0xFFBDBDBD)),
-                      )),
-                  Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      child: ListTile(
-                        leading: Container(
-                          padding: EdgeInsets.only(top: 6),
-                          child: Text(
-                            "HK2",
-                            style: _biggerFont,
+                          title: _customTextField(
+                              "Hệ số",
+                              _coefController[_yearChosenIndex][0],
+                              Color(0xFFBDBDBD)),
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: ListTile(
+                          leading: Container(
+                            padding: EdgeInsets.only(top: 6),
+                            child: Text(
+                              "HK2",
+                              style: _biggerFont,
+                            ),
                           ),
-                        ),
-                        title: _customTextField(
-                            "Hệ số",
-                            _coefController[_yearChosenIndex][1],
-                            Color(0xFFBDBDBD)),
-                      )),
-                  Text(
-                    "Năm học",
-                    style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(top: 20, bottom: 20),
-                      child: ListTile(
-                          leading: Text(
-                            "NH",
-                            style: _biggerFont,
-                          ),
-                          title: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                            value: dropdownValue,
-                            icon: Icon(Icons.keyboard_arrow_down),
-                            iconSize: 24,
-                            style:
-                                TextStyle(fontSize: 18.0, color: Colors.black),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                _yearChosen = newValue;
-                                dropdownValue = newValue;
-                              });
-                              Navigator.of(context).pop();
-                              _showMyDialog();
-                            },
-                            items: _year
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      value,
-                                      style: _biggerFont,
-                                    ),
-                                    value == _yearChosen
-                                        ? Icon(Icons.check,
-                                            color: Color(0xFF00C48C))
-                                        : Icon(Icons.check, color: Colors.white)
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ))))
-                ],
-              )),
+                          title: _customTextField(
+                              "Hệ số",
+                              _coefController[_yearChosenIndex][1],
+                              Color(0xFFBDBDBD)),
+                        )),
+                    Text(
+                      "Năm học",
+                      style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C)),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(top: 20, bottom: 20),
+                        child: ListTile(
+                            leading: Text(
+                              "NH",
+                              style: _biggerFont,
+                            ),
+                            title: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  value: dropdownValue,
+                                  icon: Icon(Icons.keyboard_arrow_down),
+                                  iconSize: 24,
+                                  style:
+                                  TextStyle(fontSize: 18.0, color: Colors.black),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      _yearChosen = newValue;
+                                      dropdownValue = newValue;
+                                    });
+                                    Navigator.of(context).pop();
+                                    _showMyDialog();
+                                  },
+                                  items: _year
+                                      .map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            value,
+                                            style: _biggerFont,
+                                          ),
+                                          value == _yearChosen
+                                              ? Icon(Icons.check,
+                                              color: Color(0xFF00C48C))
+                                              : Icon(Icons.check, color: Colors.white)
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                ))))
+                  ],
+                )),
+          ),
           actions: <Widget>[
             FlatButton(
               child: Text("Hủy",
