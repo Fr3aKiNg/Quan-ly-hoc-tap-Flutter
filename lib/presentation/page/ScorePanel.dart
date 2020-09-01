@@ -44,7 +44,10 @@ class scorePanelState extends State<ScorePanel>{
   FirebaseUser Fuser;
   int count = 0;
 
+  int coef1 = 1;
+  int coef2 = 2;
 
+  bool errorCalculate = false;
   bool valid = false;
   String scoreError = "";
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -61,6 +64,7 @@ class scorePanelState extends State<ScorePanel>{
           scoreTerm1 = value.data["year1"]["HK1"]["final"];
           scoreTerm2 = value.data["year1"]["HK2"]["final"];
           scoreOverall = value.data["year1"]["overall"]["final"];
+          coef1 = value.data["year1"]["coefficient"]["HK1"];
         });
       });
     }
@@ -141,7 +145,6 @@ class scorePanelState extends State<ScorePanel>{
           title: Center(child: Text("Điểm mục tiêu", style: _greenFont)),
           content: SingleChildScrollView(
             child: Container(
-                height: 270,
                 width: 150,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,86 +191,147 @@ class scorePanelState extends State<ScorePanel>{
             FlatButton(
                 child: Text('Thêm', style: TextStyle(fontSize: 18.0, color: Color(0xFF00C48C) ),),
                 onPressed: () {
-                  valid = false;
-                  String score1, score2, overall;
-                  double tempScore1 = 0;
-                  double tempScore2 = 0;
-                  double tempScore3 = 0;
+                    errorCalculate = false;
+                    valid = false;
+                    String score1, score2, overall;
+                    double tempScore1 = 0;
+                    double tempScore2 = 0;
+                    double tempScore3 = 0;
 
-                  String term1Text = HK1.text;
-                  String term2Text = HK2.text;
-                  String allText = All.text;
+                    String term1Text = HK1.text == "" ? "-" : HK1.text;
+                    String term2Text = HK2.text == "" ? "-" : HK2.text;
+                    String allText = All.text == "" ? "-" : All.text;
 
-                  bool check1 = false;
-                  bool check2 = false;
-                  bool check3 = false;
+                    bool check1 = false;
+                    bool check2 = false;
+                    bool check3 = false;
 
-                  if (HK1.text == "-" || HK1.text == "")
-                    check1 = true;
-                  if (HK2.text == "-" || HK2.text == "")
-                    check2 = true;
-                  if (All.text == "-" || All.text == "")
-                    check3 = true;
+                    if (HK1.text == "-" || HK1.text == "")
+                      check1 = true;
+                    if (HK2.text == "-" || HK2.text == "")
+                      check2 = true;
+                    if (All.text == "-" || All.text == "")
+                      check3 = true;
 
-                  if (check1 == false) {
-                    tempScore1 = double.parse(HK1.text);
-                    if (tempScore1 < 0) {
-                      tempScore1 *= -1;
-                      term1Text = tempScore1.toString();
-                    }
-                  }
-
-                  if (check2 == false) {
-                    tempScore2 = double.parse(HK2.text);
-                    if (tempScore2 < 0) {
-                      tempScore2 *= -1;
-                      term2Text = tempScore2.toString();
-                    }
-                  }
-                  if (check3 == false) {
-                    tempScore3 = double.parse(All.text);
-                    if (tempScore3 < 0) {
-                      tempScore3 *= -1;
-                      allText = tempScore3.toString();
-                    }
-                  }
-
-                  if (check1 == false)
-                    if (tempScore1 > 10)
-                    {
-                      valid = true;
-                    }
-                  if (check2 == false)
-                    if (tempScore2 > 10)
-                    {
-                      valid = true;
+                    if (check1 == false) {
+                      tempScore1 = double.parse(HK1.text);
+                      if (tempScore1 < 0) {
+                        tempScore1 *= -1;
+                        term1Text = tempScore1.toString();
+                      }
                     }
 
-                  if (check3 == false)
-                    if (tempScore3 > 10)
-                    {
-                      valid = true;
+                    if (check2 == false) {
+                      tempScore2 = double.parse(HK2.text);
+                      if (tempScore2 < 0) {
+                        tempScore2 *= -1;
+                        term2Text = tempScore2.toString();
+                      }
+                    }
+                    if (check3 == false) {
+                      tempScore3 = double.parse(All.text);
+                      if (tempScore3 < 0) {
+                        tempScore3 *= -1;
+                        allText = tempScore3.toString();
+                      }
                     }
 
-                  if (valid) {
-                    setState(() {
-                      scoreError = "Nhập điểm <= 10";
-                    });
-                    Navigator.of(context).pop();
-                    _showMyDialog();
-                  }
-                  else {
-                    scoreError = "";
-                    setState(() {
-                      HK1.text == "" ? expectedScoreTerm1 = "-" : expectedScoreTerm1 = term1Text;
-                      HK2.text == "" ? expectedScoreTerm2 = "-" : expectedScoreTerm2 = term2Text;
-                      All.text == "" ? expectedScoreOverall = "-" : expectedScoreOverall = allText;
-                    });
-                    User user = User();
-                    user.addExpectedScore(expectedScoreTerm1, expectedScoreTerm2, expectedScoreOverall, Fuser.uid);
-                    Navigator.of(context).pop();
-                  }
-                  //scoreError = "";
+                    if (check1 == false)
+                      if (tempScore1 > 10)
+                      {
+                        valid = true;
+                      }
+                    if (check2 == false)
+                      if (tempScore2 > 10)
+                      {
+                        valid = true;
+                      }
+
+                    if (check3 == false)
+                      if (tempScore3 > 10)
+                      {
+                        valid = true;
+                      }
+
+                    if (valid) {
+                      setState(() {
+                        scoreError = "Nhập điểm <= 10";
+                      });
+                      Navigator.of(context).pop();
+                      _showMyDialog();
+                    }
+                    else {
+                      scoreError = "";
+                      if (All.text == "") {
+                        if (HK1.text != "" && HK2.text != "") {
+                          double overallTemp = 0;
+                          double term1Temp = double.parse(term1Text);
+                          double term2Temp = double.parse(term2Text);
+                          overallTemp = (term1Temp * coef1 + term2Temp * coef2) / (coef1 + coef2);
+                          allText = overallTemp.toStringAsFixed(1).toString();
+                        }
+                      }
+                      else {
+                        print (HK1.text);
+                        print (HK2.text);
+                        if (HK1.text == "" && HK2.text != "") {
+                          double overallTemp = double.parse(allText);
+                          double term1Temp = 0;
+                          double term2Temp = double.parse(term2Text);
+                          term1Temp = ((coef1 + coef2) * overallTemp - term2Temp * coef2) / coef1;
+                          term1Text = term1Temp.toStringAsFixed(1).toString();
+                          if (term1Temp > 10) {
+                            setState(() {
+                              scoreError = "Điểm kì vọng Học kì 2 và Cả năm khiến điểm Học kì 1 vượt quá 10";
+                              errorCalculate = true;
+                            });
+                            Navigator.of(context).pop();
+                            _showMyDialog();
+                          }
+                          else errorCalculate = false;
+                        }
+                        else if (HK1.text != "" && HK2.text == "") {
+                          double overallTemp = double.parse(allText);
+                          double term1Temp = double.parse(term1Text);
+                          double term2Temp = 0;
+                          term2Temp = ((coef1 + coef2) * overallTemp - term1Temp * coef1) / coef2;
+                          term2Text = term2Temp.toStringAsFixed(1).toString();
+                          if (term2Temp > 10) {
+                            setState(() {
+                              scoreError = "Điểm kì vọng Học kì 1 và Cả năm khiến điểm Học kì 2 vượt quá 10";
+                              errorCalculate = true;
+                            });
+                            Navigator.of(context).pop();
+                            _showMyDialog();
+                          }
+                          else errorCalculate = false;
+                        }
+                        else if (HK1.text != "" && HK2.text != ""){
+                          double overallTemp = double.parse(allText);
+                          double term1Temp = double.parse(term1Text);
+                          double term2Temp = double.parse(term2Text);
+
+                          if (((term1Temp * coef1 + term2Temp * coef2) / (coef1 + coef2)).toStringAsFixed(1).toString() != overallTemp.toString()) {
+                            term1Text = "-";
+                            term2Text = "-";
+                          }
+                        }
+                      }
+                      if (!errorCalculate) {
+                        setState(() {
+                          expectedScoreTerm1 = term1Text;
+                          expectedScoreTerm2 = term2Text;
+                          expectedScoreOverall = allText;
+                        });
+                        User user = User();
+                        user.addExpectedScore(
+                            expectedScoreTerm1, expectedScoreTerm2,
+                            expectedScoreOverall, Fuser.uid);
+                        Navigator.of(context).pop();
+                      }
+                    }
+                    //scoreError = "";
+
                 }
             ),
           ],

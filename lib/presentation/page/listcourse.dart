@@ -29,7 +29,6 @@ class RandomWordsState extends State<RandomWords> {
     "Công dân",
     "Công nghệ",
     "Tin học",
-    "Thể dục",
     "Quốc phòng",
     "Âm nhạc",
     "Mỹ thuật",
