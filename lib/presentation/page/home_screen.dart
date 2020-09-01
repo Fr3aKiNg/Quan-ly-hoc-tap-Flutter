@@ -91,7 +91,7 @@ class HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => CalenderPage()),
+                                          builder: (context) => TimetablePage()),
                                     );
                                   },
                                   child: Icon(Icons.add,
