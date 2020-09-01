@@ -44,6 +44,7 @@ class scorePanelState extends State<ScorePanel>{
   FirebaseUser Fuser;
   int count = 0;
 
+
   bool valid = false;
   String scoreError = "";
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -52,7 +53,6 @@ class scorePanelState extends State<ScorePanel>{
     if (count == 0) {
       final collection = Firestore.instance.collection("users");
       Fuser = await auth.currentUser();
-      print("aaaa " + Fuser.uid );
       collection.document(Fuser.uid).get().then((value) {
         setState(() {
           expectedScoreTerm1 = value.data["expectedScore"]["term 1"];
@@ -130,51 +130,53 @@ class scorePanelState extends State<ScorePanel>{
   Future<void> _showMyDialog() async {
     final _biggerFont = const TextStyle(fontSize: 18.0);
     final _greenFont = const TextStyle(fontSize: 18.0, color: Color(0xFF00C48C));
-    TextEditingController HK1 = TextEditingController(text: goalScore.termOne);
-    TextEditingController HK2 = TextEditingController(text: goalScore.termTwo);
-    TextEditingController All = TextEditingController(text: goalScore.overall);
+    TextEditingController HK1 = TextEditingController(text: goalScore.termOne == "-" ? "" : goalScore.termOne);
+    TextEditingController HK2 = TextEditingController(text: goalScore.termTwo == "-" ? "" : goalScore.termTwo);
+    TextEditingController All = TextEditingController(text: goalScore.overall == "-" ? "" : goalScore.overall);
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: Center(child: Text("Điểm mục tiêu", style: _greenFont)),
-          content: Container(
-              height: 290,
-              width: 150,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ListTile(
-                    leading: Container(
-                        child: Text("Học kỳ 1", style: _biggerFont,),
-                        padding: EdgeInsets.only(top: 5)
+          content: SingleChildScrollView(
+            child: Container(
+                height: 270,
+                width: 150,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ListTile(
+                      leading: Container(
+                          child: Text("Học kỳ 1", style: _biggerFont,),
+                          padding: EdgeInsets.only(top: 5)
+                      ),
+                      title: _customTextField("Nhập điểm mong muốn", HK1, Color(0xFFBDBDBD)),
                     ),
-                    title: _customTextField("Nhập điểm mong muốn", HK1, Color(0xFFBDBDBD)),
-                  ),
-                  ListTile(
-                    leading: Container(
-                        child: Text("Học kỳ 2", style: _biggerFont,),
-                        padding: EdgeInsets.only(top: 5)
+                    ListTile(
+                      leading: Container(
+                          child: Text("Học kỳ 2", style: _biggerFont,),
+                          padding: EdgeInsets.only(top: 5)
+                      ),
+                      title: _customTextField("Nhập điểm mong muốn", HK2, Color(0xFFBDBDBD)),
                     ),
-                    title: _customTextField("Nhập điểm mong muốn", HK2, Color(0xFFBDBDBD)),
-                  ),
-                  ListTile(
-                    leading: Container(
-                        child: Text("Cả năm  ", style: _biggerFont,),
-                        padding: EdgeInsets.only(top: 5)
+                    ListTile(
+                      leading: Container(
+                          child: Text("Cả năm  ", style: _biggerFont,),
+                          padding: EdgeInsets.only(top: 5)
+                      ),
+                      title: _customTextField("Nhập điểm mong muốn", All, Color(0xFFBDBDBD)),
                     ),
-                    title: _customTextField("Nhập điểm mong muốn", All, Color(0xFFBDBDBD)),
-                  ),
-                  Container (
-                      margin: EdgeInsets.only(top: 10),
-                      child:
-                      Center(
-                        child: Text(scoreError, style: TextStyle(color: Colors.red),),
-                      )
-                  ),
-                ],
-              )
+                    Container (
+                        margin: EdgeInsets.only(top: 10),
+                        child:
+                        Center(
+                          child: Text(scoreError, style: TextStyle(color: Colors.red),),
+                        )
+                    ),
+                  ],
+                )
+            ),
           ),
           actions: <Widget>[
             FlatButton(
@@ -192,6 +194,10 @@ class scorePanelState extends State<ScorePanel>{
                   double tempScore2 = 0;
                   double tempScore3 = 0;
 
+                  String term1Text = HK1.text;
+                  String term2Text = HK2.text;
+                  String allText = All.text;
+
                   bool check1 = false;
                   bool check2 = false;
                   bool check3 = false;
@@ -205,19 +211,25 @@ class scorePanelState extends State<ScorePanel>{
 
                   if (check1 == false) {
                     tempScore1 = double.parse(HK1.text);
-                    if (tempScore1 < 0)
+                    if (tempScore1 < 0) {
                       tempScore1 *= -1;
+                      term1Text = tempScore1.toString();
+                    }
                   }
 
                   if (check2 == false) {
                     tempScore2 = double.parse(HK2.text);
-                    if (tempScore2 < 0)
+                    if (tempScore2 < 0) {
                       tempScore2 *= -1;
+                      term2Text = tempScore2.toString();
+                    }
                   }
                   if (check3 == false) {
                     tempScore3 = double.parse(All.text);
-                    if (tempScore3 < 0)
+                    if (tempScore3 < 0) {
                       tempScore3 *= -1;
+                      allText = tempScore3.toString();
+                    }
                   }
 
                   if (check1 == false)
@@ -247,16 +259,15 @@ class scorePanelState extends State<ScorePanel>{
                   else {
                     scoreError = "";
                     setState(() {
-                      HK1.text == "" ? expectedScoreTerm1 = "-" : expectedScoreTerm1 = HK1.text;
-                      HK2.text == "" ? expectedScoreTerm2 = "-" : expectedScoreTerm2 = HK2.text;
-                      All.text == "" ? expectedScoreOverall = "-" : expectedScoreOverall = All.text;
+                      HK1.text == "" ? expectedScoreTerm1 = "-" : expectedScoreTerm1 = term1Text;
+                      HK2.text == "" ? expectedScoreTerm2 = "-" : expectedScoreTerm2 = term2Text;
+                      All.text == "" ? expectedScoreOverall = "-" : expectedScoreOverall = allText;
                     });
                     User user = User();
                     user.addExpectedScore(expectedScoreTerm1, expectedScoreTerm2, expectedScoreOverall, Fuser.uid);
                     Navigator.of(context).pop();
                   }
                   //scoreError = "";
-
                 }
             ),
           ],
@@ -274,6 +285,7 @@ Widget _customTextField(String hintText, TextEditingController controller, Color
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         fillColor: Colors.white,
+        hintText: "-",
         hintStyle: TextStyle(fontSize: 18.0, color: color),
         filled: true,
         enabled: true,
