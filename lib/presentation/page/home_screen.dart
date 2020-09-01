@@ -75,9 +75,24 @@ class HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: h * 2),
                       EventList(),
                       SizedBox(height: h * 2),
-                      Text("Thời khóa biểu hôm nay",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Thời khóa biểu hôm nay",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                          IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TimetablePage()),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                       SizedBox(height: h * 2),
                       ScheduleOfToday(),
                       SizedBox(height: h * 2),
