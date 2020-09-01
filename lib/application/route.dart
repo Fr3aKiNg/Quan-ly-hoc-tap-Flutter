@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleapp/application/constant.dart';
 import 'package:scheduleapp/presentation/page/calender_page.dart';
+import 'package:scheduleapp/presentation/page/enter_information.dart';
 import 'package:scheduleapp/presentation/page/home_screen.dart';
 import 'package:scheduleapp/presentation/page/login_screen.dart';
 import 'package:scheduleapp/presentation/page/note/note_screen.dart';
@@ -28,6 +29,8 @@ class Router {
         return MaterialPageRoute(builder: (BuildContext context)=> EventDetailsPage());
       case RoutePaths.LoginScreen:
         return MaterialPageRoute(builder: (BuildContext context)=> LoginScreen());
+      case RoutePaths.MyInformationPage:
+        return MaterialPageRoute(builder: (BuildContext context)=> MyInformationPage());
         default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
