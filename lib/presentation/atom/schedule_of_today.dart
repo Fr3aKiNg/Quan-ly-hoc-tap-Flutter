@@ -14,7 +14,7 @@ Widget subCard(BuildContext context, String nameSub, Color color) {
       height: h * 4,
       decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: color,
+          color: color==Colors.transparent?Colors.grey[200]:color,
           borderRadius: BorderRadius.circular(10)),
       child: Center(
         child: Text(
@@ -150,41 +150,41 @@ class _ScheduleOfTodayState extends State<ScheduleOfToday> {
                 Padding(
                     padding: EdgeInsets.only(left: w * 3, top: h),
                     child: Text("Tiết 1")),
-                subCard(context, "", Colors.grey[300] ),
+                subCard(context, "", Colors.grey[200] ),
                 Padding(
                     padding: EdgeInsets.only(left: w * 3, top: h),
                     child: Text("Tiết 5")),
-                subCard(context, "", Colors.grey[300] ),
+                subCard(context, "", Colors.grey[200] ),
               ]),
               TableRow(children: [
                 Padding(
                     padding: EdgeInsets.only(left: w * 3, top: h),
                     child: Text("Tiết 2")),
-                subCard(context, "", Colors.grey[300] ),
+                subCard(context, "", Colors.grey[200] ),
                 Padding(
                     padding: EdgeInsets.only(left: w * 3, top: h),
                     child: Text("Tiết 6")),
-                subCard(context, "", Colors.grey[300] ),
+                subCard(context, "", Colors.grey[200] ),
               ]),
               TableRow(children: [
                 Padding(
                     padding: EdgeInsets.only(left: w * 3, top: h),
                     child: Text("Tiết 3")),
-                subCard(context, "", Colors.grey[300] ),
+                subCard(context, "", Colors.grey[200] ),
                 Padding(
                     padding: EdgeInsets.only(left: w * 3, top: h),
                     child: Text("Tiết 7")),
-                subCard(context, "", Colors.grey[300] ),
+                subCard(context, "", Colors.grey[200] ),
               ]),
               TableRow(children: [
                 Padding(
                     padding: EdgeInsets.only(left: w * 3, top: h),
                     child: Text("Tiết 4")),
-                subCard(context, "", Colors.grey[300] ),
+                subCard(context, "", Colors.grey[200] ),
                 Padding(
                     padding: EdgeInsets.only(left: w * 3, top: h),
                     child: Text("Tiết 8")),
-                subCard(context, "", Colors.grey[300] ),
+                subCard(context, "", Colors.grey[200] ),
               ]),
             ],
           );
