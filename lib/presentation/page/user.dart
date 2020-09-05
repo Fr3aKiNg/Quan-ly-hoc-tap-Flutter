@@ -315,8 +315,8 @@ class User {
   void editCourse(String uid, String courseName, List nameCol, List coef, String newCourse, bool isRename) {
     final collection = Firestore.instance.collection("users");
     String query1 = "columnScore."+courseName;
-    String query2, query3, query4, query5, query6, query7, query8;
-    if (!isRename){
+    String query2, query3, query4, query5, query6, query7, query8, query_overall1, query_overall2, query_overall3;
+    if (isRename == false){
       query2 = "year1.HK1.ingredientScore."+courseName;
       query3 = "year1.HK2.ingredientScore."+courseName;
       query4 = "year2.HK1.ingredientScore."+courseName;
@@ -324,6 +324,9 @@ class User {
       query6 = "year3.HK1.ingredientScore."+courseName;
       query7 = "year3.HK2.ingredientScore."+courseName;
       query8 = "columnScore."+courseName;
+      query_overall1 = "year1.overall.ingredientScore."+courseName;
+      query_overall2 = "year2.overall.ingredientScore."+courseName;
+      query_overall3 = "year3.overall.ingredientScore."+courseName;
     }
     else {
       query2 = "year1.HK1.ingredientScore."+newCourse;
@@ -333,6 +336,9 @@ class User {
       query6 = "year3.HK1.ingredientScore."+newCourse;
       query7 = "year3.HK2.ingredientScore."+newCourse;
       query8 = "columnScore."+newCourse;
+      query_overall1 = "year1.overall.ingredientScore."+newCourse;
+      query_overall2 = "year2.overall.ingredientScore."+newCourse;
+      query_overall3 = "year3.overall.ingredientScore."+newCourse;
     }
 
 
@@ -343,32 +349,37 @@ class User {
     final data5 = {};
     final data6 = {};
     final data7 = {};
+    String data8 = "";
+    String data9 = "";
+    String data10 = "";
     collection.document(uid).get().then((value) {
       for (int i = 0; i < nameCol.length; i++){
         data1.addAll({
-          nameCol[i]: value.data["year1"]["HK1"]["ingredientScore"][courseName][nameCol[i]],
+          nameCol[i]: value.data["year1"]["HK1"]["ingredientScore"][courseName][nameCol[i]] == null ? [] : value.data["year1"]["HK1"]["ingredientScore"][courseName][nameCol[i]],
         });
         data2.addAll({
-          nameCol[i]: value.data["year1"]["HK2"]["ingredientScore"][courseName][nameCol[i]],
+          nameCol[i]: value.data["year1"]["HK2"]["ingredientScore"][courseName][nameCol[i]] == null ? [] : value.data["year1"]["HK2"]["ingredientScore"][courseName][nameCol[i]],
         });
         data3.addAll({
-          nameCol[i]: value.data["year2"]["HK1"]["ingredientScore"][courseName][nameCol[i]],
+          nameCol[i]: value.data["year2"]["HK1"]["ingredientScore"][courseName][nameCol[i]] == null ? [] : value.data["year2"]["HK1"]["ingredientScore"][courseName][nameCol[i]],
         });
         data4.addAll({
-          nameCol[i]: value.data["year2"]["HK2"]["ingredientScore"][courseName][nameCol[i]],
+          nameCol[i]: value.data["year2"]["HK2"]["ingredientScore"][courseName][nameCol[i]] == null ? [] : value.data["year2"]["HK2"]["ingredientScore"][courseName][nameCol[i]],
         });
         data5.addAll({
-          nameCol[i]: value.data["year3"]["HK1"]["ingredientScore"][courseName][nameCol[i]],
+          nameCol[i]: value.data["year3"]["HK1"]["ingredientScore"][courseName][nameCol[i]] == null ? [] : value.data["year3"]["HK1"]["ingredientScore"][courseName][nameCol[i]],
         });
         data6.addAll({
-          nameCol[i]: value.data["year3"]["HK2"]["ingredientScore"][courseName][nameCol[i]],
+          nameCol[i]: value.data["year3"]["HK2"]["ingredientScore"][courseName][nameCol[i]] == null ? [] : value.data["year3"]["HK2"]["ingredientScore"][courseName][nameCol[i]],
         });
       }
       data7.addAll({
         "coef": coef,
         "column": nameCol
       });
-
+      data8 = value.data["year1"]["overall"]["ingredientScore"][courseName];
+      data9 = value.data["year2"]["overall"]["ingredientScore"][courseName];
+      data10 = value.data["year3"]["overall"]["ingredientScore"][courseName];
       collection.document(uid).updateData({
         query1: {
           "coef": coef,
@@ -381,9 +392,12 @@ class User {
         query6: data5,
         query7: data6,
         query8: data7,
-        "course": FieldValue.arrayUnion([newCourse])
+        "course": FieldValue.arrayUnion([newCourse]),
+        query_overall1: data8,
+        query_overall2: data9,
+        query_overall3: data10,
       }).then((_) {
-        if (isRename) {
+        if (isRename == true) {
           String query1 = "columnScore." + courseName;
 
           String query21 = "year1.HK1.ingredientScore."+ courseName;
@@ -414,7 +428,7 @@ class User {
         }
         else {
           collection.document(uid).updateData({
-            "course": FieldValue.arrayRemove([newCourse])
+            //"course": FieldValue.arrayRemove([newCourse])
           });
         }
       });

@@ -1,12 +1,9 @@
-
 import '../user.dart';
-
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:path/path.dart' as Path;
-
 import 'package:scheduleapp/presentation/page/score/detailCourse.dart';
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
+
 class EditCoursePage extends StatelessWidget {
   final String course;
   final String uid;
@@ -36,6 +33,7 @@ class editCourseState extends State<editCourse> {
   String uid;
   List nameScoreCol = [];
   List heso = [];
+  bool addCol = false;
 
   editCourseState(String course, String uid, List column, List coef) {
     this._courseName = course;
@@ -81,7 +79,6 @@ class editCourseState extends State<editCourse> {
       newCourseController = TextEditingController(text: _courseName);
       count = 1;
     }
-
     return Scaffold(
         resizeToAvoidBottomPadding:false,
         appBar: AppBar(
@@ -324,7 +321,7 @@ class editCourseState extends State<editCourse> {
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
-            MyDetailCoursePage(course: _courseName, uid: uid,)));
+            MyDetailCoursePage(course: newCourseController.text, uid: uid,)));
   }
 }
 
