@@ -7,7 +7,7 @@ import 'package:path/path.dart' as Path;
 import 'package:scheduleapp/presentation/page/score/transcipt.dart';
 import 'package:scheduleapp/presentation/page/score/editCourse.dart';
 import '../user.dart';
-
+import 'wait.dart';
 class MyDetailCoursePage extends StatelessWidget {
   final String course;
   final String uid;
@@ -50,6 +50,7 @@ class detailCourseState extends State<detailCourse> {
   List _scoreSes2 = [];
   List _heso = [];
   int count = 0;
+  bool updateData = false;
   List<TextEditingController> scoreController = List();
   //
   double getAvg(List _score) {
@@ -595,4 +596,5 @@ class detailCourseState extends State<detailCourse> {
       },
     );
   }
+
 }
